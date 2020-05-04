@@ -1,0 +1,596 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="UTF-8">
+    <title>部门管理</title>
+    <!--框架必需start-->
+    <script type="text/javascript" th:src="@{/static/js/public/base-util.js}" src="../../static/js/public/base-util.js"></script>
+    <script type="text/javascript" th:src="@{/libs/js/jquery.js}" src="../../libs/js/jquery.js"></script>
+    <script type="text/javascript" th:src="@{/libs/js/language/cn.js}" src="../../libs/js/language/cn.js"></script>
+    <script type="text/javascript" th:src="@{/libs/js/framework.js}" src="../../libs/js/framework.js"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{/libs/css/import_basic.css}" href="../../libs/css/import_basic.css"/>
+    <link rel="stylesheet" type="text/css" id="skin" prePath="../../"/>
+    <link rel="stylesheet" type="text/css" id="customSkin"/>
+    <!--框架必需end-->
+
+    <!--树组件start -->
+    <script type="text/javascript" src="../../libs/js/tree/ztree/ztree.js"></script>
+    <link href="../../libs/js/tree/ztree/ztree.css" rel="stylesheet" type="text/css"/>
+    <!--树组件end -->
+    <!-- card单独样式 start -->
+    <!--<link rel="stylesheet" type="text/css" th:href="@{/system/skin/card.css}" href="../../system/skin/card.css"/>-->
+    <link rel="stylesheet" type="text/css" th:href="@{/libs/skin/style/card.css}" href="../../libs/skin/style/card.css"/>
+    <!-- card单独样式 end -->
+
+    <script type="text/javascript" th:inline="javascript">
+        /*<![CDATA[*/
+        ctxPath = /*[[@{/}]]*/ '';
+        /*]]>*/
+    </script>
+    <style>
+        .page_content {
+            position: fixed;
+            background-color: #ffffff;
+            margin: 15px;
+            height: calc(100vh - 140px);
+            width: calc(100% - 30px);
+        }
+
+        .btns {
+            padding-bottom: 15px;
+            position: fixed;
+            background-color: #ffffff;
+            width: 35%;
+            z-index: 2;
+        }
+
+        .layout {
+            display: flex;
+            height: 100%;
+        }
+
+        .layout .layout-l {
+            width: 350px;
+            height: 100%;
+        }
+
+        .trees {
+            overflow-x: hidden;
+            width: 100%;
+            overflow-y: auto;
+            height: 100%;
+        }
+
+
+        .layout .layout-r {
+            flex: 1;
+            border-left: 1px solid #f5f5f5;
+            padding-top: 40px;
+        }
+
+        .items {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .items .lable {
+            width: 150px;
+            text-align: right;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .items .lable > p {
+            font-size: 18px;
+            color: red;
+            margin-right: 5px;
+        }
+
+        .items .item-c {
+            flex: 1;
+            margin-left: 20px;
+
+        }
+
+
+        .user-hide {
+            display: none;
+        }
+
+
+        .button {
+            padding: 2px 20px;
+            height: auto;
+        }
+    </style>
+</head>
+
+<body>
+<div id="tuid" style="display: none;">
+    <shiro:principal property="username"/>
+</div>
+<!--card-->
+
+<!--end-->
+<div class="content nobg" style="width: calc(100% - 10px);">
+    <ul class="content_card">
+        <li onclick="_add()">
+            <div class="minute">
+                <div class="minute-content">
+                    <div class="minute_left">
+                        <div style="font-weight:bold;font-size: 22px;">新建部门</div>
+                        <div style="line-height: 18px;font-size: 9px;">New information</div>
+                    </div>
+                    <div class="minute_right"><img src="../../system/skin/s1.png"></div>
+                </div>
+            </div>
+        </li>
+        <li onclick="_update()">
+            <div class="minute">
+                <div class="minute-content">
+                    <div class="minute_left">
+                        <div style="font-weight:bold;font-size: 22px;">编辑</div>
+                        <div style="line-height: 18px;font-size: 9px;">Bulk import</div>
+                    </div>
+                    <div class="minute_right"><img src="../../system/skin/s4.png"></div>
+                </div>
+            </div>
+        </li>
+        <li onclick="_delete()">
+            <div class="minute">
+                <div class="minute-content">
+                    <div class="minute_left">
+                        <div style="font-weight:bold;font-size: 22px;">删除部门</div>
+                        <div style="line-height: 18px;font-size: 9px;">Batch delete</div>
+                    </div>
+                    <div class="minute_right"><img src="../../system/skin/s3.png"></div>
+                </div>
+            </div>
+        </li>
+        <li class="">
+            <div class="minute">
+                <div class="minute-content">
+                    <div class="minute_left">
+                        <div id="allNumberQ" style="font-weight:bold;font-size: 22px;">0</div>
+                        <div style="line-height: 18px;font-size: 14px;">区数量</div>
+                    </div>
+                    <div class="minute_right"><img src="../../system/skin/s5.png"></div>
+                </div>
+            </div>
+            <!--<div class="minute">
+                <div class="minute-content">
+                    <div class="minute_left">
+                        <div style="font-weight:bold;font-size: 22px;">信息配置</div>
+                        <div style="line-height: 18px;font-size: 9px;">Configuration</div>
+                    </div>
+                    <div class="minute_right"><img src="../../system/skin/s2.png"></div>
+                </div>
+            </div>-->
+        </li>
+        <li class="">
+            <div class="minute">
+                <div class="minute-content">
+                    <div class="minute_left">
+                        <div id="allNumberYs" style="font-weight:bold;font-size: 22px;">2036</div>
+                        <div style="line-height: 18px;font-size: 14px;">园数量</div>
+                    </div>
+                    <div class="minute_right"><img src="../../system/skin/s5.png"></div>
+                </div>
+            </div>
+
+            <!--<div class="minute">
+                <div class="minute-content">
+                    <div class="minute_left">
+                        <div style="font-weight:bold;font-size: 22px;">上传附件</div>
+                        <div style="line-height: 18px;font-size: 9px;">upload attachments</div>
+                    </div>
+                    <div class="minute_right"><img src="../../system/skin/s5.png"></div>
+                </div>
+            </div>-->
+        </li>
+    </ul>
+</div>
+<div class="page_content">
+
+    <div class="d-f-s-c" style="padding: 5px;">
+        <div class="buttonGroup" style="margin-right: 111px;">
+            <span class="leftButton" onclick="_add()">添加</span>
+            <span class="centerButton" onclick="_update()">编辑</span>
+            <span class="rightButton" onclick="_delete()">删除</span>
+        </div>
+        <div class="u-position" id="u-position" style="flex: 1;">
+            <div class="-star"></div>
+            <div class="-a">当前位置：</div>
+            <!--<div class="-c">市教委</div>-->
+            <!--<div class="-c"> ></div>-->
+            <!--<div class="-c">和平区</div>-->
+        </div>
+    </div>
+
+    <div class="layout">
+        <div class="layout-l">
+
+
+            <div class="trees">
+                <ul id="deptTree" class="ztree blueTree"></ul>
+            </div>
+        </div>
+        <div class="layout-r">
+            <div class="items edit">
+                <div class="lable"><p>*</p>父级节点</div>
+                <div class="item-c">
+                    <input id="parentId" type="text" style="width:90%;" disabled="true"/>
+                </div>
+            </div>
+
+            <div class="items deptid">
+                <div class="lable"><p>*</p>节点ID</div>
+                <div class="item-c">
+                    <input id="deptId" type="text" style="width:90%;" disabled="true"/>
+                </div>
+            </div>
+
+            <div class="items edit">
+                <div class="lable"><p>*</p>部门名称</div>
+                <div class="item-c">
+                    <input id="deptName" type="text" style="width:90%;" disabled="true"/>
+                </div>
+            </div>
+
+            <div class="items edit">
+                <div class="lable"><p>*</p>部门编码</div>
+                <div class="item-c">
+                    <input id="deptCode" type="text" style="width:90%;" disabled="true"/>
+                </div>
+            </div>
+
+            <div class="items edit">
+                <div class="lable"><p>*</p>消息队列地址</div>
+                <div class="item-c">
+                    <input id="deptRpc" type="text" style="width:90%;" disabled="true"/>
+                </div>
+            </div>
+
+            <!--<div class="items edit">-->
+            <!--<div class="lable">tenantId</div>-->
+            <!--<div class="item-c">-->
+            <!--<input id="tenantId" type="text" style="width:80%;" disabled="true" />-->
+            <!--</div>-->
+            <!--</div>-->
+
+            <div class="items edit">
+                <div class="lable"><p>*</p>部门类型</div>
+                <div class="item-c">
+                    <input type="radio" id="male-1" name="deptType" value="S" disabled="true"/>
+                    <label for="male-1" class="hand">市</label>
+
+                    <input type="radio" id="male-2" name="deptType" value="Q" disabled="true"/>
+                    <label for="male-2" class="hand">区</label>
+
+                    <input type="radio" id="male-3" name="deptType" value="Y" disabled="true"/>
+                    <label for="male-3" class="hand">园</label>
+
+                    <input type="radio" id="male-4" name="deptType" value="Y-1" disabled="true"/>
+                    <label for="male-4" class="hand">公办</label>
+
+                    <input type="radio" id="male-5" name="deptType" value="Y-2" disabled="true"/>
+                    <label for="male-5" class="hand">民办</label>
+
+                    <input type="radio" id="male-6" name="deptType" value="Y-3" disabled="true"/>
+                    <label for="male-6" class="hand">托幼点</label>
+                </div>
+            </div>
+
+            <div class="items edit">
+                <div class="lable"><p>*</p>排序</div>
+                <div class="item-c">
+                    <input id="sort" type="text" style="width:90%;" disabled="true"/>
+                </div>
+            </div>
+
+
+            <div class="items user-hide btn-edit">
+                <div class="lable"></div>
+                <div class="item-c">
+                    <input type="button" value="更新" class="primary" onclick="toUpdate()"/>
+                    <input type="button" value="取消" style="margin-left: 15px;" class="" onclick="cancel()"/>
+                </div>
+            </div>
+            <div class="items user-hide btn-add">
+                <div class="lable"></div>
+                <div class="item-c">
+                    <input type="button" value="保存" class="primary" onclick="toAdd()"/>
+                    <input type="button" value="取消" style="margin-left: 15px;" class="" onclick="cancel()"/>
+                </div>
+            </div>
+
+            <div class="items user-hide" id="synchro">
+                <div class="lable"></div>
+                <div class="item-c">
+                    <input type="button" value="同步基础数据" class="primary" onclick="synchroData()"/>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+<script type="text/javascript">
+    var selDept = '', isUpdate = false
+    var tuid = $('#tuid').html().trim();
+    var setting = {
+        view: {
+            dblClickExpand: false,
+            showIcon: false,
+        },
+        callback: {
+            onClick: onNodeClick
+        }
+    };
+
+    $(function () {
+        initTree();
+    })
+
+    function initTree() {
+        $.ajax({
+            url: ctxPath + "dept/list",
+            type: 'get',
+            data: {},
+        }).then(function (res) {
+            var menuTree = res.data
+            var qu = 0, yuan = 0
+            for (var i = 0; i < menuTree.length; i++) {
+                if ('S' == menuTree[i].deptType) {
+                } else if ('Q' == menuTree[i].deptType) {
+                    qu += 1;
+                } else {
+                    yuan += 1;
+                }
+                menuTree[i].id = menuTree[i].deptId;
+                menuTree[i].name = menuTree[i].deptName;
+                if (-1 == menuTree[i].parentId) {
+                    menuTree[i].open = true
+                }
+            }
+            $('#allNumberQ').html(qu)
+            $('#allNumberY').html(yuan)
+            $.fn.zTree.init($("#deptTree"), setting, menuTree);
+        }, function () {
+            // top.Toast("showErrorToast", 'load tree error！');
+        })
+    }
+
+    function onNodeClick(event, treeId, treeNode) {
+        $('#u-position .-c').remove();
+        if ('S' == treeNode.deptType) {
+            $('#u-position').append('<div class="-c">' + treeNode.name + '</div>')
+        } else if ('Q' == treeNode.deptType) {
+            var pid = $('.curSelectedNode').closest('ul').closest('li').attr('id');
+            var str = '<div class="-c">' + $('.curSelectedNode').closest('ul').closest('li').find('#' + pid + '_span').html() + '</div>';
+            str += '<div class="-c">></div>';
+            str += '<div class="-c">' + treeNode.name + '</div>';
+            $('#u-position').append(str)
+        } else {
+            var pid = $('.curSelectedNode').closest('ul').closest('li').attr('id');
+            var str = '<div class="-c">' + $('#deptTree_1_span').html() + '</div>';
+            str += '<div class="-c">></div>';
+            var qname = $('.curSelectedNode').closest('ul').closest('li').find('#' + pid + '_span').html() ? $('.curSelectedNode').closest('ul').closest('li').find('#' + pid + '_span').html() : '';
+            str += '<div class="-c">' + qname + '</div>';
+            str += '<div class="-c">></div>';
+            str += '<div class="-c">' + treeNode.name + '</div>';
+            $('#u-position').append(str)
+        }
+
+
+        selDept = treeNode.deptId
+        $('#deptId').val(treeNode.deptId);
+        $('#parentId').val(treeNode.parentId);
+        $('#deptName').val(treeNode.deptName);
+        $('#sort').val(treeNode.sort);
+        $('#deptCode').val(treeNode.deptCode);
+        $('#deptRpc').val(treeNode.deptRpc);
+        if ('Q' == treeNode.deptType && 'admin' == tuid) {
+            $('#synchro').removeClass('user-hide');
+        } else {
+            $('#synchro').addClass('user-hide');
+        }
+        // $('#tenantId').val(treeNode.tenantId);
+        var type = $("input:radio[name=deptType][value=" + treeNode.deptType + "]").prop("checked", true);
+        var zTree = $.fn.zTree.getZTreeObj("deptTree");
+        zTree.expandNode(treeNode);
+        if (isUpdate) {
+            $('.items.btn-edit').removeClass('user-hide')
+            $('.items.btn-add').addClass('user-hide')
+        }
+    }
+
+    function cancel() {
+        isUpdate = false
+        // 显示主键ID
+        $('.items.deptid').removeClass('user-hide')
+
+        // 隐藏按钮
+        $('.items.btn-edit').addClass('user-hide')
+        $('.items.btn-add').addClass('user-hide')
+
+        // 更改可操作性
+        $('.items.edit').find('input').attr("disabled", true)
+    }
+
+
+    function _delete() {
+        if (selDept) {
+            top.Dialog.confirm("此操作将永久删除，是否继续？", function () {
+                $.ajax({
+                    url: ctxPath + "dept/" + selDept,
+                    type: 'delete',
+                    data: {}
+                }).then(function (res) {
+                    if (0 == res.code) {
+                        top.Toast("showSuccessToast", '操作成功');
+                        selDept = '';
+                        initTree();
+                        cancel();
+                    } else {
+                        top.Toast("showErrorToast", '操作异常');
+                    }
+                }, function () {
+                    top.Toast("showErrorToast", '删除失败！');
+                })
+            }, function () {
+
+            });
+        } else {
+            top.Toast('showWarningToast', '请选择需要删除的部门');
+        }
+    }
+
+    function _update() {
+        if (selDept) {
+            // 隐藏主键ID
+            $('.items.deptid').addClass('user-hide')
+
+            // 显示保存按钮
+            $('.items.btn-edit').removeClass('user-hide')
+            $('.items.btn-add').addClass('user-hide')
+
+            // 更改可操作性
+            $('.items.edit').find('input').attr("disabled", false)
+            isUpdate = true
+        } else {
+            top.Toast('showWarningToast', '请选择需要编辑的部门');
+        }
+    }
+
+    function _add() {
+        if (!selDept) {
+            top.Toast('showWarningToast', '请选择父级节点');
+            return;
+        }
+        isUpdate = true
+
+        // 隐藏主键ID
+        $('.items.deptid').addClass('user-hide')
+
+        // 显示保存按钮
+        $('.items.btn-edit').addClass('user-hide')
+        $('.items.btn-add').removeClass('user-hide')
+
+        // 更改可操作性
+        $('.items.edit').find('input').attr("disabled", false)
+        $('.items').find('input:text').val("")
+
+        if (selDept) {
+            $('#parentId').val(selDept);
+        } else {
+            $('#parentId').val('-1');
+        }
+    }
+
+    // 添加
+    function toAdd() {
+        var deptName = $('#deptName').val(),
+            sort = $("#sort").val(),
+            deptType = $("input:radio[name=deptType]:checked").val(),
+            deptCode = $("#deptCode").val();
+        if (!deptName || !sort || !deptType || !deptCode) {
+            top.Toast('showErrorToast', '请完善基本详细');
+            return
+        }
+        var dept = {};
+        var pid = $('#parentId').val();
+        if (!pid) {
+            pid = "-1";
+        }
+        dept.parentId = pid;
+        dept.deptName = deptName;
+        dept.sort = sort;
+        // deptId
+        dept.deptCode = deptCode;
+        dept.deptRpc = $("#deptRpc").val();
+        // dept.tenantId = $("#tenantId").val();
+        dept.deptType = deptType;
+        dept.delFlag = 0;
+        $.jsonAjax({
+            url: ctxPath + "dept",
+            type: 'post',
+            data: dept
+        }).then(function (res) {
+            // console.log(res)
+            if (0 == res.code) {
+                top.Toast("showSuccessToast", '操作成功');
+                initTree();
+                cancel();
+            } else {
+                top.Toast("showErrorToast", '操作异常');
+            }
+        }, function () {
+            top.Toast("showErrorToast", '提交失败！');
+        })
+    }
+
+    // 更新
+    function toUpdate() {
+        var deptName = $('#deptName').val()
+        if (!deptName) {
+            top.Toast('showErrorToast', '请完善基本详细');
+            return
+        }
+        var dept = {};
+        var pid = $('#parentId').val();
+        if (!pid) {
+            pid = "-1";
+        }
+        dept.parentId = pid;
+        dept.deptName = deptName;
+        dept.sort = $("#sort").val();
+        // deptId
+        dept.deptCode = $("#deptCode").val();
+        dept.deptRpc = $("#deptRpc").val();
+        // dept.tenantId = $("#tenantId").val();
+        dept.deptType = $("input:radio[name=deptType]:checked").val();
+        dept.deptCode = $("#deptCode").val();
+        dept.delFlag = 0;
+        dept.deptId = $('#deptId').val();
+
+        $.jsonAjax({
+            url: ctxPath + "dept",
+            type: 'put',
+            data: dept
+        }).then(function (res) {
+            if (0 == res.code) {
+                top.Toast("showSuccessToast", '操作成功');
+                initTree();
+            } else {
+                top.Toast("showErrorToast", '操作异常');
+            }
+        }, function () {
+            top.Toast("showErrorToast", '提交失败！');
+        })
+    }
+
+    function synchroData() {
+        top.$('body').mask("正在同步！", null, true, "rgba(144,144,144,0.5)");
+        $.ajax({
+            url: ctxPath + "dept/synchroData/" + selDept,
+            type: 'post',
+            data: {}
+        }).then(function (res) {
+            if (0 == res.code) {
+                top.Toast("showSuccessToast", '操作成功');
+            } else {
+                top.Toast("showErrorToast", '操作异常');
+            }
+            top.$('body').unmask();
+        }, function () {
+            top.Toast("showErrorToast", '操作失败！');
+            top.$('body').unmask();
+        })
+    }
+</script>
+
+</body>
+</html>

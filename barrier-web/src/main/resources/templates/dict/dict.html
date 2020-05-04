@@ -1,0 +1,432 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>字典管理</title>
+    <!--框架必需start-->
+    <script type="text/javascript" th:src="@{/static/js/public/base-util.js}" src="../../static/js/public/base-util.js"></script>
+    <script type="text/javascript" th:src="@{/libs/js/jquery.js}" src="../../libs/js/jquery.js"></script>
+    <script type="text/javascript" th:src="@{/libs/js/language/cn.js}" src="../../libs/js/language/cn.js"></script>
+    <script type="text/javascript" th:src="@{/libs/js/framework.js}" src="../../libs/js/framework.js"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{/libs/css/import_basic.css}" href="../../libs/css/import_basic.css"/>
+    <link rel="stylesheet" type="text/css" id="skin" prePath="../../"/>
+    <link rel="stylesheet" type="text/css" id="customSkin"/>
+    <!--框架必需end-->
+    <!--数据表格start-->
+    <script th:src="@{/libs/js/table/quiGrid.js}" src="../../libs/js/table/quiGrid.js" type="text/javascript"></script>
+    <!--数据表格end-->
+
+    <!--树组件start -->
+    <script type="text/javascript" src="../../libs/js/tree/ztree/ztree.js"></script>
+    <link href="../../libs/js/tree/ztree/ztree.css" rel="stylesheet" type="text/css"/>
+    <!--树组件end -->
+
+    <!-- iconfont start -->
+    <link rel="stylesheet" type="text/css" th:href="@{/static/iconfont/iconfont.css}" href="../../static/iconfont/iconfont.css"/>
+    <!-- iconfont end -->
+    <!-- card单独样式 start -->
+    <!--<link rel="stylesheet" type="text/css" th:href="@{/system/skin/card.css}" href="../../system/skin/card.css"/>-->
+    <link rel="stylesheet" type="text/css" th:href="@{/libs/skin/style/card.css}" href="../../libs/skin/style/card.css"/>
+    <!-- card单独样式 end -->
+    <script type="text/javascript" th:inline="javascript">
+        /*<![CDATA[*/
+        ctxPath = /*[[@{/}]]*/ '';
+        /*]]>*/
+    </script>
+    <style>
+        .buttonGroup {
+            width: 80px !important;
+        }
+    </style>
+
+</head>
+
+<body>
+
+<!--card-->
+<div class="content nobg" style="width: calc(100% - 10px);">
+    <ul class="content_card">
+        <li onclick="addDict()">
+            <div class="minute">
+                <div class="minute-content">
+                    <div class="minute_left">
+                        <div style="font-weight:bold;font-size: 22px;">新建信息</div>
+                        <div style="line-height: 18px;font-size: 9px;">New information</div>
+                    </div>
+                    <div class="minute_right"><img src="../../system/skin/s1.png"></div>
+                </div>
+            </div>
+        </li>
+        <!--<li>-->
+            <!--<div class="minute">-->
+                <!--<div class="minute-content">-->
+                    <!--<div class="minute_left">-->
+                        <!--<div style="font-weight:bold;font-size: 22px;">批量导入</div>-->
+                        <!--<div style="line-height: 18px;font-size: 9px;">Bulk import</div>-->
+                    <!--</div>-->
+                    <!--<div class="minute_right"><img src="../../system/skin/s2.png"></div>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</li>-->
+        <li onclick="resetEdit()">
+            <div class="minute">
+                <div class="minute-content">
+                    <div class="minute_left">
+                        <div style="font-weight:bold;font-size: 22px;">编辑</div>
+                        <div style="line-height: 18px;font-size: 9px;">Edit</div>
+                    </div>
+                    <div class="minute_right"><img src="../../system/skin/s4.png"></div>
+                </div>
+            </div>
+        </li>
+        <li onclick="batchDeletion()">
+            <div class="minute">
+                <div class="minute-content">
+                    <div class="minute_left">
+                        <div style="font-weight:bold;font-size: 22px;">批量删除</div>
+                        <div style="line-height: 18px;font-size: 9px;">Batch delete</div>
+                    </div>
+                    <div class="minute_right"><img src="../../system/skin/s3.png"></div>
+                </div>
+            </div>
+        </li>
+
+        <li>
+            <div class="minute">
+                <div class="minute-content">
+                    <div class="minute_left">
+                        <div id="allNumber" style="font-weight:bold;font-size: 22px;">0</div>
+                        <div style="line-height: 18px;font-size: 14px;">字典总数</div>
+                    </div>
+                    <div class="minute_right"><img src="../../system/skin/s5.png"></div>
+                </div>
+            </div>
+        </li>
+
+        <li class="">
+            <div class="minute">
+                <div class="minute-content">
+                    <div class="minute_left" style="width: 55%;">
+                        <!--<div style="font-weight:bold;font-size: 22px;">信息配置</div>-->
+                        <div style="line-height: 18px;font-size: 14px;">用来定义系统中的各成分的含义，为系统提供相关元素</div>
+                    </div>
+                    <div class="minute_right"><img src="../../system/skin/s4.png"></div>
+                </div>
+            </div>
+        </li>
+    </ul>
+</div>
+<!--end-->
+
+<div class="page_content">
+    <div class="titleContent" style="float:left;margin:3px 5px;">
+        应用系统字典管理情况
+    </div>
+    <div class="searchContent">
+        <form action="###" id="queryForm" method="post">
+            <table style="float: right;">
+                <tr>
+                    <!--<td>类型:</td>-->
+                    <td>
+                        <input type="text" placeholder="类型" id="searchInput"/>
+                    </td>
+                    <!--<td>字典类型:</td>-->
+                    <td>
+                        <!--th:url="${'/dict/type/dict_type'}"-->
+                        <select id="searchSystem" th:url="@{/dict/type/dict_type}" prompt="字典类型" dataRoot="data" labelField="label"
+                                valueField="value"></select>
+                    </td>
+                    <td>
+                        <button type="button" id="search" class="primary" onclick="searchHandler()">
+                            <span class="icon_find">查询</span>
+                        </button>
+                    </td>
+                    <td>
+                        <button type="button" onclick="resetSearch()">
+                            <span class="icon_clear">重置</span>
+                        </button>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+    <div class="clear"></div>
+    <div id="dataBasic"></div>
+</div>
+
+
+<script type="text/javascript">
+    var checkedArray = [];
+    var checkedTextArray = [];
+    var grid;
+    $(function () {
+        grid = $("#dataBasic").quiGrid({
+            columns: [
+                {display: '类型', name: 'type', align: 'center', width: "15%"},
+                {display: '描述', name: 'description', align: 'center', width: "15%"},
+                {
+                    display: '字典类型', name: 'system', align: 'center', width: "15%",
+                    render: function (rowdata, rowindex, value, column) {
+                        if (1 == value) {
+                            return "系统类"
+                        } else {
+                            return "业务类"
+                        }
+                    }
+                },
+                {display: '备注信息', name: 'remarks', align: 'center', width: "20%"},
+                {display: '创建时间', name: 'createTime', align: 'center', width: "15%"},
+                {
+                    display: '操作', align: 'center', width: "20%",
+                    render: function (rowdata, rowindex, value, column) {
+                        var bar = '<div class="grid_user_container">';
+                        bar += '<div class="iconfont icon-bianji bg1 qTip" title="编辑" onclick="onEdit(\'' + rowdata.id + '\')"></div>';
+                        if (1 != rowdata.system) {
+                            bar += '<div class="iconfont icon-shanchu bg2 qTip" title="删除" onclick="onDelete(\'' + rowdata.id + '\')"></div>';
+                        }
+                        bar += '<div class="iconfont icon-icon-all- bg5 qTip" title="字典项" onclick="onSubset(\'' + rowdata.id + '\')"></div>';
+                        bar += '</div>';
+                        return bar;
+                    }
+                }
+            ],
+            url: ctxPath + 'dict/page',
+            method: 'get',
+            sortName: 'update_time',
+            sortOrder: "DESC",
+            rownumbers: true,
+            checkbox: true,
+            height: '100%',
+            width: "100%",
+            pageSize: 10,
+            percentWidthMode: true,
+            onComplete: isnull,
+            onAfterShowData: onAfterShowData,
+            onClickCell: function (rowdata, rowid, rowobj) {
+                $(".maingrid_content").show();
+                $(".maingrid_content").find("iframe").attr("src", "/role/view?role_id=" + rowdata.role_id);
+                $(".maingrid_content").stop().animate({marginRight: "0"}, 500);
+            },
+            isChecked:checkedHandler,
+            onCheckRow: checkRowHandler,
+            onCheckAllRow: checkAllRowHandler
+        });
+    })
+
+    function isnull() {
+        if ($(".l-grid-body,.l-scroll").find("tr").length > 0) {
+        } else {
+            $(".l-grid-body,.l-scroll").find("div.l-grid-body-inner").html(
+                "<div class=\"indexnodata\">\n"
+                + "<p> 当前没有查找到结果</p>\n"
+                + "<p>请更改筛选条件,可以在更多的筛选条件里设置</p>\n" + "</div>")
+        }
+    }
+    function onAfterShowData(data){
+        $('#allNumber').html(data['pager.totalRows'])
+    }
+
+    //刷新页面方法
+    function refresh(isUpdate) {
+        checkedArray = [];
+        checkedTextArray = [];
+        if (!isUpdate) {
+            grid.setNewPage(1);
+        }
+        grid.loadData();
+    }
+
+    //编辑
+    function onEdit(id) {
+        var diag = new top.Dialog();
+        diag.URL = ctxPath + "page/dict/edit/" + id;
+        diag.Title = "编辑";
+        //自定义宽度和长度的设置
+        diag.Width = 420;
+        diag.Height = 220;
+        diag.ShowButtonRow = true;
+        diag.OkButtonText = " 提 交 ";
+        diag.OKEvent = function () {
+            diag.innerFrame.contentWindow.save();
+        };
+        diag.show();
+    }
+
+    // 删除
+    function onDelete(id) {
+        top.Dialog.confirm("此操作将永久删除，是否继续？", function () {
+            $.ajax({
+                url: ctxPath + "dict/" + id,
+                type: 'delete',
+                data: {}
+            }).then(function (res) {
+                if (0 == res.code) {
+                    top.Toast("showSuccessToast", '操作成功');
+                    refresh();
+                } else {
+                    top.Toast("showErrorToast", '操作异常');
+                }
+            }, function () {
+                top.Toast("showErrorToast", '删除失败！');
+            })
+        });
+    }
+
+    // 字典项
+    function onSubset(id) {
+        var diag = new top.Dialog();
+        diag.ID = "a1";
+        diag.URL = ctxPath + "page/dict/item/" + id;
+        diag.Title = "字典项管理";
+        //自定义宽度和长度的设置
+        diag.Width = 1400;
+        diag.Height = 650;
+        diag.ShowButtonRow = false;
+        diag.show();
+    }
+    // 新增
+    function addDict() {
+        var diag = new top.Dialog();
+        diag.URL = ctxPath + "page/dict/add";
+        diag.Title = "新增";
+        //自定义宽度和长度的设置
+        diag.Width = 420;
+        diag.Height = 220;
+        diag.ShowButtonRow = true;
+        diag.OkButtonText = " 提 交 ";
+        diag.OKEvent = function () {
+            diag.innerFrame.contentWindow.save();
+        };
+        diag.show();
+    }
+
+    function searchHandler() {
+        var paramsx = {};
+        var type = $("#searchInput").val();
+        if (type) {
+            paramsx.type = type;
+        }
+
+        var system = $("#searchSystem").val();
+        if (system) {
+            paramsx.system = system
+        }
+
+        paramsx.filters = JSON.stringify(paramsx);
+
+        grid.setOptions({
+            params: paramsx
+        });
+        grid.setNewPage(1);
+        grid.loadData();
+    }
+
+    function resetSearch() {
+        $("#queryForm")[0].reset();
+        searchHandler();
+    }
+
+    // 批量删除
+    function batchDeletion() {
+        if(checkedArray.length > 0) {
+            top.Dialog.confirm("此操作将永久删除，是否继续？", function () {
+                for(var i =0;i<checkedArray.length;i++) {
+                    $.ajax({
+                        url: ctxPath + "dict/" + checkedArray[i],
+                        type: 'delete',
+                        data: {}
+                    }).then(function (res) {
+                        if (0 == res.code) {
+                            top.Toast("showSuccessToast", '删除成功');
+                            refresh();
+                        } else {
+                            top.Toast("showErrorToast", res.msg);
+                        }
+                    }, function () {
+                        top.Toast("showErrorToast", '删除失败！');
+                    })
+                }
+            });
+        } else {
+            top.Toast("showErrorToast", '请选择需要删除的数据！');
+        }
+    }
+    function resetEdit() {
+        if(checkedArray.length > 0) {
+            if(checkedArray.length > 1) {
+                top.Toast("showErrorToast", '同时只能编辑一条数据！');
+                return;
+            }
+            var diag = new top.Dialog();
+            diag.URL = ctxPath + "page/dict/edit/" + checkedArray[0];
+            diag.Title = "编辑";
+            //自定义宽度和长度的设置
+            diag.Width = 420;
+            diag.Height = 220;
+            diag.ShowButtonRow = true;
+            diag.OkButtonText = " 提 交 ";
+            diag.OKEvent = function () {
+                diag.innerFrame.contentWindow.save();
+            };
+            diag.show();
+        } else {
+            top.Toast("showErrorToast", '请选择需要编辑的数据！');
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+    function findCheckedArray(id) {
+        for(var i =0;i<checkedArray.length;i++) {
+            if(checkedArray[i] == id) return i;
+        }
+        return -1;
+    }
+    function addCheckedArray(id,name) {
+        if(findCheckedArray(id) == -1) {
+            checkedArray.push(id);
+            checkedTextArray.push(name);
+        }
+    }
+    function removeCheckedArray(id) {
+        var i = findCheckedArray(id);
+        if(i==-1) return;
+        checkedArray.splice(i,1);
+        checkedTextArray.splice(i,1);
+    }
+    function checkedHandler(rowdata) {
+        if (findCheckedArray(rowdata.id) == -1)
+            return false;
+        return true;
+    }
+    function checkRowHandler(checked, data) {
+        if (checked) addCheckedArray(data.id,data.description);
+        else removeCheckedArray(data.id,data.description);
+    }
+    function checkAllRowHandler(checked) {
+        for (var rowid in this.records) {
+            if(checked)
+                addCheckedArray(this.records[rowid]['id'],this.records[rowid]['description']);
+            else
+                removeCheckedArray(this.records[rowid]['id'],this.records[rowid]['description']);
+        }
+    }
+</script>
+<style>
+    .page_content {
+        position: fixed;
+        background-color: #ffffff;
+        margin: 15px;
+        height: calc(100vh - 140px);
+        width: calc(100% - 30px);
+    }
+</style>
+</body>
+</html>

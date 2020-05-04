@@ -19,7 +19,6 @@
         <module>barrier-common-data</module>
         <module>barrier-common-swagger</module>
         <module>barrier-common-qui</module>
-        <module>barrier-common-rmq</module>
     </modules>
 
     <build>

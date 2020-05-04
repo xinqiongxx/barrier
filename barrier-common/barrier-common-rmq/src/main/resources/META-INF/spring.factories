@@ -1,3 +1,0 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-    com.tjaide.nursery.barrier.common.rmq.RmqConfigProperties,\
-    com.tjaide.nursery.barrier.common.rmq.config.WebMvcConfig

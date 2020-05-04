@@ -1,0 +1,182 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>字典管理</title>
+
+    <!--框架必需start-->
+    <script type="text/javascript" th:src="@{/static/js/public/base-util.js}" src="../../static/js/public/base-util.js"></script>
+    <script type="text/javascript" th:src="@{/libs/js/jquery.js}" src="../../libs/js/jquery.js"></script>
+    <script type="text/javascript" th:src="@{/libs/js/language/cn.js}" src="../../libs/js/language/cn.js"></script>
+    <script type="text/javascript" th:src="@{/libs/js/framework.js}" src="../../libs/js/framework.js"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{/libs/css/import_basic.css}"
+          href="../../libs/css/import_basic.css"/>
+    <link rel="stylesheet" type="text/css" id="skin" th:prePath="@{/}" prePath="../../"/>
+    <link rel="stylesheet" type="text/css" id="customSkin"/>
+    <!--框架必需end-->
+    <!--数据表格start-->
+    <script th:src="@{/libs/js/table/quiGrid.js}" src="../../libs/js/table/quiGrid.js" type="text/javascript"></script>
+    <!--数据表格end-->
+    <!-- iconfont start -->
+    <link rel="stylesheet" type="text/css" th:href="@{/static/iconfont/iconfont.css}" href="../../static/iconfont/iconfont.css"/>
+    <!-- iconfont end -->
+
+    <script type="text/javascript" th:inline="javascript">
+        /*<![CDATA[*/
+        ctxPath = /*[[@{/}]]*/ '';
+        /*]]>*/
+    </script>
+    <style>
+        .buttonGroup {
+            width: 80px !important;
+        }
+    </style>
+
+</head>
+
+<body>
+
+<div class="form_content">
+    <div class="oppContent">
+        <div class="buttonGroup">
+            <span class="leftButton icon_add" onclick="addDictItem()">新增</span>
+        </div>
+    </div>
+    <div class="clear"></div>
+    <div id="dataBasic"></div>
+</div>
+
+<input type="hidden" id="id" th:value="${id }">
+<script type="text/javascript">
+    var grid;
+    var _id = $('#id').val();
+    console.log('>>>>' + _id)
+    $(function () {
+        grid = $("#dataBasic").quiGrid({
+            columns: [
+                {display: '类型', name: 'type', align: 'center', width: "15%"},
+                {display: '数据值', name: 'value', align: 'center', width: "15%"},
+                {display: '标签名', name: 'label', align: 'center', width: "15%"},
+                {display: '描述', name: 'description', align: 'center', width: "15%"},
+                {display: '排序', name: 'sort', align: 'center', width: "10%"},
+                {display: '备注信息', name: 'remarks', align: 'center', width: "15%"},
+                {
+                    display: '操作', align: 'center', width: "15%",
+                    render: function (rowdata, rowindex, value, column) {
+                        var bar = '<div class="grid_user_container">';
+                        bar += '<div class="iconfont icon-bianji bg1 qTip" title="编辑" onclick="onEdit(\'' + rowdata.id + '\')"></div>';
+                        bar += '<div class="iconfont icon-shanchu bg2 qTip" title="删除" onclick="onDelete(\'' + rowdata.id + '\')"></div>';
+                        bar += '</div>';
+                        return bar;
+                    }
+                }
+            ],
+            url: ctxPath + 'dict/item/page?dictId=' + _id,
+            sortnameParmName: 'gridsort',
+            method: 'get',
+            sortName: 'update_time',
+            sortOrder: "DESC",
+            rownumbers: true,
+            checkbox: false,
+            height: '100%',
+            width: "100%",
+            pageSize: 10,
+            percentWidthMode: true,
+            onComplete: isnull,
+            onClickCell: function (rowdata, rowid, rowobj) {
+                $(".maingrid_content").show();
+                $(".maingrid_content").find("iframe").attr("src", "/role/view?role_id=" + rowdata.role_id);
+                $(".maingrid_content").stop().animate({marginRight: "0"}, 500);
+            }
+        })
+    })
+
+    function isnull() {
+        if ($(".l-grid-body,.l-scroll").find("tr").length > 0) {
+        } else {
+            $(".l-grid-body,.l-scroll").find("div.l-grid-body-inner").html(
+                "<div class=\"indexnodata\">\n"
+                + "<p> 当前没有查找到结果</p>\n"
+                + "<p>请更改筛选条件,可以在更多的筛选条件里设置</p>\n" + "</div>")
+        }
+    }
+
+    //刷新页面方法
+    function refresh(isUpdate) {
+        if (!isUpdate) {
+            grid.setNewPage(1);
+        }
+        grid.loadData();
+    }
+
+    // 新增
+    function addDictItem() {
+        var diag = new top.Dialog();
+        diag.URL = ctxPath + "page/dict/additem/" + _id;
+        diag.Title = "新增";
+        //自定义宽度和长度的设置
+        diag.Width = 720;
+        diag.Height = 185;
+        diag.ShowButtonRow = true;
+        diag.OkButtonText = " 提 交 ";
+        diag.OKEvent = function () {
+            diag.innerFrame.contentWindow.save();
+        };
+        diag.show();
+    }
+
+    // 编辑
+    function onEdit(id) {
+        var diag = new top.Dialog();
+        diag.URL = ctxPath + "page/dict/edititem/" + id;
+        diag.Title = "编辑";
+        //自定义宽度和长度的设置
+        diag.Width = 720;
+        diag.Height = 185;
+        diag.ShowButtonRow = true;
+        diag.OkButtonText = " 提 交 ";
+        diag.OKEvent = function () {
+            diag.innerFrame.contentWindow.save();
+        };
+        diag.show();
+    }
+
+    // 删除
+    function onDelete(id) {
+        // top.Dialog.confirm("此操作将永久删除，是否继续？",function(){
+        $.ajax({
+            url: ctxPath + "dict/item/" + id,
+            type: 'delete',
+            data: {}
+        }).then(function (res) {
+            if (0 == res.code) {
+                top.Toast("showSuccessToast", '操作成功');
+                refresh();
+            } else {
+                top.Toast("showErrorToast", res.msg);
+            }
+        }, function () {
+            top.Toast("showErrorToast", '删除失败！');
+        })
+        // });
+    }
+</script>
+<style>
+    .form_content {
+        padding: 0 15px;
+        margin-top: 15px;
+        position: fixed;
+        background-color: #ffffff;
+        height: calc(100% - 30px);
+        width: calc(100% - 30px);
+    }
+    .page_content {
+        position: fixed;
+        background-color: #ffffff;
+        padding: 15px;
+        height: calc(100% - 30px);
+        width: calc(100% - 30px);
+    }
+</style>
+</body>
+</html>

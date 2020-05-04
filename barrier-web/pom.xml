@@ -13,10 +13,6 @@
     <packaging>war</packaging>
     <description>后台管理</description>
     <dependencies>
-        <!--<dependency>
-            <groupId>com.tjaide.nursery</groupId>
-            <artifactId>barrier-common-rmq</artifactId>
-        </dependency>-->
         <!-- 支持 db -->
         <dependency>
             <groupId>com.tjaide.nursery</groupId>

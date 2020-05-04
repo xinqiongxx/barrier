@@ -1,0 +1,140 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>添加用户</title>
+    <!--框架必需start-->
+    <script type="text/javascript" th:src="@{/static/js/public/base-util.js}" src="../../static/js/public/base-util.js"></script>
+    <script type="text/javascript" th:src="@{/libs/js/jquery.js}" src="../../libs/js/jquery.js"></script>
+    <script type="text/javascript" th:src="@{/libs/js/language/cn.js}" src="../../libs/js/language/cn.js"></script>
+    <script type="text/javascript" th:src="@{/libs/js/framework.js}" src="../../libs/js/framework.js"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{/libs/css/import_basic.css}"
+          href="../../libs/css/import_basic.css"/>
+    <link rel="stylesheet" type="text/css" id="skin" th:prePath="@{/}" prePath="../../"/>
+    <link rel="stylesheet" type="text/css" id="customSkin"/>
+    <!--框架必需end-->
+
+    <!-- 表单验证start -->
+    <script type="text/javascript" th:src="@{/libs/js/form/validationRule.js}"
+            src="../../libs/js/form/validationRule.js"></script>
+    <script type="text/javascript" th:src="@{/libs/js/form/validation.js}"
+            src="../../libs/js/form/validation.js"></script>
+    <!-- 表单验证end -->
+
+    <!-- 树形下拉框end -->
+    <script type="text/javascript" th:inline="javascript">
+        /*<![CDATA[*/
+        ctxPath = /*[[@{/}]]*/ '';
+        /*]]>*/
+    </script>
+</head>
+<body>
+<div class="form_content" id="formContent">
+    <input id="id" type="hidden" th:if="${dataMap ne null}" th:value="${dataMap.getId()}"/>
+    <form id="formAdd" method="post">
+        <table class="tableStyle" formMode="view">
+            <tr>
+                <td>类型：</td>
+                <td>
+                    <input type="text" id="type" placeholder="请输入 类型" class="validate[required]" th:if="${dataMap ne null}"
+                           th:value="${dataMap.getType()}"/>
+                    <input type="text" id="type" placeholder="请输入 类型" class="validate[required]" th:if="${dataMap eq null}"/>
+                    <span class="star">*</span>
+                </td>
+            </tr>
+            <tr>
+                <td>描述：</td>
+                <td>
+                    <input type="text" id="description" placeholder="请输入 描述" class="validate[required]" th:if="${dataMap ne null}"
+                           th:value="${dataMap.getDescription()}"/>
+                    <input type="text" id="description" placeholder="请输入 描述" class="validate[required]" th:if="${dataMap eq null}"/>
+                    <span class="star">*</span>
+                </td>
+            </tr>
+            <tr>
+                <td>备注信息：</td>
+                <td>
+                    <input type="text" id="remarks" placeholder="请输入 备注信息" th:if="${dataMap ne null}" th:value="${dataMap.getRemarks()}"/>
+                    <input type="text" id="remarks" placeholder="请输入 备注信息" th:if="${dataMap eq null}"/>
+                </td>
+            </tr>
+            <tr>
+                <td>字典类型：</td>
+                <td>
+                    <div th:if="${dataMap ne null}">
+                        <input type="radio" class="validate[required] radio" id="dictType-1" name="dictType" value="1"
+                               th:checked="${dataMap.getSystem() eq '1'}"/>
+                        <label for="dictType-1" class="hand">系统类</label>
+
+                        <input type="radio" class="validate[required] radio" id="dictType-2" name="dictType" value="0"
+                               th:checked="${dataMap.getSystem() eq '0'}"/>
+                        <label for="dictType-2" class="hand">业务类</label>
+                    </div>
+                    <div th:if="${dataMap eq null}">
+                        <input type="radio" class="validate[required] radio" id="dictType-1" name="dictType" value="1"/>
+                        <label for="dictType-1" class="hand">系统类</label>
+
+                        <input type="radio" class="validate[required] radio" id="dictType-2" name="dictType" value="0"/>
+                        <label for="dictType-2" class="hand">业务类</label>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+<script type="text/javascript">
+    //保存
+    function save() {
+        var valid = $(formAdd).validationEngine({returnIsValid: true});
+        if (valid == true) {
+            var data = {};
+            data.type = $('#type').val();
+            data.description = $('#description').val();
+            data.remarks = $("#remarks").val();
+
+            data.delFlag = "0";
+            data.tenantId = "1";
+            data.system = $("input:radio[name=dictType]:checked").val();
+            if ($('#id').val()) {
+                data.id = $('#id').val();
+                $.jsonAjax({
+                    url: ctxPath + "dict",
+                    type: 'put',
+                    data: data
+                }).then(function (res) {
+                    if (res.code == 0) {
+                        top.Toast("showSuccessToast", '操作成功');
+                        top.frmright.refresh();
+                        top.Dialog.close()
+                    } else {
+                        top.Toast("showErrorToast", res.msg);
+                    }
+
+                }, function () {
+                    top.Toast("showErrorToast", '操作失败！');
+                })
+                return false
+            }
+
+            $.jsonAjax({
+                url: ctxPath + "dict",
+                type: 'post',
+                data: data
+            }).then(function (res) {
+                if (0 == res.code) {
+                    top.frmright.refresh();
+                    top.Dialog.close()
+                } else {
+                    top.Toast("showErrorToast", '操作异常');
+                }
+            }, function () {
+                top.Toast("showErrorToast", '新增失败！');
+            })
+        } else {
+            top.Toast("showErrorToast", '请完善表单');
+        }
+    }
+</script>
+</body>
+</html>

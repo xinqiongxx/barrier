@@ -59,11 +59,6 @@
                 <artifactId>barrier-common-qui</artifactId>
                 <version>${barrier.version}</version>
             </dependency>
-            <dependency>
-                <groupId>com.tjaide.nursery</groupId>
-                <artifactId>barrier-common-rmq</artifactId>
-                <version>${barrier.version}</version>
-            </dependency>
             <!--shiro spring -->
             <dependency>
                 <groupId>org.apache.shiro</groupId>

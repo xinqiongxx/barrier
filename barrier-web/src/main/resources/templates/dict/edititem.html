@@ -1,0 +1,130 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>添加字典项</title>
+    <!--框架必需start-->
+    <script type="text/javascript" th:src="@{/static/js/public/base-util.js}" src="../../static/js/public/base-util.js"></script>
+    <script type="text/javascript" th:src="@{/libs/js/jquery.js}" src="../../libs/js/jquery.js"></script>
+    <script type="text/javascript" th:src="@{/libs/js/language/cn.js}" src="../../libs/js/language/cn.js"></script>
+    <script type="text/javascript" th:src="@{/libs/js/framework.js}" src="../../libs/js/framework.js"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{/libs/css/import_basic.css}"
+          href="../../libs/css/import_basic.css"/>
+    <link rel="stylesheet" type="text/css" id="skin" th:prePath="@{/}" prePath="../../"/>
+    <link rel="stylesheet" type="text/css" id="customSkin"/>
+    <!--框架必需end-->
+
+    <!-- 表单验证start -->
+    <script type="text/javascript" th:src="@{/libs/js/form/validationRule.js}"
+            src="../../libs/js/form/validationRule.js"></script>
+    <script type="text/javascript" th:src="@{/libs/js/form/validation.js}"
+            src="../../libs/js/form/validation.js"></script>
+    <!-- 表单验证end -->
+
+    <!-- 数字步进器start -->
+    <script type="text/javascript" th:src="@{/libs/js/form/stepper.js}"
+            src="../../libs/js/form/stepper.js"></script>
+    <!-- 数字步进器end -->
+
+    <script type="text/javascript" th:inline="javascript">
+        /*<![CDATA[*/
+        ctxPath = /*[[@{/}]]*/ '';
+        /*]]>*/
+    </script>
+</head>
+<body>
+<input type="hidden" id="id" th:value="${dataMap.getId()}">
+<input type="hidden" id="dictId" th:value="${dataMap.getDictId()}">
+<div class="form_content" id="formContent">
+    <form id="formAdd" method="post">
+        <table class="tableStyle" formMode="view">
+            <tr>
+                <td>类型：</td>
+                <td>
+                    <input type="text" id="type" th:value="${dataMap.getType()}" disabled/>
+                </td>
+                <td>数据值：</td>
+                <td>
+                    <input type="text" id="value" placeholder="请输入 数据值" class="validate[required]" th:value="${dataMap.getValue()}"/>
+                    <span class="star">*</span>
+                </td>
+            </tr>
+            <tr>
+                <td>标签名：</td>
+                <td>
+                    <input type="text" id="label" placeholder="请输入 标签名" class="validate[required]" th:value="${dataMap.getLabel()}"/>
+                    <span class="star">*</span>
+                </td>
+                <td>描述：</td>
+                <td>
+                    <input type="text" id="description" placeholder="请输入 描述" class="validate[required]" th:value="${dataMap.getDescription()}"/>
+                    <span class="star">*</span>
+                </td>
+            </tr>
+            <tr>
+                <td>排序：</td>
+                <td>
+                    <input type="text" id="sort" class="stepper validate[required]" th:value="${dataMap.getSort()}"/>
+                    <span class="star">*</span>
+                </td>
+                <td>备注信息：</td>
+                <td>
+                    <input type="text" id="remarks" placeholder="请输入 备注信息" th:value="${dataMap.getRemarks()}"/>
+                </td>
+            </tr>
+            <!--<tr>-->
+            <!--<td>字典类型：</td>-->
+            <!--<td>-->
+            <!--<input type="radio" class="validate[required] radio" id="dictType-1" name="dictType" value="0"/>-->
+            <!--<label for="dictType-1" class="hand">系统类</label>-->
+
+            <!--<input type="radio" class="validate[required] radio" id="dictType-2" name="dictType" value="1" />-->
+            <!--<label for="dictType-2" class="hand">业务类</label>-->
+            <!--</td>-->
+            <!--<td>类型：</td>-->
+            <!--<td>-->
+            <!--<input type="text" id="type" class="validate[required]" />-->
+            <!--<span class="star">*</span>-->
+            <!--</td>-->
+            <!--</tr>-->
+        </table>
+    </form>
+</div>
+<script type="text/javascript">
+    //保存
+    function save() {
+        var valid = $(formAdd).validationEngine({returnIsValid: true});
+        if (valid == true) {
+            var data = {};
+            data.id = $('#id').val();
+            data.dictId = $('#dictId').val();
+            data.value = $('#value').val();
+            data.label = $('#label').val();
+            data.type = $('#type').val();
+            data.description = $('#description').val();
+            data.sort = $("#sort").val();
+            data.remarks = $("#remarks").val();
+            data.delFlag = "0";
+            data.tenantId = "1";
+            $.jsonAjax({
+                url: ctxPath + "dict/item",
+                type: 'put',
+                data: data
+            }).then(function (res) {
+                if (0 == res.code) {
+                    top.document.getElementById("_DialogFrame_a1").contentWindow.refresh();
+                    parent.Dialog.close()
+                } else {
+                    top.Toast("showErrorToast", res.msg);
+                }
+            }, function () {
+                top.Toast("showErrorToast", '操作失败！');
+            })
+        } else {
+            top.Toast("showErrorToast", '请完善表单');
+        }
+    }
+</script>
+</body>
+</html>
