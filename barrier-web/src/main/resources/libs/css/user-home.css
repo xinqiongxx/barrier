@@ -1,0 +1,960 @@
+body {
+    background-color: #EEF3FA;
+}
+
+.content_1 {
+    width: 100%;
+    margin: 0 auto;
+    position: relative;
+}
+
+.d-f {
+    display: flex;
+}
+
+
+.content-content {
+    margin-top: 74px;
+    padding: 0 15px 20px;
+}
+
+.content {
+    background: #fff;
+    border-radius: 5px;
+    margin-top: 20px;
+    float: left;
+    width: 100%;
+    overflow: hidden;
+}
+
+.content.nobg {
+    background-color: transparent;
+}
+
+
+.content_card {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 10px;
+    align-items: center;
+}
+
+.content_card li {
+    /*height: 125px;*/
+    background-color: #fff;
+    width: calc(25% - 20px);
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.content_card li .minute {
+    height: 100px;
+    border-radius: 5px 5px 0 0;
+    position: relative;
+}
+
+.content_card li:nth-child(1) .minute {
+    background: linear-gradient(to right, rgba(171, 187, 249, 1), rgba(171, 187, 249, .5));
+}
+
+.content_card li:nth-child(2) .minute {
+    background: linear-gradient(to right, rgba(126, 219, 227, 1), rgba(126, 219, 227, .5));
+}
+
+.content_card li:nth-child(3) .minute {
+    background: linear-gradient(to right, rgba(242, 228, 182, 1), rgba(242, 228, 182, .5));
+}
+
+.content_card li:nth-child(4) .minute {
+    background: linear-gradient(to right, rgba(245, 197, 193, 1), rgba(245, 197, 193, .5));
+}
+
+.content_card li .minute .minute-content {
+    position: absolute;
+    left: -8px;
+    right: -8px;
+    top: 5px;
+    height: calc(100% - 5px);
+    border-radius: 5px;
+    color: #fff;
+    padding: 0 15px;
+    font-size: 14px;
+
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+}
+
+.content_card li:nth-child(1) .minute .minute-content {
+    background: linear-gradient(135deg, rgb(104, 135, 250), rgb(49, 200, 255));
+}
+
+.content_card li:nth-child(2) .minute .minute-content {
+    background: linear-gradient(135deg, rgb(20, 196, 211), rgb(79, 224, 163));
+}
+
+.content_card li:nth-child(3) .minute .minute-content {
+    background: linear-gradient(135deg, rgb(249, 209, 125), rgb(255, 154, 87));
+}
+
+.content_card li:nth-child(4) .minute .minute-content {
+    background: linear-gradient(135deg, rgb(252, 150, 138), rgb(254, 107, 142));
+}
+
+.content_card li .minute .minute-content .minute_left {
+    position: absolute;
+    width: 81px;
+    height: 79px;
+}
+
+.content_card li .minute .minute-content .minute_left img {
+    width: 100%;
+    height: 100%;
+}
+
+.content_card li .minute .minute-content .minute_right {
+    position: absolute;
+    margin-left: 90px;
+}
+
+.content_card li .minute .minute-content .c-lable {
+    font-size: 28px;
+    font-weight: 700;
+    margin-right: 5px
+}
+
+.content_card li .minute .minute-content .c-title {
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.content_card li .lable {
+    height: 30px;
+    line-height: 30px;
+    padding: 0 20px;
+    font-size: 14px;
+}
+
+.content_card li:nth-child(1) .lable {
+    color: rgb(85, 153, 251);
+}
+
+.content_card li:nth-child(2) .lable {
+    color: rgb(37, 205, 195);
+}
+
+.content_card li:nth-child(3) .lable {
+    color: rgb(254, 158, 88);
+}
+
+.content_card li:nth-child(4) .lable {
+    color: rgb(254, 105, 140);
+}
+
+.content_card li .lable span {
+    height: 18px;
+    width: 18px;
+    display: block;
+    border-radius: 50%;
+    background-image: url("../../static/image/homeicon/arrow.png");
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    float: right;
+    margin-top: 6px;
+    margin-right: -5px;
+}
+
+.content_card li:nth-child(1) .lable span {
+    background-color: rgb(85, 153, 251);
+}
+
+.content_card li:nth-child(2) .lable span {
+    background-color: rgb(37, 205, 195);
+}
+
+.content_card li:nth-child(3) .lable span {
+    background-color: rgb(254, 158, 88);
+}
+
+.content_card li:nth-child(4) .lable span {
+    background-color: rgb(254, 105, 140);
+}
+
+.content_card li .lable span img {
+    text-align: center;
+    vertical-align: middle;
+
+}
+
+.con-head {
+    display: flex;
+    margin: 10px 15px;
+    justify-content: space-between;
+}
+
+.con-head .name {
+    font-size: 16px;
+    color: #373f6e;
+    font-weight: bold;
+    padding: 10px 0 0 5px;
+}
+.con-head .name p {
+    position: relative;
+    cursor: pointer;
+}
+.con-head .name p i.iconfont{
+    position: absolute;
+    left: calc(50% - 16px / 2);
+    top: 50%;
+    display: none;
+}
+.con-head .name p.active i.iconfont {
+    display: block;
+}
+.con-head .option {
+    background-color: #5C92FC;
+    color: #ffffff;
+    font-size: 12px;
+    padding: 0px 15px;
+    border-radius: 30px;
+    height: 24px;
+    line-height: 24px;
+    text-align: left;
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+.con-head .option .arrow {
+    display: block;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #91b6ff url("../../static/image/homeicon/arrow-left.png") 50% 50% no-repeat;
+    float: right;
+    margin: 0 -20px 0 0;
+
+}
+
+.con-head .option .icon {
+    width: 20px;
+    height: 20px;
+    display: block;
+    float: left;
+    margin: 2px 5px 0 0;
+}
+
+.con-head .option .icon img {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.con-head .option .font {
+    margin-right: 5px;
+}
+
+.dataSource {
+    height: calc(100% - 48px);
+}
+
+.dataSource.-c {
+    position: relative;
+    border-radius: 0 0 5px 5px;
+    overflow: hidden;
+    padding: 0 20px;
+}
+
+.dataSource .option {
+    background-color: #5C92FC;
+    color: #ffffff;
+    font-size: 12px;
+    padding: 0px 20px;
+    border-radius: 30px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    margin-top: 10px;
+}
+
+.pushButtons-add {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    border-radius: 100px;
+    right: -45px;
+    bottom: -45px;
+    background: #11c3d3; /* Old browsers */
+    background: -moz-linear-gradient(-45deg, #11c3d3 0%, #4ce0a2 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(-45deg, #11c3d3 0%, #4ce0a2 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(135deg, #11c3d3 0%, #4ce0a2 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    background: linear-gradient(135deg, #11c3d3 0%, #4ce0a2 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#11c3d3', endColorstr='#4ce0a2', GradientType=1); /* IE6-9 fallback on horizontal gradient */
+}
+
+.pushButtons-add span {
+    display: block;
+    margin: 20px 0 0 26px;
+    cursor: pointer;
+}
+
+.pushButtons {
+    display: flex;
+    justify-content: start;
+    flex-wrap: wrap;
+    padding: 0 15px;
+}
+
+.pushButtons li {
+    background-color: #eceff4;
+    height: 42px;
+    line-height: 42px;
+    padding: 0 15px;
+    margin-right: 8px;
+    margin-bottom: 15px;
+    cursor: pointer;
+}
+.pushButtons li:hover {
+    background-color: #5c92fb;
+    color: #ffffff;
+}
+
+.pushButtons li.active {
+    background-color: #5c92fb;
+    color: #ffffff;
+}
+
+.speed-list {
+    height: 90px;
+    display: flex;
+    justify-content: center;
+    text-align: left;
+    font-size: 12px;
+    margin-bottom: 15px
+}
+
+.speed {
+    height: 10px;
+    width: 100%;
+    background-color: #e0e0e0;
+    position: relative;
+    border-radius: 15px;
+    margin-top: 10px;
+
+}
+
+.speed .speed-item {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    border-radius: 15px;
+}
+
+.speed .speed-item.cl1 {
+    background: linear-gradient(to right, #fe954b, #fad07b)
+}
+
+.speed .speed-item.cl2 {
+    background: linear-gradient(to right, #00bccc, #3ede99)
+}
+
+.speed .speed-item.cl3 {
+    background: linear-gradient(to right, #ff527d, #ff8f47)
+}
+
+.speed .speed-item.cl4 {
+    background: linear-gradient(to right, #ccd2d1, #ced4d2)
+}
+
+.speed .speed-item.cl5 {
+    background: linear-gradient(to right, #5d80f9, #14bdff)
+}
+
+.speed .speed-item.cl6 {
+    background: linear-gradient(to right, #00bece, #18d78a)
+}
+
+.speed .speed-item.cl7 {
+    background: linear-gradient(to right, #fe944c, #facc6c)
+}
+
+.speed .speed-item.cl8 {
+    background: linear-gradient(to right, #fc877b, #ff6186)
+}
+
+
+.buttonGroup {
+    width: auto;
+    float: none;
+}
+
+
+.content-head {
+    height: 75px;
+    width: 100%;
+    background-color: #FFFFFF;
+    position: fixed;
+    top: 0;
+    z-index: 999;
+    display: flex;
+    justify-content: space-between;
+    box-shadow: 2px 2px 5px #eee;
+
+}
+
+.content-head > div {
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.content-head > div.logo {
+    width: 25%;
+}
+
+.content-head > div.logo img {
+    margin-left: 30px;
+    cursor: pointer;
+}
+
+.content-head > div.navigation {
+    width: 45%;
+    justify-content: center;
+}
+
+ul.sub-navigation {
+    display: flex;
+}
+
+.sub-navigation li {
+    color: #5c92fb;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    position: relative;
+    line-height: 75px;
+}
+.sub-navigation li.active:after{
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    content: '';
+    border-bottom: 4px solid #5D92FA;
+}
+
+.sub-navigation li + li{
+    margin-left: 40px;
+}
+
+.content-head > div.user-news {
+    width: 25%;
+    justify-content: flex-end;
+}
+
+.user-news ._user {
+    margin-right: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.user-news ._user .p1 {
+    margin-right: 15px;
+    color: #888888;
+}
+
+.logout {
+    background-color: #eff4fd;
+    height: 20px;
+    line-height: 20px;
+    padding: 0 10px;
+    border-radius: 15px;
+    font-size: 12px;
+    color: #fe6384;
+    margin-top: 5px;
+    cursor: pointer;
+}
+
+.logout span {
+    width: 15px;
+    height: 15px;
+    float: left;
+    display: block;
+    margin: 2px 2px 0 2px;
+}
+
+.logout span img {
+    width: 100%;
+    height: 100%;
+}
+
+.spot {
+    border-radius: 15px;
+    position: absolute;
+    height: 14px;
+    background: #5c92fb;
+    width: 30px;
+    bottom: 30px;
+    left: 50%;
+    transform: translate(-50%);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 0 15px;
+}
+
+.spot > div {
+    width: 7px;
+    height: 7px;
+    background-color: #85adfc;
+    border-radius: 7px;
+}
+
+.spot > div.active {
+    background-color: #fff;
+}
+
+
+.card1 {
+    display: flex;
+    justify-content: space-around;
+    padding: 20px 20px 0;
+}
+
+.card1 li {
+    text-align: center;
+    font-size: 16px;
+}
+
+.card1 li:nth-child(1) {
+    color: #729dff
+}
+
+.card1 li:nth-child(2) {
+    color: #ff5a5a
+}
+
+.card1 li:nth-child(3) {
+    color: #ff9250
+}
+
+.card1 div {
+    display: flex;
+}
+
+.card1 p {
+    font-size: 24px;
+    font-weight: 700;
+    display: block;
+    padding: 0 0 0 8px;
+    margin-top: -2px;
+}
+
+.card1 li img {
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+
+.card2 {
+    display: flex;
+    justify-content: center;
+    padding: 10px 15px 15px 15px;
+    text-align: center;
+}
+
+.card2 div.item {
+    flex: 1;
+    position: relative;
+}
+
+.card2 div.item + div.item:after {
+    position: absolute;
+    top: 15px;
+    bottom: 15px;
+    left: 0;
+    content: '';
+    border-left: 1px solid #d9d9d9;
+}
+
+/**/
+/*.g2-guide-html{color: #5c92fb;text-align: center;}*/
+/*.g2-guide-html .title{font-size: 14px;}*/
+/*.g2-guide-html .value{font-size: 24px;}*/
+
+.card3 {
+    margin: 10px 5px;
+}
+
+.card3 li {
+    display: flex;
+    align-items: center;
+    margin: 3px 0;
+}
+.card3 li div {
+    width: calc(100% - 15px);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow:ellipsis;
+    font-size: 12px;
+}
+
+
+.card4 {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 22% 0;
+}
+
+.card4 li {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 5px 0;
+}
+
+.card4 li span {
+    height: 12px;
+    width: 12px;
+    display: block;
+    border-radius: 50%;
+    margin-right: 5px;
+    background: red;
+    position: relative;
+}
+
+.card4 li:nth-child(1) span {
+    background: linear-gradient(to right, #fd9c6b, #f7c559);
+}
+
+.card4 li:nth-child(2) span {
+    background: linear-gradient(to right, #41e8a2, #01f0c7);
+}
+
+.card4 li:nth-child(3) span {
+    background: linear-gradient(to right, #17e9d1, #62cdf1);
+}
+
+.card4 li:nth-child(4) span {
+    background: linear-gradient(to right, #71bcff, #6e68f3);
+}
+
+.card4 li span:after {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    content: '';
+    left: 3px;
+    top: 3px;
+    background-color: #fff;
+}
+
+.card4 li ._c1 {
+    font-size: 14px;
+    font-weight: 700;
+    color: #7b7b99;
+}
+
+.card4 li ._c2 {
+    margin: 0 10px;
+    color: #e4e4e4;
+}
+
+.card4 li ._c3 {
+    font-size: 12px;
+    color: #9090a4;
+    margin-right: 15px;
+}
+
+.card4 li ._c4 {
+    color: #6e6e8f;
+}
+
+.card5 {
+}
+
+.card5 ._title {
+    display: flex;
+}
+
+.card5 ._title ._c1 {
+}
+
+.card5 ._title ._c2 {
+    font-size: 16px;
+    font-weight: 700;
+    color: #fe6078;
+    margin: 0 5px;
+}
+
+.card5 .speed-bg {
+    height: 25px;
+    width: 100%;
+    background-color: #e0e0e0;
+    position: relative;
+}
+
+.card5 .speed-bg > .speed {
+    padding-left: 10px;
+    color: #fff;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 25px;
+    margin-top: 0;
+    border-radius: 0;
+    background: linear-gradient(to right, rgb(8, 223, 158), rgb(5, 193, 206))
+}
+
+
+.card6 {
+    display: flex;
+    justify-content: center;
+    flex-flow: column;
+    margin: 15% 0;
+    font-size: 12px;
+}
+
+.card6 li {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.card6 li span {
+    height: 12px;
+    width: 12px;
+    display: block;
+    border-radius: 50%;
+    margin-right: 5px;
+    background: red;
+    position: relative;
+}
+
+.card6 li:nth-child(1) span {
+    background: linear-gradient(to right, #fe8478, #fe6c83);
+}
+
+.card6 li:nth-child(2) span {
+    background: linear-gradient(to right, #c55ff9, #b152fd);
+}
+
+.card6 li:nth-child(3) span {
+    background: linear-gradient(to right, #729efe, #729efe);
+}
+
+.card6 li span:after {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    content: '';
+    left: 3px;
+    top: 3px;
+    background-color: #fff;
+}
+
+.card6 li ._c1 {
+    flex: 1;
+}
+
+.card7 {
+    font-size: 14px;
+    line-height: 40px
+}
+
+.card7 li {
+    display: flex;
+    align-items: center;
+    margin: 5px 0;
+}
+
+.card7 li span {
+    height: 12px;
+    width: 12px;
+    display: block;
+    border-radius: 50%;
+    margin-right: 5px;
+    background: red;
+    position: relative;
+}
+
+.card7 li:nth-child(1) span {
+    background: linear-gradient(to right, #fe9e68, #f6c355);
+}
+
+.card7 li:nth-child(2) span {
+    background: linear-gradient(to right, #736cfd, #6bb1fe);
+}
+
+.card7 li:nth-child(3) span {
+    background: linear-gradient(to right, #a771f9, #e56af8);
+}
+
+.card7 li:nth-child(4) span {
+    background: linear-gradient(to right, #ff9486, #fe9381);
+}
+
+.card7 li span:after {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    content: '';
+    left: 3px;
+    top: 3px;
+    background-color: #fff;
+}
+
+.card7 li ._c1 {
+    font-size: 24px;
+    font-weight: 600;
+    margin: 0 5px;
+}
+
+.card7 li ._c2 {
+}
+
+
+.user-dot {
+    height: 10px;
+    width: 10px;
+    display: block;
+    border-radius: 50%;
+    margin-right: 5px;
+    background: red;
+    position: relative;
+}
+
+.user-dot.t1 {
+    background: -webkit-radial-gradient(#8f90fe, #8084fd); /* Safari 5.1 - 6.0 */
+    background: -o-radial-gradient(#8f90fe, #8084fd); /* Opera 11.6 - 12.0 */
+    background: -moz-radial-gradient(#8f90fe, #8084fd); /* Firefox 3.6 - 15 */
+    background: radial-gradient(#8f90fe, #8084fd); /* 标准的语法 */
+}
+
+.user-dot.t2 {
+    background: -webkit-radial-gradient(#d095f1, #ca85f0); /* Safari 5.1 - 6.0 */
+    background: -o-radial-gradient(#d095f1, #ca85f0); /* Opera 11.6 - 12.0 */
+    background: -moz-radial-gradient(#d095f1, #ca85f0); /* Firefox 3.6 - 15 */
+    background: radial-gradient(#d095f1, #ca85f0); /* 标准的语法 */
+}
+
+.user-dot.t3 {
+    background: -webkit-radial-gradient(#fe8496, #ff7387); /* Safari 5.1 - 6.0 */
+    background: -o-radial-gradient(#fe8496, #ff7387); /* Opera 11.6 - 12.0 */
+    background: -moz-radial-gradient(#fe8496, #ff7387); /* Firefox 3.6 - 15 */
+    background: radial-gradient(#fe8496, #ff7387); /* 标准的语法 */
+}
+
+/*.user-dot-state{*/
+/*height: 15px;*/
+/*width: 15px;*/
+/*border-radius: 50%;*/
+/*background: red;*/
+/*position: relative;*/
+/*margin-left: 15px;*/
+
+/*display: flex;*/
+/*color: #fff;*/
+/*text-align: center;*/
+/*justify-content: center;*/
+/*align-items: center;*/
+/*}*/
+/*.user-dot-state.yes{*/
+/*background: #26cebd;*/
+/*font-size: 12px;*/
+/*}*/
+/*.user-dot-state.no{*/
+/*background: #fe597f;*/
+/*}*/
+/*.user-dot-state.wait{*/
+/*background: #d6d7d7;*/
+/*}*/
+
+.user_toggle {
+    display: block;
+    position: relative;
+    line-height: 75px;
+}
+
+.user_toggle_content {
+    right: -40px;
+    height: auto;
+    top: 75px;
+    background-color: #fff;
+    line-height: 3;
+}
+
+.user_toggle_content li {
+    cursor: pointer;
+}
+
+
+.timeSingle {
+    display: flex;
+    margin-top: 8px;
+}
+
+.timeSingle li {
+    padding: 0 5px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin: 0 3px;
+    border: 1px solid transparent;
+}
+
+.timeSingle li:hover, .timeSingle li.on {
+
+    color: #666666 !important;
+    border: 1px solid rgba(215, 215, 215, 0.7);
+}
+
+.timeSingle li:hover, .timeSingle li.date {
+    color: #666666 !important;
+    border: 1px solid rgba(215, 215, 215, 0.7);
+    background: #fff url("../../static/image/homeicon/date.png") 170px center no-repeat;
+}
+
+.timeSingle li .item-date {
+    background-color: transparent;
+    height: 16px;
+    width: 145px;
+    color: inherit;
+    border-width: 0px;
+    border-style: initial;
+    border-color: initial;
+    border-image: initial;
+    padding: 2px;
+}
+
+.timeSingle li.on .item-date::-webkit-input-placeholder {
+    color: #666;
+}
+
+.timeSingle li.on .item-date::-moz-placeholder {
+    color: #666;
+}
+
+.timeSingle li.on .item-date::-ms-input-placeholder {
+    color: #666;
+}
+
+._button5 {
+    display: flex;
+    justify-content: center;
+    color: #fff;
+}
+._button5>div{
+    background-color: #5c92fb;
+    padding: 0 15px;
+    border-radius: 15px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.hide {
+    display: none;
+}

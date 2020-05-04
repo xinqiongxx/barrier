@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.tjaide.nursery.barrier.common.core.config.JacksonConfig,\
+  com.tjaide.nursery.barrier.common.core.util.SpringContextHolder

@@ -1,0 +1,832 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="UTF-8">
+    <title>道闸系统</title>
+    <!--框架必需start-->
+    <link rel="stylesheet" type="text/css" th:href="@{/libs/css/import_basic.css}" href="../../libs/css/import_basic.css"/>
+    <link rel="stylesheet" type="text/css" id="theme" themeColor="blue" th:href="@{/libs/skins/blue/style.css}"
+          href="../../libs/skins/blue/style.css" positionTarget="positionContent"/>
+    <link rel="stylesheet" type="text/css" id="skin" th:href="@{/system/skin/style.css}" href="../../system/skin/style.css" skinPath="system/skin/"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/system/skin/animate.min.css}" href="../../system/skin/animate.min.css"/>
+    <script type="text/javascript" th:src="@{/libs/js/jquery.js}" src="../../libs/js/jquery.js"></script>
+    <script type="text/javascript" th:src="@{/libs/js/language/cn.js}" src="../../libs/js/language/cn.js"></script>
+    <script type="text/javascript" th:src="@{/libs/js/main.js}" src="../../libs/js/main.js"></script>
+    <!--框架必需end-->
+
+    <!--引入弹窗组件start-->
+    <script type="text/javascript" th:src="@{/libs/js/popup/drag.js}" src="../../libs/js/popup/drag.js"></script>
+    <script type="text/javascript" th:src="@{/libs/js/popup/dialog.js}" src="../../libs/js/popup/dialog.js"></script>
+    <!--引入弹窗组件end-->
+
+    <!--引入提示组件start-->
+    <script type="text/javascript" th:src="@{/libs/js/popup/toast.js}" src="../../libs/js/popup/toast.js"></script>
+    <script type="text/javascript" th:src="@{/libs/js/popup/notice.js}" src="../../libs/js/popup/notice.js"></script>
+    <!--引入提示组件end-->
+    <!-- iconfont start -->
+    <link rel="stylesheet" type="text/css" th:href="@{/static/iconfont/iconfont.css}" href="../../static/iconfont/iconfont.css"/>
+    <!-- iconfont end -->
+
+    <script type="text/javascript" th:inline="javascript">
+        /*<![CDATA[*/
+        ctxPath = /*[[@{/}]]*/ '';
+        /*]]>*/
+    </script>
+    <style>
+        html,body {
+            width: 100% !important;
+            height: 100%;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+        }
+
+        .main_box{
+            background: url("../../static/image/bg.jpg") no-repeat;
+            background-size: 100% 100%;
+        }
+
+        #mainFrame {
+            width: 95%;
+            height: 100%;
+            margin: auto;
+            background: none;
+        }
+
+        .main_title {
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            font-size: 25px;
+            font-weight: bold;
+            padding: 20px 0px;
+            background: none;
+            color: #ffffff;
+        }
+
+        .main_user_box {
+            position: absolute;
+            right: 20px;
+            border: 1px solid;
+            top: 0px;
+        }
+
+        #hideCon {
+            width: 20%;
+            border: 1px solid;
+        }
+
+        .main_left_top {
+            width: 25%;
+        }
+        .main_center_top {
+            width: 50%;
+        }
+
+        .main_right_top {
+            width: 25%;
+        }
+        .main_left_top,.main_center_top,.main_right_top,.main_left_bottom,.main_center_bottom,.main_right_bottom {
+            padding:5px;
+        }
+        .main_left_top,.main_center_top,.main_right_top {
+            height: 460px;
+        }
+        .main_left_bottom,.main_center_bottom,.main_right_bottom{
+            height: 300px;
+        }
+        .main_left_top_box{
+            width: 100%;
+            height: 100%;
+        }
+        .main_center_top_box,.main_right_top_box,.main_left_bottom_box,.main_menu_box,.main_right_bottom_box {
+            width: 100%;
+            height: 100%;
+            border: 1px solid #bdbdbd;
+        }
+
+        .main_title_box {
+            padding: 10px 0px 0px 10px;
+            color: #ffffff;
+        }
+        .main_title_box .iconfont {
+            margin-right: 3px;
+        }
+        /*第一块start*/
+        .main_date_box {
+            border: 1px solid #bdbdbd;
+            height: 40%;
+            box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+        }
+
+        .main_statistics_box {
+            border: 1px solid #bdbdbd;
+            margin-top: 10px;
+            height: calc(60% - 10px);
+            box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+        }
+
+        .main_date_top_box {
+            margin: 20px 5px;
+            background: -moz-linear-gradient(right, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0) 100%);
+            background: -webkit-linear-gradient(right, rgba(255,255,255,0.5) 0%,rgba(255,255,255,0) 100%);
+            background: -o-linear-gradient(right, rgba(255,255,255,0.5) 0%,rgba(255,255,255,0) 100%);
+            background: -ms-linear-gradient(right, rgba(255,255,255,0.5) 0%,rgba(255,255,255,0) 100%);
+            background: linear-gradient(to right, rgba(255,255,255,0.5) 0%,rgba(255,255,255,0) 100%);
+            border-left: 3px solid #2da9fa;
+        }
+        .main_date_top_title {
+            color: #ffffff;
+            font-weight: bold;
+            padding: 3px 5px;
+            position: relative;
+            top: 3px;
+        }
+
+        .main_date_top_data {
+            padding: 0px 10px;
+            font-size: 16px;
+            font-weight: bold;
+            letter-spacing: 5px;
+            color: #f7ff02;
+            position: relative;
+            top: -3px;
+        }
+
+        .main_date_bottom_box {
+            display: flex;
+            position: relative;
+        }
+
+        .main_date_bottom_date {
+            margin: 0px 5px 5px;
+            width: 50%;
+            background-color: rgba(224, 224, 224, 0.5);
+            padding: 5px 25px;
+            border-radius: 1px;
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: bold;
+            text-align: center;
+            box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+        }
+
+        .main_date_bottom_date div:nth-child(1) {
+            position: relative;
+            top: 3px;
+        }
+        .main_date_bottom_date div:nth-child(2) {
+            position: relative;
+            top: -3px;
+        }
+        .main_date_bottom_time {
+            margin-left: 10px;
+            flex: 1;
+            height: 30px;
+            line-height: 30px;
+            position: absolute;
+            bottom: 5px;
+            color: #ffffff;
+            right: 20px;
+        }
+
+        .main_date_bottom_time span {
+            background: rgba(130, 130, 130, 0.5);
+            width: 15px;
+            display: inline-block;
+            text-align: center;
+        }
+
+        span.time_colon {
+            background: none;
+            width: 5px;
+            color: #999999;
+        }
+        /*第一块end*/
+        /*第二块start*/
+        .main_select_box {
+            background-color: #cbdbfc;
+            color: #ffffff;
+            padding: 0px 5px;
+        }
+
+        .main_select_box {
+            background-color: #cbdbfc;
+            color: #ffffff;
+            padding: 0px 5px;
+            height: 6%;
+            line-height: 30px;
+        }
+        .main_vedio_box {
+            width: 100%;
+            height: 75%;
+            background: #000000;
+        }
+
+        .main_vedio_title_box {
+            height: 19%;
+            text-align: center;
+            padding: 10px 0px;
+        }
+
+        .main_vedio_title_box div:nth-child(1) {
+            font-size: 30px;
+            font-weight: bold;
+            color: #ffffff;
+        }
+
+        .main_vedio_title_box div:nth-child(2) {
+            display: inline-block;
+            padding: 0px 15px;
+            background: rgba(224, 224, 224, 0.5);
+            margin-top: 10px;
+            border-radius: 20px;
+            color: #ffffff;
+        }
+        /*第二块end*/
+        /*第三块start*/
+        .main_message_list_item {
+            display: flex;
+            border: 2px solid rgb(205, 222, 255,0.2);
+            margin: 10px;
+            position: relative;
+        }
+
+        .image-border {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+        }
+
+        .image-border1 {
+            top: -3px;
+            left: -3px;
+            border-left: 2px solid #FFFFFF;
+            border-top: 2px solid #FFFFFF;
+        }
+
+        .image-border2 {
+            top: -3px;
+            right: -3px;
+            border-right: 2px solid #FFFFFF;
+            border-top: 2px solid #FFFFFF;
+        }
+
+        .image-border3 {
+            bottom: -3px;
+            left: -3px;
+            border-bottom: 2px solid #FFFFFF;
+            border-left: 2px solid #FFFFFF;
+        }
+
+        .image-border4 {
+            bottom: -3px;
+            right: -3px;
+            border-right: 2px solid #FFFFFF;
+            border-bottom: 2px solid #FFFFFF;
+        }
+
+        .main_message_list_item_left {
+            width: 70%;
+            display: flex;
+            padding: 0px 20px;
+        }
+
+        .user_photo_box {
+            width: 50px;
+            height: 50px;
+            border-radius: 5px;
+            margin: 5px;
+            background-color: rgba(255,255,255,0.3);
+        }
+
+        .user_photo_icon_box {
+            border: 1px solid #cbe6f8;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background-color: rgba(255,255,255,0.5);
+        }
+
+        .user_icon_box {
+            color: #006dff;
+            width: 30px;
+        }
+
+        .main_message_list_item_right {
+            color: #ffffff;
+        }
+        /*第三块end*/
+        /*第四块start*/
+        .main_weather_list_box {
+            display: flex;
+            padding: 10px 20px;
+        }
+        .main_weather_list_left {
+            background: rgba(255,255,255,0.3);
+            width: 30%;
+            margin: 5px;
+            border-radius: 10px 0px;
+            text-align: center;
+            padding-top: 20px;
+            color: #ffffff;
+        }
+
+        .main_weather_list_right {
+            width: 35%;
+        }
+
+        .main_weather_list_right_item {
+            text-align: center;
+            color: #ffffff;
+            background-color: rgba(255,255,255,0.3);
+            margin: 5px;
+            border-radius: 10px 0px;
+        }
+
+        .main_weather_list_right_item .main_weather_item_title:nth-child(1) {
+            font-size: 12px;
+            position: relative;
+            top: 3px;
+        }
+
+        .main_weather_item_title:nth-child(2) {
+            color: #009aff;
+            font-size: 12px;
+            position: relative;
+            top: -5px;
+        }
+        /*第四块end*/
+        /*第五块start*/
+        .main_menu_box {
+            padding: 20px 30px;
+        }
+        .main_menu_item{
+            position:relative;
+            width:100px;
+            display: inline-block;
+        }
+
+        .main_menu_item_left {
+            width: 50px;
+            height: 86.6px;
+            margin: 0 auto;
+            transform: translate(-50%,-50%);
+            transform: rotate(60deg);
+            border-top: 1px solid #d4e7f3;
+            border-bottom: 1px solid #d4e7f3;
+        }
+        .main_menu_item_center {
+            position: absolute;
+            width: 50px;
+            height: 86.6px;
+            left: 25px;
+            top: 0;
+            border-top: 1px solid #d4e7f3;
+            border-bottom: 1px solid #d4e7f3;
+        }
+        .main_menu_item_right {
+            position: absolute;
+            width: 50px;
+            height: 86.6px;
+            left: 25px;
+            top: 0;
+            transform: translate(-50%,-50%);
+            transform: rotate(300deg);
+            border-top: 1px solid #d4e7f3;
+            border-bottom: 1px solid #d4e7f3;
+        }
+
+        /*第五块end*/
+        /*第六块start*/
+        .main_data_list_box {
+            padding: 5px 20px;
+        }
+        .main_data_list {
+            display: flex;
+            border-bottom: 1px solid rgba(144,144,144,0.2);
+            margin: 10px 0px;
+        }
+
+        .main_data_list_item {
+            width: 50%;
+            text-align: center;
+            color: #ffffff;
+        }
+
+        .main_data_list_item span {
+            font-size: 16px;
+            margin: 0px 3px;
+            color: #00ff24;
+        }
+        /*第六块end*/
+
+    </style>
+</head>
+<body>
+<div class="main_box" style="height: 100%;">
+    <!--头部与导航start-->
+    <div id="hbox" style="">
+
+    </div>
+    <!--头部与导航end-->
+    <div id="mainFrame">
+        <table width="100%" cellpadding="0" cellspacing="0" class="table_border0">
+            <tbody>
+            <tr>
+                <td colspan="3" style="position: relative;">
+                    <!--顶部区域start-->
+                    <div class="main_title">
+                        幼儿园进出管控系统
+                    </div>
+                    <div class="main_user_box">
+                        <div class="right_toggle">
+                            <div class="user_information" title="用户中心">
+                                <b id="user_info"></b>
+                            </div>
+                            <shiro:authenticated>
+                                <ul class="right_toggle_content" style="display: none;">
+                                    <li class="clearfloat right_toggle_home" onclick="information()"><i></i>
+                                        <div>个人信息</div>
+                                    </li>
+                                    <li class="clearfloat right_toggle_lock_screen" onclick="changePassword()"><i></i>
+                                        <div>修改密码</div>
+                                    </li>
+                                    <li class="clearfloat right_toggle_sign_out" onclick="exitHandler()"><i></i>
+                                        <div>退出</div>
+                                    </li>
+                                </ul>
+                            </shiro:authenticated>
+                        </div>
+                    </div>
+                    <!--顶部区域end-->
+                </td>
+            </tr>
+            <tr>
+                <!--第二层左侧区域start-->
+                <td class="main_left_top">
+                    <div class="main_left_top_box">
+                        <div class="main_date_box">
+                            <div class="main_date_top_box">
+                                <div  class="main_date_top_title">累计服务时长总量（MIN）</div>
+                                <div  class="main_date_top_data">000274538</div>
+                            </div>
+                            <div class="main_date_bottom_box">
+                                <div class="main_date_bottom_date">
+                                    <div>2020年4月22日</div>
+                                    <div>星期三</div>
+                                </div>
+                                <div class="main_date_bottom_time">
+                                    <span>1</span>
+                                    <span>5</span>
+                                    <span class="time_colon">:</span>
+                                    <span>2</span>
+                                    <span>3</span>
+                                    <span class="time_colon">:</span>
+                                    <span>1</span>
+                                    <span>2</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="main_statistics_box">
+                            <div class="main_title_box">
+                                <i class="iconfont icon-qunzuduoren"></i>
+                                人数统计
+                            </div>
+                            <div class="main_chart_box">
+                                <div class="charts_container"></div>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+                <!--第二层左侧区域end-->
+                <!--第二层中间区域start-->
+                <td class="main_center_top">
+                    <div class="main_center_top_box">
+                        <div class="main_select_box">
+                            请选择播放源
+                            <select prompt="请选择播放源" data='{"list":[{"value":"1","key":"008569"},{"value":"2","key":"00567841"}]}'></select>
+                        </div>
+                        <div class="main_vedio_box">
+
+                        </div>
+                        <div class="main_vedio_title_box">
+                            <div>幼儿园</div>
+                            <div>为每个孩子的未来奠基</div>
+                        </div>
+                    </div>
+                </td>
+                <!--第二层中间区域end-->
+                <!--第二层右侧区域start-->
+                <td class="main_right_top">
+                    <div class="main_right_top_box">
+                        <div class="main_title_box">
+                            <i class="iconfont icon-ren"></i>
+                            进出人员
+                            <i class="iconfont icon-gengduomore10"></i>
+                        </div>
+                        <div class="main_message_list_box">
+                            <div>
+                                <div class="main_message_list_item">
+                                    <div class="image-border image-border1"></div>
+                                    <div class="image-border image-border2"></div>
+                                    <div class="image-border image-border3"></div>
+                                    <div class="image-border image-border4"></div>
+                                    <div class="main_message_list_item_left">
+                                        <div class="user_photo_box">
+                                            <div class="user_photo_icon_box">
+                                                <i class="iconfont icon-wo"></i>
+                                            </div>
+                                        </div>
+                                        <div class="user_icon_box"><i class="iconfont icon-jiaohuan1"></i></div>
+                                        <div class="user_photo_box">
+                                            <div class="user_photo_icon_box">
+                                                <i class="iconfont icon-wo"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="main_message_list_item_right">
+                                        <div class="user_name_box">张三</div>
+                                        <div class="user_time_box">00:00:00</div>
+                                    </div>
+                                </div>
+                                <div class="main_message_list_item">
+                                    <div class="image-border image-border1"></div>
+                                    <div class="image-border image-border2"></div>
+                                    <div class="image-border image-border3"></div>
+                                    <div class="image-border image-border4"></div>
+                                    <div class="main_message_list_item_left">
+                                        <div class="user_photo_box">
+                                            <div class="user_photo_icon_box">
+                                                <i class="iconfont icon-wo"></i>
+                                            </div>
+                                        </div>
+                                        <div class="user_icon_box"><i class="iconfont icon-jiaohuan1"></i></div>
+                                        <div class="user_photo_box">
+                                            <div class="user_photo_icon_box">
+                                                <i class="iconfont icon-wo"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="main_message_list_item_right">
+                                        <div class="user_name_box">张三</div>
+                                        <div class="user_time_box">00:00:00</div>
+                                    </div>
+                                </div>
+                                <div class="main_message_list_item">
+                                    <div class="image-border image-border1"></div>
+                                    <div class="image-border image-border2"></div>
+                                    <div class="image-border image-border3"></div>
+                                    <div class="image-border image-border4"></div>
+                                    <div class="main_message_list_item_left">
+                                        <div class="user_photo_box">
+                                            <div class="user_photo_icon_box">
+                                                <i class="iconfont icon-wo"></i>
+                                            </div>
+                                        </div>
+                                        <div class="user_icon_box"><i class="iconfont icon-jiaohuan1"></i></div>
+                                        <div class="user_photo_box">
+                                            <div class="user_photo_icon_box">
+                                                <i class="iconfont icon-wo"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="main_message_list_item_right">
+                                        <div class="user_name_box">张三</div>
+                                        <div class="user_time_box">00:00:00</div>
+                                    </div>
+                                </div>
+                                <div class="main_message_list_item">
+                                    <div class="image-border image-border1"></div>
+                                    <div class="image-border image-border2"></div>
+                                    <div class="image-border image-border3"></div>
+                                    <div class="image-border image-border4"></div>
+                                    <div class="main_message_list_item_left">
+                                        <div class="user_photo_box">
+                                            <div class="user_photo_icon_box">
+                                                <i class="iconfont icon-wo"></i>
+                                            </div>
+                                        </div>
+                                        <div class="user_icon_box"><i class="iconfont icon-jiaohuan1"></i></div>
+                                        <div class="user_photo_box">
+                                            <div class="user_photo_icon_box">
+                                                <i class="iconfont icon-wo"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="main_message_list_item_right">
+                                        <div class="user_name_box">张三</div>
+                                        <div class="user_time_box">00:00:00</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+                <!--第二层右侧区域end-->
+            </tr>
+            <tr>
+                <!--第三层左侧区域start-->
+                <td class="main_left_bottom">
+                    <div class="main_left_bottom_box">
+                        <div class="main_title_box">
+                            <i class="iconfont icon-tianqi"></i>
+                            实时天气
+                        </div>
+                        <div class="main_weather_list_box">
+                            <div class="main_weather_list_left">
+                                <div class="main_weather_item_title">实时温度</div>
+                                <div class="main_weather_item_title">27.0℃</div>
+                            </div>
+                            <div class="main_weather_list_right">
+                                <div class="main_weather_list_right_item">
+                                    <div class="main_weather_item_title">预报温度</div>
+                                    <div class="main_weather_item_title">6℃-27.0℃</div>
+                                </div>
+                                <div class="main_weather_list_right_item">
+                                    <div class="main_weather_item_title">实时湿度</div>
+                                    <div class="main_weather_item_title">54%</div>
+                                </div>
+                            </div>
+                            <div class="main_weather_list_right">
+                                <div class="main_weather_list_right_item">
+                                    <div class="main_weather_item_title">体感温度</div>
+                                    <div class="main_weather_item_title">18.0℃</div>
+                                </div>
+                                <div class="main_weather_list_right_item">
+                                    <div class="main_weather_item_title">空气质量指数</div>
+                                    <div class="main_weather_item_title">27.0℃</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+                <!--第三层左侧区域end-->
+                <!--第三层中间区域start-->
+                <td class="main_center_bottom">
+                    <div class="main_menu_box">
+                        <div class="main_menu_item">
+                            <div class="main_menu_item_left"></div>
+                            <div class="main_menu_item_center"><span class="iconfont icon-fl-renshi"></span><span>底库管理</span></div>
+                            <div class="main_menu_item_right"></div>
+                        </div>
+                        <div class="main_menu_item">
+                            <div class="main_menu_item_left"></div>
+                            <div class="main_menu_item_center"><span class="iconfont icon-quanxianchaxun"></span><span>权限管理</span></div>
+                            <div class="main_menu_item_right"></div>
+                        </div>
+                        <div class="main_menu_item">
+                            <div class="main_menu_item_left"></div>
+                            <div class="main_menu_item_center"><span class="iconfont icon-rizhi"></span><span>日志管理</span></div>
+                            <div class="main_menu_item_right"></div>
+                        </div>
+                        <div class="main_menu_item">
+                            <div class="main_menu_item_left"></div>
+                            <div class="main_menu_item_center"><span class="iconfont icon-shujujiekou"></span><span>接口管理</span></div>
+                            <div class="main_menu_item_right"></div>
+                        </div>
+                        <div class="main_menu_item">
+                            <div class="main_menu_item_left"></div>
+                            <div class="main_menu_item_center"><span class="iconfont icon-dv_pingban"></span><span>平板管理</span></div>
+                            <div class="main_menu_item_right"></div>
+                        </div>
+                        <div class="main_menu_item">
+                            <div class="main_menu_item_left"></div>
+                            <div class="main_menu_item_center"><span class="iconfont icon-anquan1"></span><span>安全管理</span></div>
+                            <div class="main_menu_item_right"></div>
+                        </div>
+                        <div class="main_menu_item">
+                            <div class="main_menu_item_left"></div>
+                            <div class="main_menu_item_center"><span class="iconfont icon-dazhongxingshuizha"></span><span>闸机管理</span></div>
+                            <div class="main_menu_item_right"></div>
+                        </div>
+                        <div class="main_menu_item">
+                            <div class="main_menu_item_left"></div>
+                            <div class="main_menu_item_center"><span class="iconfont icon-xitong"></span><span>系统管理</span></div>
+                            <div class="main_menu_item_right"></div>
+                        </div>
+                        <div class="main_menu_item">
+                            <div class="main_menu_item_left"></div>
+                            <div class="main_menu_item_center"><span class="iconfont icon-_renlianshibie"></span><span>1:N比对</span></div>
+                            <div class="main_menu_item_right"></div>
+                        </div>
+                        <div class="main_menu_item">
+                            <div class="main_menu_item_left"></div>
+                            <div class="main_menu_item_center"><span class="iconfont icon-duibi1"></span><span>1:1比对</span></div>
+                            <div class="main_menu_item_right"></div>
+                        </div>
+
+
+
+
+
+
+
+
+
+                    </div>
+                </td>
+                <!--第三层中间区域end-->
+                <!--第三层右侧区域start-->
+                <td class="main_right_bottom">
+                    <div class="main_right_bottom_box">
+                        <div class="main_title_box">
+                            <i class="iconfont icon-tongjifenxi"></i>
+                            基础数据
+                        </div>
+                        <div class="main_data_list_box">
+                            <div class="main_data_list">
+                                <div class="main_data_list_item">学生总人数 <span>2</span> 个</div>
+                                <div class="main_data_list_item">家长总人数 <span>2</span> 个</div>
+                            </div>
+                            <div class="main_data_list">
+                                <div class="main_data_list_item">学生总人数 <span>2</span> 个</div>
+                                <div class="main_data_list_item">家长总人数 <span>2</span> 个</div>
+                            </div>
+                            <div class="main_data_list">
+                                <div class="main_data_list_item">学生总人数 <span>2</span> 个</div>
+                                <div class="main_data_list_item">家长总人数 <span>2</span> 个</div>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+                <!--第三层右侧区域end-->
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+<script type="text/javascript">
+
+    var setting = {
+        data: {
+            simpleData: {
+                idKey: "id",
+                pIdKey: "parentId",
+                enable: true
+            },
+            key: {
+                children: "children"
+            }
+        }
+    };
+
+    $(function () {
+        $.get(ctxPath + "menu", {}, function (data) {
+            initMenuNav(data.data, setting);
+        });
+    })
+
+
+    function exitHandler() {
+        top.Dialog.confirm("确定要退出系统吗", function () {
+            window.location = ctxPath + "login/logout";
+        });
+    }
+
+    function changePassword() {
+        var diag = new top.Dialog();
+        diag.Title = "修改密码";
+        diag.URL = ctxPath + "page/index/chagepwd";
+        //自定义长度和宽度的设置
+        diag.Width = 380;
+        diag.Height = 130;
+        diag.ShowButtonRow = true;
+        diag.OkButtonText = " 保 存 ";
+        diag.OKEvent = function () {
+            var demo = diag.innerFrame.contentWindow.save();
+        };
+        diag.show();
+    }
+
+    function information() {
+        var diag = new top.Dialog();
+        diag.Title = "个人信息";
+        diag.URL = ctxPath + "page/index/information";
+        //自定义长度和宽度的设置
+        diag.Width = 650;
+        diag.Height = 198;
+        diag.ShowButtonRow = true;
+        diag.OkButtonText = " 保 存 ";
+        diag.OKEvent = function () {
+            var demo = diag.innerFrame.contentWindow.save();
+        };
+        diag.show();
+    }
+
+
+</script>
+</body>
+</html>

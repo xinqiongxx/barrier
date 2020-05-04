@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>barrier-common</artifactId>
+        <groupId>com.tjaide.nursery</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>barrier-common-shiro</artifactId>
+    <dependencies>
+        <!--工具类核心包-->
+        <dependency>
+            <groupId>com.tjaide.nursery</groupId>
+            <artifactId>barrier-common-core</artifactId>
+        </dependency>
+        <!--shiro spring -->
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-spring</artifactId>
+        </dependency>
+        <!-- shiro ehcache -->
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-ehcache</artifactId>
+        </dependency>
+
+        <!-- cas -->
+        <dependency>
+            <groupId>org.pac4j</groupId>
+            <artifactId>pac4j-cas</artifactId>
+        </dependency>
+        <!-- shiro-thymeleaf 2.0.0-->
+        <dependency>
+            <groupId>com.github.theborakompanioni</groupId>
+            <artifactId>thymeleaf-extras-shiro</artifactId>
+        </dependency>
+        <!-- casFilter替代 -->
+        <dependency>
+            <groupId>io.buji</groupId>
+            <artifactId>buji-pac4j</artifactId>
+            <exclusions>
+                <exclusion>
+                    <artifactId>shiro-web</artifactId>
+                    <groupId>org.apache.shiro</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>pac4j-core</artifactId>
+                    <groupId>org.pac4j</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-core</artifactId>
+            <version>5.1.5.RELEASE</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
+
+</project>

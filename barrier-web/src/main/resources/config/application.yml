@@ -1,0 +1,88 @@
+debug: false
+session:
+  # 站点类型 s q y
+  siteType: q
+path:
+  imgPath: D:\\barrier
+server:
+  port: 8088
+  servlet:
+    context-path: /
+    jsp:
+      init-parameters:
+        development: true
+#加密串
+jasypt:
+  encryptor:
+    password: password
+spring:
+  resources:
+    static-locations: classpath:/
+    chain:
+      strategy:
+        content:
+          # 策略
+          enabled: false
+          paths:  /**
+  thymeleaf:
+    cache: false
+    prefix: classpath:/templates/
+    check-template-location: true
+    suffix: .html
+    encoding: UTF-8
+    content-type: text/html
+    mode: HTML5
+  # 数据源
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      username: root
+      password: a8i3d2e9,.
+      url: jdbc:mysql://39.99.225.172:3306/barrier?Unicode=true&characterEncoding=UTF-8
+      stat-view-servlet:
+        enabled: true
+        url-pattern: /druid/*
+      filter:
+        stat:
+          enabled: true
+          log-slow-sql: true
+          slow-sql-millis: 10000
+          merge-sql: false
+        wall:
+          config:
+            multi-statement-allow: true
+# shiro
+shiro:
+  cas:
+    enabled: false
+  login-url: /login
+  success-url: /index
+  unauthorized-url: /loginemptyKq
+  anon:
+    - /login/login
+    - /static/**
+    - /libs/**
+    - /system/**
+    - /favicon.ico
+  authc:
+    - /**
+  user:
+# Mybatis
+mybatis-plus:
+  tenant-enable: ture
+  mapper-locations: classpath:/mapper/*Mapper.xml
+  global-config:
+    banner: false
+    db-config:
+      id-type: auto
+      field-strategy: NOT_EMPTY
+# Logger Config
+logging:
+  level:
+    com.tjaide.nursery.barrier.web.mapper: info
+# 租户表维护
+cacx:
+  tenant:
+    column: tenant_id
+    tables:

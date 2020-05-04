@@ -1,0 +1,4 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+    com.tjaide.nursery.barrier.common.log.LogAutoConfiguration
+org.springframework.context.ApplicationContextInitializer=\
+    com.tjaide.nursery.barrier.common.log.init.ApplicationLoggerInitializer

@@ -1,0 +1,208 @@
+@charset "utf-8";
+/*统计相关*/
+.content_wrap {
+  background-color: #fff;
+  border-radius: 5px;
+  padding: 20px;
+}
+.content_wrap_trans {
+  background-color: transparent;
+  padding-bottom: 20px;
+}
+.table_box {
+  min-width: 1000px;
+  padding: 20px 20px 0 20px;
+}
+
+.right_btn {
+  position: absolute;
+  right: 15px;
+  top: 23px;
+}
+
+.content_win {
+  padding: 20px;
+  background: #fff;
+  border-radius: 5px;
+  position: relative;
+}
+
+.content_win .title span {
+  display: inline-block;
+  color: #727784;
+  font-size: 14px;
+  line-height: 30px;
+}
+
+.content_win .isNothing {
+  width: 100%;
+  min-height: 300px;
+  text-align: center;
+  padding-top: 100px;
+}
+
+.isNothing img {
+  height: 50%;
+  width: 50%;
+}
+
+.browser_stats {
+  width: 100%;
+}
+.news_list {
+  padding-right: 20px;
+}
+
+.news_list td {
+  border-bottom: 1px solid rgba(120, 130, 140, .13);
+  padding: 15px 15px;
+}
+.browser_stats td {
+  padding: 20px 0;
+}
+
+.browser_stats .roomname,.browser_stats .buildingname  {
+  background-color: #dbdbdb;
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+  text-align: center;
+  font-size: 20px;
+  line-height: 50px;
+}
+
+.news_list td span {
+  line-height: 18px;
+  font-size: 16px;
+  font-weight: 400;
+  color: #2c2b2e;
+}
+.browser_stats td span {
+  color: #54667a;
+  font-weight: 300;
+}
+
+.browser_stats td em {
+  display: inline-block;
+  background-color: #cfecfe;
+  color: #009efb;
+  padding: 2px 10px;
+  line-height: 13px;
+  font-weight: 400;
+  border-radius: 4px;
+  font-size: 12px;
+}
+
+/*申请来源等统计页*/
+.content_win {
+  padding: 10px;
+  background: #fff;
+  border-radius: 5px;
+  position: relative;
+}
+
+.content_win .left {
+  /*float: left;*/
+  width: 50%;
+  flex:1;
+}
+
+.content_win .left span {
+  font-weight: 300;
+  color: #2c2b2e;
+  line-height: 48px;
+  font-size: 36px;
+  margin-bottom: 10px;
+  display: block;
+  padding-top: 35px;
+  padding-left: 10px;
+}
+
+.content_win .left p {
+  color: #90a4ae;
+  line-height: 16px;
+  font-size: 14px;
+  font-weight: 400;
+  margin-bottom: 10px;
+  display: block;
+  padding-left: 10px;
+}
+
+#holder {
+  background: url(../../libs/images/analysis/holder_01.png) no-repeat center center;
+}
+#holder1 {
+  background: url(../../libs/images/analysis/holder_02.png) no-repeat center center;
+}
+#holder, #holder1,#holder2, #holder3, #holder4 {
+  position: relative;
+  width: 145px;
+  height: 145px;
+  margin: 0 auto;
+  float: right;
+}
+.table_box {
+  min-width: 1000px;
+  padding: 20px 20px 0 20px;
+}
+.dynamic_text{
+  display: block;
+  width: 205px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.earning_list td img {
+  display: block;
+  margin: auto;
+}
+
+.earning_list td {
+  padding: 6px 0;
+}
+
+.earning_list td p {
+  font-size: 12px;
+  color: #90a4ae;
+}
+
+.content_win {
+  position: relative;
+}
+.content_win .title span {
+  display: inline-block;
+  padding-bottom: 5px;
+  font-size: 20px;
+  font-weight: 700;
+}
+.browsers_win {
+  width: 100%;
+  padding-top: 20px;
+}
+
+.browsers_win th {
+  padding: 10px 0;
+  color: #a0aeba;
+  font-size: 14px;
+  line-height: 20px;
+  text-align: left;
+}
+
+.browsers_win td {
+  padding: 10px 0;
+  color: #5e6773;
+  font-size: 14px;
+  line-height: 30px;
+  border-bottom: 1px solid #e9eef2;
+  vertical-align: middle;
+}
+
+.browsers_win td img {
+  float: left;
+  margin-right: 10px;
+}
+
+.browsers_win td span {
+  line-height: 40px !important;
+}

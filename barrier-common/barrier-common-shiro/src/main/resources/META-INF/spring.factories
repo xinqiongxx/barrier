@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.tjaide.nursery.barrier.common.shiro.Pac4jAutoConfiguration,\
+  com.tjaide.nursery.barrier.common.shiro.ShiroAutoConfiguration

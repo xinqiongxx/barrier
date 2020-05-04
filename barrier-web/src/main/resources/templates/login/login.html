@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>登陆</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/static/css/login.css}" href="../../static/css/login.css"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/static/font/iconfont.css}" href="../../static/font/iconfont.css"/>
+    <script type="text/javascript" th:src="@{/libs/js/jquery.js}" src="../../libs/js/jquery.js"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{/static/js/plugins/layui/css/layui.css}" href="../../static/js/plugins/layui/css/layui.css"/>
+    <script type="text/javascript" th:src="@{/static/js/plugins/layui/layui.js}" src="../../static/js/plugins/layui/layui.js"></script>
+    <script type="text/javascript" th:src="@{/static/js/public/base-util.js}" src="../../static/js/public/base-util.js"></script>
+    <script type="text/javascript" th:inline="javascript">
+        /*<![CDATA[*/
+        ctxPath = /*[[@{/}]]*/ '';
+        /*]]>*/
+    </script>
+    <style>
+        body, html {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+
+<div class="win">
+    <div class="login_bg_box">
+        <div class="login_title_box">
+           <!-- <div class="login_title_left"><img src="../../static/image/login/logo.png" alt=""></div>-->
+            <div class="login_title_right">
+                <div class="school_name">幼儿园进出管控系统</div>
+                <div class="system_name"><span>v 1.0</span></div>
+            </div>
+        </div>
+        <div class="login_win">
+            <form action="" method="post" class="form_win">
+                <div class="form_title">
+                    <span>欢迎登录</span>
+                </div>
+                <div class="user">
+                    <i></i>
+                    <input type="text" name="username" id="username"
+                           value="" class="validate[required]" placeholder="账号"/>
+                </div>
+                <div class="passerword">
+                    <i></i>
+                    <input type="password" name="password" id="password"
+                           value="" placeholder="密码" class="validate[required]"/>
+                </div>
+                <!--<div class="login_forget">
+                    <label style="display:none"><input type="checkbox" name="remeber" id="remeber" value="false" class="remeber_btn"></label>
+                    <span class="remember_box"><i class="iconfont iconduoxuan-weixuan"></i>记住我</span>
+                    &lt;!&ndash;<a href="/forgotpwd">忘记密码？</a>&ndash;&gt;
+                </div>-->
+                <input type="button" value="登 录" class="account_login"/>
+                <div class="login_info"></div>
+                <div class="login_copy">版权所有-翻版必究</div>
+            </form>
+
+        </div>
+    </div>
+    <!--<div class="footer"></div>-->
+</div>
+<script>
+    $(function () {
+        console.log(ctxPath)
+        document.getElementById("username").focus();
+        $("#username").keydown(function (event) {
+            if (event.keyCode == 13) {
+                document.getElementById("password").focus();
+            }
+        });
+        $("#password").keydown(function (event) {
+            if (event.keyCode == 13) {
+                $('.account_login').click();
+            }
+        });
+
+
+
+    });
+    layui.use('layer', function () {
+        var layer = layui.layer;
+        // 登录
+        $('.account_login').click(function () {
+            $(".login_info").show();
+            $(".login_info").html("正在登录中...");
+            var data = {};
+            if ($('#username').val() == '') {
+                // layer.msg("账号不能为空",{"anim":6});
+                $(".login_info").html("账号不能为空");
+                return false;
+            } else if ($('#password').val() == '') {
+                $(".login_info").html("密码不能为空");
+                return false;
+            }
+            data.username = $('#username').val();
+            data.password = $('#password').val();
+            $ajax({url: ctxPath + "login/login", data: data, method: "POST"}, function (ret) {
+                console.log(ret)
+                if (ret.code == 200) {
+                    $(".login_info").html("登录成功，转到主页...");
+                    location.href = "/";
+                } else {
+                    $(".login_info").html(ret.msg);
+                }
+            });
+        });
+    })
+
+</script>
+</body>
+</html>
