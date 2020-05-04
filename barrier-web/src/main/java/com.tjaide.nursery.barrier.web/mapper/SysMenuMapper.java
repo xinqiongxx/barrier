@@ -15,7 +15,7 @@ import java.util.List;
  * 菜单权限表 Mapper 接口
  * </p>
  *
- * @author wangjun
+ * @author maxinqiong
  * @since 2017-10-29
  */
 public interface SysMenuMapper extends BaseMapper<SysMenu> {

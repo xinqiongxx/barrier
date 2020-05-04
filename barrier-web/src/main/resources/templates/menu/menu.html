@@ -1,0 +1,485 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>权限管理</title>
+        <!--框架必需start-->
+        <script type="text/javascript" th:src="@{/static/js/public/base-util.js}" src="../../static/js/public/base-util.js"></script>
+        <script type="text/javascript" th:src="@{/libs/js/jquery.js}" src="../../libs/js/jquery.js"></script>
+        <script type="text/javascript" th:src="@{/libs/js/language/cn.js}" src="../../libs/js/language/cn.js"></script>
+        <script type="text/javascript" th:src="@{/libs/js/framework.js}" src="../../libs/js/framework.js"></script>
+        <link rel="stylesheet" type="text/css" th:href="@{/libs/css/import_basic.css}" href="../../libs/css/import_basic.css"/>
+        <link rel="stylesheet" type="text/css" id="skin" prePath="../../"/>
+        <link rel="stylesheet" type="text/css" id="customSkin"/>
+        <!--框架必需end-->
+
+        <!--树组件start -->
+        <script type="text/javascript" src="../../libs/js/tree/ztree/ztree.js"></script>
+        <link href="../../libs/js/tree/ztree/ztree.css" rel="stylesheet" type="text/css"/>
+        <!--树组件end -->
+        <!-- card单独样式 start -->
+        <!--<link rel="stylesheet" type="text/css" th:href="@{/system/skin/card.css}" href="../../system/skin/card.css"/>-->
+        <link rel="stylesheet" type="text/css" th:href="@{/libs/skin/style/card.css}" href="../../libs/skin/style/card.css"/>
+        <!-- card单独样式 end -->
+
+        <script type="text/javascript" th:inline="javascript">
+            /*<![CDATA[*/
+            ctxPath = /*[[@{/}]]*/ '';
+            /*]]>*/
+        </script>
+    </head>
+
+    <body>
+        <div class="page_content">
+            <div class="d-f-s-c" style="padding: 5px;">
+                <div class="buttonGroup" style="margin-right: 111px;">
+                    <span class="leftButton" onclick="_add()">添加</span>
+                    <span class="centerButton" onclick="_update()">编辑</span>
+                    <span class="rightButton" onclick="_delete()">删除</span>
+                </div>
+                <div class="u-position" id="u-position" style="flex: 1;">
+                    <div class="-star"></div>
+                    <div class="-a">当前位置：</div>
+                </div>
+            </div>
+            <div class="layout">
+                <div class="layout-l">
+
+                    <div class="trees">
+                        <ul id="menuTree" class="ztree blueTree"></ul>
+                    </div>
+                </div>
+                <div class="layout-r">
+                    <div class="items">
+                        <div class="lable"><p>*</p>父级节点
+                        </div>
+                        <div class="item-c">
+                            <input id="parentId" type="text" placeholder="请输入父级节点" style="width:90%;" disabled="true"/>
+                        </div>
+                    </div>
+                    <div class="items user-hide type0 type1">
+                        <div class="lable"><p>*</p>节点ID
+                        </div>
+                        <div class="item-c">
+                            <input id="menuId" type="text" style="width:90%;" disabled="true"/>
+                        </div>
+                    </div>
+                    <div class="items edit add">
+                        <div class="lable"><p>*</p>标题
+                        </div>
+                        <div class="item-c">
+                            <input id="name" type="text" placeholder="请输入标题" style="width:90%;" disabled="true"/>
+                        </div>
+                    </div>
+                    <div class="items edit add">
+                        <div class="lable"><p>*</p>类型
+                        </div>
+                        <div class="item-c">
+                            <input type="radio" id="male-1" name="type" value="0" disabled="true"/>
+                            <label for="male-1" class="hand">菜单</label>
+                            <input type="radio" id="male-2" name="type" value="1" disabled="true"/>
+                            <label for="male-2" class="hand">按钮</label>
+                        </div>
+                    </div>
+                    <div class="items user-hide type0 edit add">
+                        <div class="lable"><p>*</p>地址
+                        </div>
+                        <div class="item-c">
+                            <input id="path" type="text" style="width:90%;" disabled="true"/>
+                        </div>
+                    </div>
+                    <div class="items user-hide type0 edit add">
+                        <div class="lable"><p>*</p>图标
+                        </div>
+                        <div class="item-c">
+                            <input id="icon" type="text" style="width:90%;" disabled="true"/>
+                        </div>
+                    </div>
+                    <div class="items user-hide type0 edit add">
+                        <div class="lable"><p>*</p>排序
+                        </div>
+                        <div class="item-c">
+                            <input id="sort" type="text" style="width:90%;" disabled="true"/>
+                        </div>
+                    </div>
+
+                    <!--<div class="items h user-hide type1">-->
+                    <!--<div class="lable">路由缓冲</div>-->
+                    <!--<div class="item-c"><input type="text" style="width:80%;" /></div>-->
+                    <!--</div>-->
+
+                    <div class="items user-hide type1 edit add">
+                        <div class="lable">权限标识</div>
+                        <div class="item-c">
+                            <input id="permission" type="text" style="width:90%;" disabled="true"/>
+                        </div>
+                    </div>
+
+                    <div class="items user-hide btn-edit">
+                        <div class="lable"></div>
+                        <div class="item-c">
+                            <input type="button" value="更 新" class="primary" onclick="toUpdate()"/>
+                            <input type="button" value="取 消" style="margin-left: 15px;" class="plan" onclick="cancelUpd()"/>
+                            <!---->
+                        </div>
+                    </div>
+                    <div class="items user-hide btn-add">
+                        <div class="lable"></div>
+                        <div class="item-c">
+                            <input type="button" value="保 存" class="primary" onclick="toAdd()"/>
+                            <input type="button" value="取 消" style="margin-left: 15px;" class="" onclick="cancelAdd()"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script type="text/javascript">
+            var selMenu = '', isUpdate = false;
+            var menuTree = [];
+
+            var setting = {
+                view: {
+                    showIcon: false,
+                    dblClickExpand: false
+                },
+                callback: {
+                    onClick: onNodeClick
+                }
+            };
+
+            function showHide(type) {
+                if (0 == type) {
+                    $('.type1').addClass('user-hide')
+                    $('.type0').removeClass('user-hide')
+                } else if (1 == type) {
+                    $('.type0').addClass('user-hide')
+                    $('.type1').removeClass('user-hide')
+                } else {
+                    $("input:radio[name=type]").eq(0).prop("checked", false);
+                    $("input:radio[name=type]").eq(1).prop("checked", false);
+                    $('.type0').addClass('user-hide')
+                    $('.type1').addClass('user-hide')
+                }
+            }
+
+            $(function () {
+                $("input[name=type]").click(function () {
+                    var type = $("input:radio[name=type]:checked").val();
+                    showHide(type)
+                });
+                initTree();
+            })
+
+            function initTree() {
+                $.ajax({
+                    url: ctxPath + "menu/list",
+                    type: 'get',
+                    data: {},
+                }).then(function (res) {
+                    menuTree = res.data
+                    for (var i = 0; i < menuTree.length; i++) {
+                        menuTree[i].id = menuTree[i].menuId;
+                        menuTree[i].icon = '';
+                        menuTree[i].open = true;
+                    }
+                    $.fn.zTree.init($("#menuTree"), setting, menuTree);
+                }, function () {
+                    top.Toast("showErrorToast", 'load tree error！');
+                })
+            }
+
+            // 点击树
+            function onNodeClick(event, treeId, treeNode) {
+                selMenu = treeNode.menuId
+                // console.log(treeNode)(treeNode)
+                if (treeNode.parentId) {
+                    $('#parentId').val(treeNode.parentId);
+                } else {
+                    $('#parentId').val('-1');
+                }
+
+                $('#menuId').val(treeNode.menuId);
+                $('#name').val(treeNode.name);
+                $("input:radio[name=type]").eq(treeNode.type).prop("checked", true);
+                $("input:radio[name=type]").eq(treeNode.type).click();
+                if (1 == treeNode.type) {
+                    $('#permission').val(treeNode.permission)
+
+                    $('#path').val("");
+                    $('#icon').val("");
+                    $('#sort').val("");
+                } else if (0 == treeNode.type) {
+                    $('#path').val(treeNode.path);
+                    $('#icon').val(treeNode.icon);
+                    $('#sort').val(treeNode.sort);
+
+                    $('#powerName').val("")
+                }
+
+                var zTree = $.fn.zTree.getZTreeObj("menuTree");
+                zTree.expandNode(treeNode);
+
+                $('#u-position .-c').remove();
+                if(!treeNode.parentId || -1 == treeNode.parentId) {
+                    $('#u-position').append('<div class="-c">'+treeNode.name+'</div>')
+                } else {
+                    var pid = $('.curSelectedNode').closest('ul').closest('li').attr('id');
+                    var str = '<div class="-c">'+$('.curSelectedNode').closest('ul').closest('li').find('#' + pid + '_span').html()+'</div>';
+                    str += '<div class="-c">></div>';
+                    str += '<div class="-c">'+treeNode.name+'</div>';
+                    $('#u-position').append(str)
+                }
+
+                if (isUpdate) {
+                    $('.items.btn-edit').removeClass('user-hide')
+                    $('.items.btn-add').addClass('user-hide')
+                }
+            }
+
+            function _add() {
+                console.log(selMenu)
+                isUpdate = true
+                $('.items.btn-edit').addClass('user-hide')
+                $('.items.btn-add').removeClass('user-hide')
+
+                $('.items.add').find('input').attr("disabled", false)
+                showHide(2)
+                $('.items.add').find('input:text').val("")
+
+                if (selMenu) {
+                    $('#parentId').val(selMenu);
+                } else {
+                    $('#parentId').val('-1');
+                }
+            }
+
+            // 编辑
+            function _update() {
+                if (selMenu) {
+                    $('.items.edit').find('input').attr("disabled", false)
+                    $('.items.btn-edit').removeClass('user-hide')
+                    $('.items.btn-add').addClass('user-hide')
+                    isUpdate = true
+                } else {
+                    top.Toast('showWarningToast', '请选择需要编辑的菜单');
+                }
+            }
+
+            // 删除
+            function _delete() {
+                if (selMenu) {
+                    top.Dialog.confirm("此操作将永久删除，是否继续？", function () {
+                        $.ajax({
+                            url: ctxPath + "menu/" + selMenu,
+                            type: 'delete',
+                            data: {}
+                        }).then(function (res) {
+                            if (0 == res.code) {
+                                top.Toast("showSuccessToast", '操作成功');
+                                selMenu = '';
+                                initTree();
+                            } else {
+                                top.Toast("showErrorToast", '操作异常');
+                            }
+                        }, function () {
+                            top.Toast("showErrorToast", '删除失败！');
+                        })
+                    }, function () {
+
+                    });
+                } else {
+                    top.Toast('showWarningToast', '请选择需要删除的菜单');
+                }
+            }
+
+            // 取消添加
+            function cancelAdd() {
+                isUpdate = false
+                $('.items.btn-edit').addClass('user-hide')
+                $('.items.btn-add').addClass('user-hide')
+
+                $('.items.add').find('input').attr("disabled", true)
+                showHide(2)
+                $('.items.add').find('input:text').val("")
+            }
+
+            function toAdd() {
+                var type = $("input:radio[name=type]:checked").val();
+                if (!type || !$('#name').val()) {
+                    top.Toast('showErrorToast', '请完善基本详细');
+                    return
+                }
+                var menu = {};
+                menu.name = $('#name').val();
+                menu.permission = $('#permission').val();
+                menu.parentId = $("#parentId").val();
+                menu.icon = $("#icon").val();
+                menu.path = $("#path").val();
+                menu.sort = $("#sort").val();
+                menu.type = type;
+                menu.delFlag = 0;
+
+                //menu.icon = '/system/skin/index_icon.png';
+                menu.sort = '0';
+                $.jsonAjax({
+                    url: ctxPath + "menu",
+                    type: 'post',
+                    data: menu
+                }).then(function (res) {
+                    if (0 == res.code) {
+                        top.Toast("showSuccessToast", '操作成功');
+                        $('.items.add').find('input:text').val("")
+                        initTree();
+                        cancelUpd();
+                    } else {
+                        top.Toast("showErrorToast", '操作异常');
+                    }
+                }, function () {
+                    top.Toast("showErrorToast", '提交失败！');
+                })
+            }
+
+            // 取消编辑
+            function cancelUpd() {
+                $('.items.edit').find('input').attr("disabled", true)
+                $('.items.btn-edit').addClass('user-hide')
+                $('.items.btn-add').addClass('user-hide')
+                isUpdate = false
+            }
+
+            function toUpdate() {
+                var menu = {};
+                menu.name = $('#name').val();
+                menu.permission = $('#permission').val();
+                menu.parentId = $("#parentId").val();
+                menu.icon = $("#icon").val();
+                menu.path = $("#path").val();
+                menu.sort = $("#sort").val();
+                menu.type = $("input:radio[name=type]:checked").val();
+                menu.delFlag = 0;
+                menu.menuId = $("#menuId").val();
+                $.jsonAjax({
+                    url: ctxPath + "menu",
+                    type: 'put',
+                    data: menu
+                }).then(function (res) {
+                    if (0 == res.code) {
+                        top.Toast("showSuccessToast", '操作成功');
+                        initTree();
+                    } else {
+                        top.Toast("showErrorToast", '操作异常');
+                    }
+                }, function () {
+                    top.Toast("showErrorToast", '提交失败！');
+                })
+            }
+        </script>
+        <style>
+            .page_content {
+                position: fixed;
+                background-color: #ffffff;
+                margin: 15px;
+                height: calc(100vh - 30px);
+                width: calc(100% - 30px);
+            }
+
+            .btns {
+                padding-bottom: 15px;
+                position: fixed;
+                background-color: #ffffff;
+                width: 25%;
+                z-index: 2;
+            }
+
+            .layout {
+                display: flex;
+                height: 100%;
+            }
+
+            .layout .layout-l {
+                width: 350px;
+                height: 100%;
+            }
+
+            .layout .layout-r {
+                /*width: 65%;*/
+                flex: 1;
+                position: relative;
+                border-left: 1px solid #f5f5f5;
+                padding-top: 40px;
+            }
+
+            .layout-r:after {
+                /*position: absolute;*/
+                /*left: 0;*/
+                /*right: 0;*/
+                /*height: 0;*/
+                /*bottom: 0;*/
+                /*content: '';*/
+                /*transform: scaleY(0.5);*/
+                /*border-left: 1px dashed #bdc7d7;*/
+            }
+
+            .items {
+                display: flex;
+                align-items: center;
+                margin-bottom: 30px;
+            }
+
+
+            .items .lable {
+                width: 150px;
+                text-align: right;
+                display: flex;
+                justify-content: flex-end;
+            }
+
+            .items .lable > p {
+                font-size: 18px;
+                color: red;
+                margin-right: 5px;
+            }
+
+            .items .item-c {
+                flex: 1;
+                margin-left: 20px;
+            }
+
+            .user-hide {
+                display: none;
+            }
+
+
+            .l-grid-body.l-grid-body2.l-scroll {
+                height: 100% !important;
+            }
+
+            /*.ztree ul.level0 span.zbutton {*/
+                /*display: none;*/
+            /*}*/
+
+            /*.ztree a.level1 {*/
+                /*padding-left: 30px;*/
+                /*width: calc(100% - 30px);*/
+
+                /*text-overflow: ellipsis;*/
+                /*white-space: nowrap;*/
+                /*overflow: hidden;*/
+            /*}*/
+
+            /*.ztree a.level1:hover {*/
+                /*background: rgba(224, 237, 254, 1);*/
+            /*}*/
+
+            .button {
+                padding: 2px 20px;
+                height: auto;
+            }
+
+
+
+
+
+        </style>
+    </body>
+</html>

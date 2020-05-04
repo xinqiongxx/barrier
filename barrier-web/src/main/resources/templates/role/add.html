@@ -1,0 +1,184 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>角色管理</title>
+    <!--框架必需start-->
+    <script type="text/javascript" th:src="@{/static/js/public/base-util.js}" src="../../static/js/public/base-util.js"></script>
+    <script type="text/javascript" th:src="@{/libs/js/jquery.js}" src="../../libs/js/jquery.js"></script>
+    <script type="text/javascript" th:src="@{/libs/js/language/cn.js}" src="../../libs/js/language/cn.js"></script>
+    <script type="text/javascript" th:src="@{/libs/js/framework.js}" src="../../libs/js/framework.js"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{/libs/css/import_basic.css}" href="../../libs/css/import_basic.css"/>
+    <link rel="stylesheet" type="text/css" id="skin" prePath="../../"/>
+    <link rel="stylesheet" type="text/css" id="customSkin"/>
+    <!--框架必需end-->
+
+    <!-- 表单验证start -->
+    <script type="text/javascript" th:src="@{/libs/js/form/validationRule.js}" src="../../libs/js/form/validationRule.js"></script>
+    <script type="text/javascript" th:src="@{/libs/js/form/validation.js}" src="../../libs/js/form/validation.js"></script>
+    <!-- 表单验证end -->
+
+    <!--表单异步提交start-->
+    <script type="text/javascript" th:src="@{/libs/js/form/form.js}" src="../../libs/js/form/form.js"></script>
+    <!--表单异步提交end-->
+    <!-- 树组件start -->
+    <script type="text/javascript" th:src="@{/libs/js/tree/ztree/ztree.js}" src="../../libs/js/tree/ztree/ztree.js"></script>
+    <link type="text/css" rel="stylesheet" th:href="@{/libs/js/tree/ztree/ztree.css}" href="../../libs/js/tree/ztree/ztree.css"></link>
+    <!-- 树组件end -->
+    <!-- 树形下拉框start -->
+    <script type="text/javascript" th:src="@{/libs/js/form/selectTree.js}" src="../../libs/js/form/selectTree.js"></script>
+    <!-- 树形下拉框end -->
+    <script type="text/javascript" th:inline="javascript">
+        /*<![CDATA[*/
+        ctxPath = /*[[@{/}]]*/ '';
+        /*]]>*/
+    </script>
+</head>
+<body>
+<div class="form_content" id="formContent">
+    <form id="formAdd" method="post">
+        <table class="tableStyle" formMode="view">
+            <tr>
+                <td><span class="star">*</span>角色标识：</td>
+                <td>
+                    <input type="hidden" id="role_id" name="role_id"/>
+                    <input type="text" id="role_code" name="role_code" class="validate[required]"/>
+                </td>
+            </tr>
+            <tr>
+                <td><span class="star">*</span>角色名称：</td>
+                <td><input type="text" id="role_name" name="role_name" class="validate[required]"/>
+                </td>
+            </tr>
+            <tr>
+                <td>角色描述：</td>
+                <td><textarea id="remark" name="remark" style="resize: none;"></textarea>
+                </td>
+            </tr>
+            <tr>
+                <td><span class="star">*</span>数据权限：</td>
+                <td>
+                    <select id="ds_type" class="validate[required]" data='{"list":[{"value":"0","key":"全部"},
+                        {"value":"1","key":"自定义"},
+                        {"value":"2","key":"本级及子级"},
+                        {"value":"3","key":"本级"}]}'>
+                    </select>
+                </td>
+            </tr>
+            <!--<tr>
+                <td>应用权限：</td>
+                <td>
+                    <div class="selectTree" id="service" multiMode="true" noGroup="true"></div>
+
+
+                    &lt;!&ndash;<select id="service" th:url="@{/service/list}" prompt="应用权限" dataRoot="data" labelField="serviceName"&ndash;&gt;
+                    &lt;!&ndash;valueField="serviceId"></select>&ndash;&gt;
+                </td>
+            </tr>-->
+        </table>
+    </form>
+</div>
+
+<script type="text/javascript">
+    var roleId = '[[${param.role_id}]]';
+
+    //保存
+    function save() {
+        var valid = $(formAdd).validationEngine({returnIsValid: true});
+        if (valid == true) {
+            var role = {};
+            role.roleId = $('#role_id').val();
+            role.roleCode = $('#role_code').val();
+            role.roleName = $('#role_name').val();
+            role.dsType = $("#ds_type").attr("relValue");
+            role.roleDesc = $('#remark').val();
+            role.dsScope = "0";
+            role.delFlag = "0";
+            role.tenantId = "1";
+            /*if ($("#service").attr("relValue")) {
+                role.serviceIds = $("#service").attr("relValue").split(',');
+            }*/
+            var type = 'post';
+            if ('' != roleId) {
+                type = 'put';
+            }
+            $.jsonAjax({
+                url: ctxPath + "role",
+                type: type,
+                data: role,
+            }).then(function (res) {
+                if (0 == res.code) {
+                    if(top.frmright){
+                        top.frmright.refresh();
+                    }
+                    top.Dialog.close()
+                } else {
+                    top.Toast("showErrorToast", '操作异常');
+                }
+            }, function () {
+                top.Toast("showErrorToast", '提交失败！');
+            })
+        } else {
+            top.Toast("showErrorToast", '表单填写不正确，请按要求填写！');
+        }
+    }
+
+    //查询角色信息
+    $(function () {
+        //initServise();
+        if ('' != roleId) {
+            $.ajax({
+                url: ctxPath + "role/" + roleId,
+                type: 'get'
+            }).then(function (res) {
+                var data = res.data
+                //console.log(res)
+                $("#role_id").val(data.roleId);
+                $("#role_code").val(data.roleCode);
+                $("#role_name").val(data.roleName);
+                $("#remark").val(data.roleDesc);
+                $("#ds_type").setValue(data.dsType);
+               /* if (data.serviceList.length > 0) {
+                    var serviceStr = "";
+                    for (var i = 0; i < data.serviceList.length; i++) {
+                        serviceStr += data.serviceList[i].serviceId + ",";
+                    }
+                    //$('#service').val(serviceStr.substr(0, serviceStr.length - 1));
+                    $("#service").setValue(serviceStr.substr(0, serviceStr.length - 1));
+                }*/
+
+            })
+        }
+    })
+
+    function initServise() {
+        $.ajax({
+            url: ctxPath + "menu/tree",
+            type: 'get'
+        }).then(function (res) {
+            if (0 == res.code) {
+                var treeNodes = {}
+                var datas = []
+                for (var i = 0; i < res.data.length; i++) {
+                    var rd = res.data[i]
+                    var data = {}
+                    data.id = rd.serviceId
+                    data.name = rd.serviceName
+                    data.parentId = 0
+                    datas.push(data)
+                }
+                treeNodes.treeNodes = datas
+                if(0 == treeNodes.treeNodes.length) {
+                    treeNodes = {
+                        'treeNodes': [{'id':'','name':''}]
+                    }
+                }
+                $("#service").data("data", treeNodes)
+                $("#service").render()
+            }
+        })
+    }
+</script>
+</body>
+</html>

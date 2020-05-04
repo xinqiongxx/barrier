@@ -16,7 +16,7 @@ import java.util.List;
  * Mapper 接口
  * </p>
  *
- * @author wangjun
+ * @author maxinqiong
  * @since 2017-10-29
  */
 public interface SysRoleMapper extends BaseMapper<SysRole> {
@@ -32,9 +32,7 @@ public interface SysRoleMapper extends BaseMapper<SysRole> {
     * @Description:  获取角色详细
     * @Param:
      * @param id
-    * @return:  
-    * @Author: 孙灵顺
-    * @Date: 2019/9/4 17:30
+    * @return:
     */
     RoleVO getRoleById(Serializable id);
 

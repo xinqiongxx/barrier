@@ -29,7 +29,7 @@
            <!-- <div class="login_title_left"><img src="../../static/image/login/logo.png" alt=""></div>-->
             <div class="login_title_right">
                 <div class="school_name">幼儿园进出管控系统</div>
-                <div class="system_name"><span>v 1.0</span></div>
+                <div class="system_name"><span>v 1.1.6</span></div>
             </div>
         </div>
         <div class="login_win">
@@ -96,9 +96,9 @@
             }
             data.username = $('#username').val();
             data.password = $('#password').val();
-            $ajax({url: ctxPath + "login/login", data: data, method: "POST"}, function (ret) {
+            $ajax({url: ctxPath + "login/login", data: data, method: "POST",show:false}, function (ret) {
                 console.log(ret)
-                if (ret.code == 200) {
+                if (ret.code == 0) {
                     $(".login_info").html("登录成功，转到主页...");
                     location.href = "/";
                 } else {

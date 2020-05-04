@@ -23,7 +23,7 @@ public interface SysUserRoleService extends IService<SysUserRole> {
      *
      * @param userId 用户ID
      * @return boolean
-     * @author 寻欢·李
+     * @author 马鑫琼
      * @date 2017年12月7日 16:31:38
      */
     Boolean deleteByUserId(String userId);

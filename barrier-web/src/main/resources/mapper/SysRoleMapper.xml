@@ -43,12 +43,9 @@
     <!-- 通过用户ID，查询角色信息-->
     <select id="getRoleById" resultMap="roleMap">
         SELECT
-            a.*,
-            c.*
+            a.*
         FROM
         sys_role a
-        LEFT JOIN sys_role_service AS b ON a.role_id = b.role_id
-        LEFT JOIN sys_service AS c ON b.service_id = c.service_id
         WHERE a.del_flag = '0' and  a.role_id = #{id}
     </select>
 </mapper>

@@ -1,0 +1,593 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="multipart/form-data; charset=utf-8"/>
+    <title>用户管理</title>
+    <!--框架必需start-->
+    <script type="text/javascript" th:src="@{/static/js/public/base-util.js}" src="../../static/js/public/base-util.js"></script>
+    <script type="text/javascript" th:src="@{/libs/js/jquery.js}" src="../../libs/js/jquery.js"></script>
+    <script type="text/javascript" th:src="@{/libs/js/language/cn.js}" src="../../libs/js/language/cn.js"></script>
+    <script type="text/javascript" th:src="@{/libs/js/framework.js}" src="../../libs/js/framework.js"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{/libs/css/import_basic.css}" href="../../libs/css/import_basic.css"/>
+    <link rel="stylesheet" type="text/css" id="skin" prePath="../../"/>
+    <link rel="stylesheet" type="text/css" id="customSkin"/>
+    <!--框架必需end-->
+    <!--树组件start-->
+    <script th:src="@{/libs/js/tree/ztree/ztree.js}" src="../../libs/js/tree/ztree/ztree.js" type="text/javascript"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{/libs/js/tree/ztree/ztree.css}" href="../../libs/js/tree/ztree/ztree.css"/>
+    <!--树组件end -->
+    <!--数据表格start-->
+    <script th:src="@{/libs/js/table/quiGrid.js}" src="../../libs/js/table/quiGrid.js" type="text/javascript"></script>
+    <!--数据表格end-->
+    <!-- 表单异步提交start -->
+    <script src="../../libs/js/form/form.js" type="text/javascript"></script>
+    <!-- 表单异步提交end -->
+
+    <!-- iconfont start -->
+    <link rel="stylesheet" type="text/css" th:href="@{/static/iconfont/iconfont.css}" href="../../static/iconfont/iconfont.css"/>
+    <!-- iconfont end -->
+
+    <!-- card单独样式 start -->
+    <!--<link rel="stylesheet" type="text/css" th:href="@{/system/skin/card.css}" href="../../system/skin/card.css"/>-->
+    <link rel="stylesheet" type="text/css" th:href="@{/libs/skin/style/card.css}" href="../../libs/skin/style/card.css"/>
+    <!-- card单独样式 end -->
+    <script type="text/javascript" th:inline="javascript">
+        /*<![CDATA[*/
+        ctxPath = /*[[@{/}]]*/ '';
+        /*]]>*/
+    </script>
+</head>
+
+<body>
+<!--card-->
+<div class="content nobg" style="width: calc(100% - 10px);">
+    <ul class="content_card">
+        <li onclick="addUnit()">
+            <div class="minute">
+                <div class="minute-content">
+                    <div class="minute_left">
+                        <div style="font-weight:bold;font-size: 22px;">新建信息</div>
+                        <div style="line-height: 18px;font-size: 9px;">New information</div>
+                    </div>
+                    <div class="minute_right"><img src="../../system/skin/s1.png"></div>
+                </div>
+            </div>
+        </li>
+        <li onclick="importUser()">
+            <div class="minute">
+                <div class="minute-content">
+                    <div class="minute_left">
+                        <div style="font-weight:bold;font-size: 22px;">批量导入</div>
+                        <div style="line-height: 18px;font-size: 9px;">Bulk import</div>
+                    </div>
+                    <div class="minute_right"><img src="../../system/skin/s2.png"></div>
+                </div>
+            </div>
+        </li>
+        <li onclick="resetPwd()">
+            <div class="minute">
+                <div class="minute-content">
+                    <div class="minute_left">
+                        <div style="font-weight:bold;font-size: 22px;">重置密码</div>
+                        <div style="line-height: 18px;font-size: 9px;">Reset password</div>
+                    </div>
+                    <div class="minute_right"><img src="../../system/skin/s8.png"></div>
+                </div>
+            </div>
+        </li>
+        <li onclick="resetEdit()">
+            <div class="minute">
+                <div class="minute-content">
+                    <div class="minute_left">
+                        <div style="font-weight:bold;font-size: 22px;">编辑</div>
+                        <div style="line-height: 18px;font-size: 9px;">Edit</div>
+                    </div>
+                    <div class="minute_right"><img src="../../system/skin/s4.png"></div>
+                </div>
+            </div>
+        </li>
+        <li>
+            <div class="minute">
+                <div class="minute-content">
+                    <div class="minute_left">
+                        <div id="allNumber" style="font-weight:bold;font-size: 22px;">0</div>
+                        <div style="line-height: 18px;font-size: 14px;">用户总数</div>
+                    </div>
+                    <div class="minute_right"><img src="../../system/skin/s5.png"></div>
+                </div>
+            </div>
+
+        </li>
+    </ul>
+</div>
+<!--end-->
+<div class="page_content">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td colspan="2">
+                <div class="d-f-s-c">
+                    <div style="margin:0px 10px;">
+                        <div style="text-align: center;">
+                            <input type="text" autocomplete="off" id="input-n" style="width: 240px;" placeholder="输入关键字进行过滤"/>
+                        </div>
+                    </div>
+
+                    <div class="searchContent">
+                        <div class="titleContent" style="float:left;margin-top:3px;margin-left:15px">
+                            登录账号基本情况
+                        </div>
+                        <table style="float: right;">
+                            <tr>
+                                <input type="hidden" id="deptid" name="deptid"/>
+                                <td><input type="text" id="username" name="username" placeholder="用户名"/></td>
+                                <!--<td>姓名：</td>
+                                <td><input type="text" id="name" name="name" placeholder="姓名"/></td>-->
+                                <td>
+                                    <button type="button" class="primary" onclick="searchHandler()">
+                                        <span class=nobg"icon_find">查询</span>
+                                    </button>
+                                </td>
+                                <td>
+                                    <button type="button" class="primary" onclick="resetSearch()">
+                                        <span class="icon_clear">清空</span>
+                                    </button>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td style="vertical-align: top;width: 260px;">
+                <div id="deptTreeheight" style="overflow-y:auto;overflow-x: hidden; width: 100%;height: 100% !important;">
+                    <ul id="deptTree" class="ztree blueTree"></ul>
+                </div>
+            </td>
+            <td style="vertical-align: top;">
+                <div style="padding: 5px 0 0 5px;border-left: 1px solid #EEEEEE;">
+
+                    <div id="dataBasic"></div>
+                </div>
+            </td>
+        </tr>
+        <!--<tr>-->
+        <!--<td width="230px" style="vertical-align: top;">-->
+        <!---->
+        <!---->
+        <!--</td>-->
+        <!--<td style="vertical-align: top;">-->
+        <!--&lt;!&ndash;<div class="page_content">&ndash;&gt;-->
+        <!---->
+        <!---->
+        <!--&lt;!&ndash;</div>&ndash;&gt;-->
+        <!--</td>-->
+        <!--</tr>-->
+    </table>
+</div>
+<script type="text/javascript">
+    var checkedArray = [];
+    var checkedTextArray = [];
+    //树的设置
+    var setting = {
+        view: {
+            selectedMulti: false,
+            showIcon: false,
+
+        },
+        callback: {
+            onCheck: onCheck,
+            onClick: onClick,
+            //不允许拖拽
+            beforeDrag: beforeDrag
+        }
+    };
+
+    var grid;
+    $(function () {
+        $("#input-n").keypress(function (e) {
+            if (e.which == 13) {
+                var param = {deptName: $("#input-n").val()}
+                $.ajax({
+                    url: ctxPath + "dept/list",
+                    type: 'get',
+                    data: {
+                        deptName: $("#input-n").val()
+                    },
+                }).then(function (res) {
+                    var menuTree = res.data
+                    for (var i = 0; i < menuTree.length; i++) {
+                        //console.log(res[i])
+                        menuTree[i].id = menuTree[i].deptId;
+                        menuTree[i].name = menuTree[i].deptName;
+                        if (-1 == menuTree[i].parentId) {
+                            menuTree[i].open = true
+                        }
+                    }
+                    $.fn.zTree.init($("#deptTree"), setting, menuTree);
+                }, function () {
+                    // top.Toast("showErrorToast", 'load tree error！');
+                })
+            }
+        });
+        grid = $("#dataBasic").quiGrid({
+            columns: [
+                {display: '用户名', name: 'username', align: 'center', width: "15%"},
+                // {display: '手机号', name: 'phone', align: 'center', width: "15%"},
+                {display: '邮箱', name: 'email', align: 'center', width: "15%"},
+                {
+                    display: '角色', name: 'roleList', align: 'center', width: "10%",
+                    render: function (rowdata, rowindex, value, column) {
+                        var roleStr = "";
+                        for (var i = 0; i < value.length; i++) {
+                            roleStr += value[i].roleName + ",";
+                        }
+                        return roleStr.substr(0, roleStr.length - 1);
+                    }
+                },
+                {
+                    display: '状态', name: 'lockFlag', align: 'center', width: "5%",
+                    render: function (rowdata, rowindex, value, column) {
+                        if ('0' == value) {
+                            return "正常"
+                        } else {
+                            return "锁定"
+                        }
+                    }
+                },
+                {display: '创建时间', name: 'createTime', align: 'center', width: "15%"},
+                {display: '所属部门', name: 'deptName', align: 'center', width: "25%"},
+                {
+                    display: '操作', align: 'center', width: "15%",
+                    render: function (rowdata, rowindex, value, column) {
+                        var bar = '<div class="grid_user_container">';
+
+                        bar += '<div class="iconfont icon-bianji bg1 qTip" title="编辑" onclick="onEdit(\'' + rowdata.userId + '\')"></div>';
+
+                        if (rowdata.builtIn != '0') {
+                            bar += '<div class="iconfont icon-shanchu bg2 qTip" title="删除" onclick="onDelete(\'' + rowdata.userId + '\')"></div>';
+                        }
+                        bar += '<div class="iconfont icon-zhongzhi bg3 qTip" title="重置密码" onclick="resetPassword(\'' + rowdata.userId + '\')"></div>';
+
+
+                        if (0 == rowdata.lockFlag) {
+                            bar += '<div class="iconfont icon-suoding bg4 qTip" title="锁定" onclick="onLock(\'' + rowdata.userId + '\',\'' + rowdata.builtIn + '\', 1)"></div>';
+                        } else if (1 == rowdata.lockFlag) {
+                            bar += '<div class="iconfont icon-qiyong bg5 qTip" title="启用" onclick="onLock(\'' + rowdata.userId + '\',\'' + rowdata.builtIn + '\', 0)"></div>';
+                        }
+
+                        bar += '</div>';
+                        return bar;
+                    }
+                }
+            ],
+            url: ctxPath + 'user/page',
+            method: 'get',
+            sortName: 'ucreate_time',
+            sortOrder: "ASC",
+            rownumbers: true,
+            checkbox: true,
+            height: '100%',
+            width: "100%",
+            pageSize: 10,
+            percentWidthMode: true,
+            onComplete: isnull,
+            onAfterShowData: onAfterShowData,
+
+            isChecked: checkedHandler,
+            onCheckRow: checkRowHandler,
+            onCheckAllRow: checkAllRowHandler
+        })
+        $(".qTip").tip();
+        searchHandler();
+    })
+
+    function initTree() {
+        $.ajax({
+            url: ctxPath + "dept/list",
+            type: 'get',
+            data: {},
+        }).then(function (res) {
+            var menuTree = res.data
+            for (var i = 0; i < menuTree.length; i++) {
+                //console.log(res[i])
+                menuTree[i].id = menuTree[i].deptId;
+                menuTree[i].name = menuTree[i].deptName;
+                if (-1 == menuTree[i].parentId) {
+                    menuTree[i].open = true
+                }
+            }
+            $.fn.zTree.init($("#deptTree"), setting, menuTree);
+        }, function () {
+            // top.Toast("showErrorToast", 'load tree error！');
+        })
+    }
+
+    function isnull() {
+        $(".qTip").tip();
+        if ($(".l-grid-body,.l-scroll").find("tr").length > 0) {
+        } else {
+            $(".l-grid-body,.l-scroll").find("div.l-grid-body-inner").html(
+                "<div class=\"indexnodata\">\n"
+                + "<p> 当前没有查找到结果</p>\n"
+                + "<p>请更改筛选条件,可以在更多的筛选条件里设置</p>\n" + "</div>")
+        }
+    }
+
+    function onCheck() {
+    }
+
+    function onAfterShowData(data) {
+        initTree();
+        $('#allNumber').html(data['pager.totalRows'])
+    }
+
+    //点击树节点
+    function onClick(event, treeId, treeNode, clickFlag) {
+        $("#deptid").val(treeNode.id);
+        searchHandler();
+    }
+
+    //不允许拖拽
+    function beforeDrag(treeId, treeNodes) {
+        return false;
+    }
+
+    //新增
+    function addUnit() {
+        var diag = new top.Dialog();
+        diag.URL = ctxPath + "page/user/add";
+        diag.Title = "添加用户";
+        //自定义宽度和长度的设置
+        diag.Width = 500;
+        diag.Height = 390;
+        diag.ShowButtonRow = true;
+        diag.OkButtonText = " 提 交 ";
+        diag.OKEvent = function () {
+            diag.innerFrame.contentWindow.save();
+        };
+        diag.show();
+    }
+
+    //删除
+    function onDelete(rowid) {
+        $.ajax({
+            url: ctxPath + "user/" + rowid,
+            type: 'delete'
+        }).then(function (res) {
+            if (0 == res.code) {
+                grid.loadData();/**/
+                top.Toast("showSuccessToast", '操作成功');
+            } else {
+                top.Toast("showErrorToast", '操作异常');
+            }
+        }, function () {
+            top.Toast("showErrorToast", '操作异常');
+        })
+    }
+
+    //修改
+    function onEdit(rowid) {
+        var diag = new top.Dialog();
+        diag.Title = "编辑";
+        diag.URL = ctxPath + "page/user/update?userId=" + rowid;
+        //自定义长度和宽度的设置
+        diag.Width = 500;
+        diag.Height = 350;
+        diag.ShowButtonRow = true;
+        diag.OkButtonText = " 提 交 ";
+        diag.OKEvent = function () {
+            var demo = diag.innerFrame.contentWindow.save();
+        };
+        diag.show();
+    }
+
+    // 查询
+    function searchHandler() {
+        var paramsx = {};
+        var username = $("#username").val();
+        if (username) {
+            paramsx.username = username;
+        }
+        var deptid = $("#deptid").val();
+        if (deptid) {
+            paramsx.deptId = deptid
+        }
+        paramsx.filters = JSON.stringify(paramsx);
+
+        grid.setOptions({
+            params: paramsx
+        });
+        grid.setNewPage(1);
+        grid.loadData();
+
+    }
+
+    //重置查询
+    function resetSearch() {
+        $("#deptid").val("");
+        $("#username").val("");
+        searchHandler();
+    }
+
+
+    //刷新页面方法
+    function refresh(isUpdate) {
+        checkedArray = [];
+        checkedTextArray = [];
+        if (!isUpdate) {
+            grid.setNewPage(1);
+        }
+        grid.loadData();
+    }
+
+
+    function importUser() {
+        var diag = new top.Dialog();
+        diag.Title = "导入";
+        diag.URL = ctxPath + "page/user/importUser";
+        //自定义长度和宽度的设置
+        diag.Width = 320;
+        diag.Height = 150;
+        diag.ShowButtonRow = false;
+        // diag.OkButtonText = " 提 交 ";
+        // diag.OKEvent = function () {
+        //     var demo = diag.innerFrame.contentWindow.save();
+        // };
+        diag.show();
+    }
+
+    // 锁定 启用
+    function onLock(userid, builtIn, lockFlag) {
+        var user = {};
+        user.userId = userid;
+        user.lockFlag = lockFlag;
+        user.builtIn = builtIn;
+        $.jsonAjax({
+            url: ctxPath + "user",
+            type: 'put',
+            data: user
+        }).then(function (res) {
+            if (0 == res.code) {
+                top.frmright.refresh();
+                top.Dialog.close()
+                top.Toast("showSuccessToast", '操作成功');
+            } else {
+                top.Toast("showErrorToast", res.msg);
+            }
+        }, function () {
+            top.Toast("showErrorToast", '操作失败！');
+        })
+    }
+
+    function resetPassword(userid) {
+        $.ajax({
+            url: ctxPath + "user/resetPassword/" + userid,
+            type: 'post'
+        }).then(function (res) {
+            if (0 == res.code) {
+                grid.loadData();/**/
+                top.Toast("showSuccessToast", '密码重置为111111');
+            } else {
+                top.Toast("showErrorToast", '操作异常');
+            }
+        }, function () {
+            top.Toast("showErrorToast", '操作异常');
+        })
+    }
+
+    function resetPwd() {
+        if (checkedArray.length > 0) {
+            top.Dialog.confirm("是否重置用户" + checkedTextArray + "的密码", function () {
+                for (var i = 0; i < checkedArray.length; i++) {
+                    $.ajax({
+                        url: ctxPath + "user/resetPassword/" + checkedArray[i],
+                        type: 'post'
+                    }).then(function (res) {
+                        if (0 == res.code) {
+                            top.Toast("showSuccessToast", '密码重置为111111');
+                        } else {
+                            top.Toast("showErrorToast", '重置用户[' + checkedTextArray[i] + ']密码异常');
+                        }
+                    }, function () {
+                        top.Toast("showErrorToast", '操作异常');
+                    })
+                }
+            })
+        } else {
+            top.Toast("showErrorToast", '请选择需要重置密码的用户！');
+        }
+    }
+
+    function resetEdit() {
+        console.log('checkedArray>' + checkedArray)
+        console.log('checkedTextArray>' + checkedTextArray)
+        if (checkedArray.length > 0) {
+            if (checkedArray.length > 1) {
+                top.Toast("showErrorToast", '同时只能编辑一个用户！');
+                return;
+            }
+            var diag = new top.Dialog();
+            diag.Title = "编辑";
+            diag.URL = ctxPath + "page/user/update?userId=" + checkedArray[0];
+            //自定义长度和宽度的设置
+            diag.Width = 500;
+            diag.Height = 350;
+            diag.ShowButtonRow = true;
+            diag.OkButtonText = " 提 交 ";
+            diag.OKEvent = function () {
+                var demo = diag.innerFrame.contentWindow.save();
+            };
+            diag.show();
+        } else {
+            top.Toast("showErrorToast", '请选择需要编辑的用户！');
+        }
+    }
+
+
+    function findCheckedArray(id) {
+        for (var i = 0; i < checkedArray.length; i++) {
+            if (checkedArray[i] == id) return i;
+        }
+        return -1;
+    }
+
+    function addCheckedArray(id, name) {
+        if (findCheckedArray(id) == -1) {
+            checkedArray.push(id);
+            checkedTextArray.push(name);
+        }
+    }
+
+    function removeCheckedArray(id) {
+        var i = findCheckedArray(id);
+        if (i == -1) return;
+        checkedArray.splice(i, 1);
+        checkedTextArray.splice(i, 1);
+    }
+
+    function checkedHandler(rowdata) {
+        if (findCheckedArray(rowdata.userId) == -1)
+            return false;
+        return true;
+    }
+
+    function checkRowHandler(checked, data) {
+        if (checked) addCheckedArray(data.userId, data.username);
+        else removeCheckedArray(data.userId, data.username);
+    }
+
+    function checkAllRowHandler(checked) {
+        for (var rowid in this.records) {
+            if (checked)
+                addCheckedArray(this.records[rowid]['userId'], this.records[rowid]['username']);
+            else
+                removeCheckedArray(this.records[rowid]['userId'], this.records[rowid]['username']);
+        }
+    }
+</script>
+<style>
+    .page_content {
+        position: fixed;
+        background-color: #ffffff;
+        margin: 15px;
+        height: calc(100vh - 140px);
+        width: calc(100% - 30px);
+    }
+
+    .page_content > table {
+        height: calc(100vh - 150px);
+    }
+
+    .ztree li {
+        width: 240px;
+    }
+
+    .l-grid-body-inner {
+        width: 100% !important;
+    }
+
+</style>
+</body>
+</html>

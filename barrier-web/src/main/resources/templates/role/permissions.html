@@ -1,0 +1,132 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>角色管理</title>
+    <!--框架必需start-->
+    <script type="text/javascript" th:src="@{/static/js/public/base-util.js}" src="../../static/js/public/base-util.js"></script>
+    <script type="text/javascript" th:src="@{/libs/js/jquery.js}" src="../../libs/js/jquery.js"></script>
+    <script type="text/javascript" th:src="@{/libs/js/language/cn.js}" src="../../libs/js/language/cn.js"></script>
+    <script type="text/javascript" th:src="@{/libs/js/framework.js}" src="../../libs/js/framework.js"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{/libs/css/import_basic.css}"
+          href="../../libs/css/import_basic.css"/>
+    <link rel="stylesheet" type="text/css" id="skin" prePath="../../"/>
+    <link rel="stylesheet" type="text/css" id="customSkin"/>
+    <!--框架必需end-->
+
+    <!-- 表单验证start -->
+    <script type="text/javascript" th:src="@{/libs/js/form/validationRule.js}"
+            src="../../libs/js/form/validationRule.js"></script>
+    <script type="text/javascript" th:src="@{/libs/js/form/validation.js}"
+            src="../../libs/js/form/validation.js"></script>
+    <!-- 表单验证end -->
+
+    <!--表单异步提交start-->
+    <script type="text/javascript" th:src="@{/libs/js/form/form.js}" src="../../libs/js/form/form.js"></script>
+    <!--表单异步提交end-->
+    <!-- 树组件start -->
+    <script type="text/javascript" th:src="@{/libs/js/tree/ztree/ztree.js}"
+            src="../../libs/js/tree/ztree/ztree.js"></script>
+    <link type="text/css" rel="stylesheet" th:href="@{/libs/js/tree/ztree/ztree.css}"
+          href="../../libs/js/tree/ztree/ztree.css"></link>
+    <!-- 树组件end -->
+    <!-- 树形下拉框start -->
+    <script type="text/javascript" th:src="@{/libs/js/form/selectTree.js}"
+            src="../../libs/js/form/selectTree.js"></script>
+    <!-- 树形下拉框end -->
+    <script type="text/javascript" th:inline="javascript">
+        /*<![CDATA[*/
+        ctxPath = /*[[@{/}]]*/ '';
+        /*]]>*/
+    </script>
+</head>
+<body>
+<div class="form_content">
+    <ul id="menuTree" class="ztree"></ul>
+</div>
+
+
+<script type="text/javascript">
+    var setting = {
+        view: {
+            dblClickExpand: false
+        },
+        check: {
+            enable: true
+        },
+        callback: {
+            onClick: onNodeClick
+        }
+    };
+
+    // setting.check.chkboxType = { "Y" : "p", "N" : "ps" }
+    function onNodeClick(event, treeId, treeNode) {
+        var zTree = $.fn.zTree.getZTreeObj("menuTree");
+        zTree.expandNode(treeNode);
+    }
+
+    $(function () {
+        $.ajax({
+            url: ctxPath + "menu/list",
+            type: 'get',
+            data: {},
+        }).then(function (res) {
+            var menuTree = res.data
+            for (var i = 0; i < menuTree.length; i++) {
+                menuTree[i].id = menuTree[i].menuId;
+                menuTree[i].icon = '';
+            }
+            $.fn.zTree.init($("#menuTree"), setting, menuTree);
+
+            $.ajax({
+                url: ctxPath + "menu/tree/" + [[${param.role_id}]],
+                type: 'get',
+                data: {}
+            }).then(function (res) {
+                var zTree = $.fn.zTree.getZTreeObj("menuTree");
+                for (var i = 0; i < res.data.length; i++) {
+                    var node = zTree.getNodeByParam('id', res.data[i]);
+                    //4个参数：① 节点 ② 勾选true/取消勾选false ③checkTypeFlag设置父子关联true/设置父子不关联false ④是否回调，调用回调函数true，否则false
+                    zTree.checkNode(node, true, false, true);
+                }
+            })
+        })
+
+
+    })
+
+    //保存
+    function save() {
+        //获取zTree对象
+        var zTree = $.fn.zTree.getZTreeObj("menuTree");
+        //得到选中的数据集
+        var checkedNodes = zTree.getCheckedNodes(true);
+
+        var menuIds = []
+        for (var i = 0; i < checkedNodes.length; i++) {
+            menuIds.push(checkedNodes[i].menuId)
+        }
+
+        var roleId = [[${param.role_id}]];
+        $.ajax({
+            url: ctxPath + "role/menu?roleId=" + roleId + "&menuIds=" + menuIds.join(','),
+            type: 'put',
+            headers: {'Content-Type': 'application/json;charset=utf8'}
+        }).then(function (res) {
+            if (0 == res.code) {
+                top.Toast("showSuccessToast", '操作成功');
+                if(top.frmright){
+                    top.frmright.refresh();
+                }
+                top.Dialog.close()
+            } else {
+                top.Toast("showErrorToast", '操作异常');
+            }
+        }, function () {
+            top.Toast("showErrorToast", '提交失败！');
+        })
+    }
+</script>
+</body>
+</html>

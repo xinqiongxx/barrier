@@ -29,7 +29,7 @@ import java.util.List;
  * 服务实现类
  * </p>
  *
- * @author wangjun
+ * @author maxinqiong
  * @since 2017-10-29
  */
 @Service

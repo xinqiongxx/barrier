@@ -3,6 +3,7 @@ package com.tjaide.nursery.barrier.web.controller;
 import com.tjaide.nursery.barrier.common.core.entity.ShiroUser;
 import com.tjaide.nursery.barrier.common.core.util.ShiroUtils;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import springfox.documentation.annotations.ApiIgnore;
@@ -28,7 +29,16 @@ public class HomeController {
 
 
     @GetMapping(value = "/")
-    public String main() {
+    public String main(Model model) {
+        model.addAttribute("user", ShiroUtils.getUser());
+        return "index/mainshow";
+    }
+
+
+
+    @GetMapping(value = "/main")
+    public String tomain(Model model) {
+        model.addAttribute("user", ShiroUtils.getUser());
         return "index/main";
     }
 

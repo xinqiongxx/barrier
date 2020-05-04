@@ -12,7 +12,7 @@ import com.tjaide.nursery.barrier.web.entity.SysDeptRelation;
  * Mapper 接口
  * </p>
  *
- * @author wangjun
+ * @author maxinqiong
  * @since 2018-02-12
  */
 public interface SysDeptRelationMapper extends BaseMapper<SysDeptRelation> {

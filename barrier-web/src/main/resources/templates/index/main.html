@@ -2,16 +2,18 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <meta charset="UTF-8">
-    <title>道闸系统</title>
+    <title>幼儿园进出管控系统</title>
     <!--框架必需start-->
     <link rel="stylesheet" type="text/css" th:href="@{/libs/css/import_basic.css}" href="../../libs/css/import_basic.css"/>
-    <link rel="stylesheet" type="text/css" id="theme" themeColor="blue" th:href="@{/libs/skins/blue/style.css}"
-          href="../../libs/skins/blue/style.css" positionTarget="positionContent"/>
-    <link rel="stylesheet" type="text/css" id="skin" th:href="@{/system/skin/style.css}" href="../../system/skin/style.css" skinPath="system/skin/"/>
+    <link rel="stylesheet" type="text/css" id="theme" themeColor="blue" th:href="@{/libs/skins/blue/style.css}" href="../../libs/skins/blue/style.css"
+          positionTarget="positionContent"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/system/skin/style.css}" href="../../system/skin/style.css" skinPath="system/skin/"/>
     <link rel="stylesheet" type="text/css" th:href="@{/system/skin/animate.min.css}" href="../../system/skin/animate.min.css"/>
     <script type="text/javascript" th:src="@{/libs/js/jquery.js}" src="../../libs/js/jquery.js"></script>
     <script type="text/javascript" th:src="@{/libs/js/language/cn.js}" src="../../libs/js/language/cn.js"></script>
-    <script type="text/javascript" th:src="@{/libs/js/main.js}" src="../../libs/js/main.js"></script>
+    <!--框架必需end-->
+    <!--框架必需start-->
+    <script type="text/javascript" th:src="@{/libs/js/framework.js}" src="../../libs/js/framework.js"></script>
     <!--框架必需end-->
 
     <!--引入弹窗组件start-->
@@ -26,7 +28,7 @@
     <!-- iconfont start -->
     <link rel="stylesheet" type="text/css" th:href="@{/static/iconfont/iconfont.css}" href="../../static/iconfont/iconfont.css"/>
     <!-- iconfont end -->
-
+    <script type="text/javascript" th:src="@{/libs/js/echarts/echarts.min.js}" src="../../libs/js/echarts/echarts.min.js"></script>
     <script type="text/javascript" th:inline="javascript">
         /*<![CDATA[*/
         ctxPath = /*[[@{/}]]*/ '';
@@ -46,7 +48,7 @@
         }
 
         .main_box{
-            background: url("../../static/image/bg.jpg") no-repeat;
+            background: url("../../static/image/main_bg.png") no-repeat;
             background-size: 100% 100%;
         }
 
@@ -71,8 +73,10 @@
         .main_user_box {
             position: absolute;
             right: 20px;
-            border: 1px solid;
-            top: 0px;
+            top: 15px;
+        }
+        .user_information a{
+            color: #FFFFFF;
         }
 
         #hideCon {
@@ -92,12 +96,7 @@
         }
         .main_left_top,.main_center_top,.main_right_top,.main_left_bottom,.main_center_bottom,.main_right_bottom {
             padding:5px;
-        }
-        .main_left_top,.main_center_top,.main_right_top {
-            height: 460px;
-        }
-        .main_left_bottom,.main_center_bottom,.main_right_bottom{
-            height: 300px;
+            height: 100%;
         }
         .main_left_top_box{
             width: 100%;
@@ -106,27 +105,86 @@
         .main_center_top_box,.main_right_top_box,.main_left_bottom_box,.main_menu_box,.main_right_bottom_box {
             width: 100%;
             height: 100%;
-            border: 1px solid #bdbdbd;
+            border: 1px solid #1e6ab1;
+            background: rgba(164, 164, 164, 0.2);
+            border-radius: 5px;
+            position: relative;
         }
 
         .main_title_box {
-            padding: 10px 0px 0px 10px;
+            padding: 5px 0px 0px 10px;
             color: #ffffff;
+            height: 50px;
+            line-height: 50px;
+            position: relative;
         }
         .main_title_box .iconfont {
             margin-right: 3px;
         }
+        .main_title_box .iconfont:nth-child(2) {
+            position: absolute;
+            right: 20px;
+            top: 10px;
+        }
+
+
+        .main_image-border {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+        }
+
+        .main_image-border1 {
+            top: -2px;
+            left: -2px;
+            border-left: 1px solid #FFFFFF;
+            border-top: 1px solid #FFFFFF;
+        }
+
+        .main_image-border2 {
+            top: -2px;
+            right: -2px;
+            border-right: 1px solid #FFFFFF;
+            border-top: 1px solid #FFFFFF;
+        }
+
+        .main_image-border3 {
+            bottom: -2px;
+            left: -2px;
+            border-bottom: 1px solid #FFFFFF;
+            border-left: 1px solid #FFFFFF;
+        }
+
+        .main_image-border4 {
+            bottom: -2px;
+            right: -2px;
+            border-right: 1px solid #FFFFFF;
+            border-bottom: 1px solid #FFFFFF;
+        }
+
+
+
         /*第一块start*/
         .main_date_box {
-            border: 1px solid #bdbdbd;
+            position: relative;
+            border: 1px solid #1e6ab1;
+            background: rgba(164, 164, 164, 0.2);
+            border-radius: 5px;
             height: 40%;
+            min-height: 150px;
+            padding: 5px 0px;
             box-sizing: border-box;
             -moz-box-sizing: border-box;
             -webkit-box-sizing: border-box;
         }
 
+
+
         .main_statistics_box {
-            border: 1px solid #bdbdbd;
+            position: relative;
+            border: 1px solid #1e6ab1;
+            background: rgba(164, 164, 164, 0.2);
+            border-radius: 5px;
             margin-top: 10px;
             height: calc(60% - 10px);
             box-sizing: border-box;
@@ -135,7 +193,9 @@
         }
 
         .main_date_top_box {
-            margin: 20px 5px;
+            margin: 2px 15px 10px;
+            padding: 0px;
+            height: calc(50% - 6px);
             background: -moz-linear-gradient(right, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0) 100%);
             background: -webkit-linear-gradient(right, rgba(255,255,255,0.5) 0%,rgba(255,255,255,0) 100%);
             background: -o-linear-gradient(right, rgba(255,255,255,0.5) 0%,rgba(255,255,255,0) 100%);
@@ -147,8 +207,10 @@
             color: #ffffff;
             font-weight: bold;
             padding: 3px 5px;
+            height: 50%;
             position: relative;
-            top: 3px;
+            top: 25%;
+            transform: translateY(-50%);
         }
 
         .main_date_top_data {
@@ -157,20 +219,23 @@
             font-weight: bold;
             letter-spacing: 5px;
             color: #f7ff02;
+            height: 50%;
             position: relative;
-            top: -3px;
+            top: 25%;
+            transform: translateY(-50%);
         }
 
         .main_date_bottom_box {
             display: flex;
+            height: calc(50% - 6px);
             position: relative;
         }
 
         .main_date_bottom_date {
-            margin: 0px 5px 5px;
-            width: 50%;
+            margin: 10px 15px 0px;
+            width: calc(50% - 30px);
             background-color: rgba(224, 224, 224, 0.5);
-            padding: 5px 25px;
+            padding: 0px;
             border-radius: 1px;
             color: #ffffff;
             font-size: 14px;
@@ -182,27 +247,31 @@
         }
 
         .main_date_bottom_date div:nth-child(1) {
+            height: 50%;
             position: relative;
-            top: 3px;
+            top: 25%;
+            transform: translateY(-50%);
         }
         .main_date_bottom_date div:nth-child(2) {
+            height: 50%;
             position: relative;
-            top: -3px;
+            top: 25%;
+            transform: translateY(-50%);
         }
         .main_date_bottom_time {
             margin-left: 10px;
-            flex: 1;
+            width:50%;
             height: 30px;
             line-height: 30px;
             position: absolute;
             bottom: 5px;
             color: #ffffff;
-            right: 20px;
+            right: 0;
         }
 
         .main_date_bottom_time span {
             background: rgba(130, 130, 130, 0.5);
-            width: 15px;
+            width: 20px;
             display: inline-block;
             text-align: center;
         }
@@ -212,24 +281,28 @@
             width: 5px;
             color: #999999;
         }
+
+        .main_chart_box {
+            height: calc(100% - 50px);
+        }
         /*第一块end*/
         /*第二块start*/
         .main_select_box {
-            background-color: #cbdbfc;
-            color: #ffffff;
+            background-color: #575757;
             padding: 0px 5px;
+            height: 30px;
+            line-height: 30px;
         }
-
-        .main_select_box {
-            background-color: #cbdbfc;
+        .select_main_title {
             color: #ffffff;
-            padding: 0px 5px;
-            height: 6%;
+            display: inline-block;
+            float: left;
+            margin-right: 10px;
             line-height: 30px;
         }
         .main_vedio_box {
             width: 100%;
-            height: 75%;
+            height: calc(100% - 30px);
             background: #000000;
         }
 
@@ -296,6 +369,10 @@
             border-bottom: 2px solid #FFFFFF;
         }
 
+        .main_message_list_box {
+            height: calc(100% - 50px);
+        }
+
         .main_message_list_item_left {
             width: 70%;
             display: flex;
@@ -309,18 +386,26 @@
             margin: 5px;
             background-color: rgba(255,255,255,0.3);
         }
-
         .user_photo_icon_box {
             border: 1px solid #cbe6f8;
             width: 100%;
             height: 100%;
+            line-height: 70px;
             border-radius: 50%;
+            text-align: center;
             background-color: rgba(255,255,255,0.5);
+        }
+
+        .user_photo_icon_box .iconfont {
+            font-size: 30px;
+            color: #ffffff;
         }
 
         .user_icon_box {
             color: #006dff;
             width: 30px;
+            line-height: 60px;
+            text-align: center;
         }
 
         .main_message_list_item_right {
@@ -328,6 +413,13 @@
         }
         /*第三块end*/
         /*第四块start*/
+        .main_line_box {
+            height: calc(100% - 50px);
+        }
+
+
+
+
         .main_weather_list_box {
             display: flex;
             padding: 10px 20px;
@@ -369,12 +461,14 @@
         /*第四块end*/
         /*第五块start*/
         .main_menu_box {
-            padding: 20px 30px;
+            padding: 10px 30px;
+            text-align: center;
         }
         .main_menu_item{
             position:relative;
             width:100px;
             display: inline-block;
+            margin: 5px;
         }
 
         .main_menu_item_left {
@@ -392,6 +486,7 @@
             height: 86.6px;
             left: 25px;
             top: 0;
+            color: #FFFFFF;
             border-top: 1px solid #d4e7f3;
             border-bottom: 1px solid #d4e7f3;
         }
@@ -407,10 +502,28 @@
             border-bottom: 1px solid #d4e7f3;
         }
 
+        .main_menu_item_center .iconfont {
+            display: block;
+            text-align: center;
+            font-size: 35px;
+            position: relative;
+            height: 70%;
+            top: 25px;
+        }
+
+        .main_menu_item_center span:nth-child(2) {
+            font-size: 12px;
+            display: inline-block;
+            width: 50px;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
         /*第五块end*/
         /*第六块start*/
         .main_data_list_box {
             padding: 5px 20px;
+            height: calc(100% - 50px);
         }
         .main_data_list {
             display: flex;
@@ -430,7 +543,15 @@
             color: #00ff24;
         }
         /*第六块end*/
-
+        .right_toggle_content{
+            top: 40px !important;
+        }
+        .right_toggle_content li {
+            cursor: pointer;
+        }
+        table {
+            width: 100% !important;
+        }
     </style>
 </head>
 <body>
@@ -441,9 +562,9 @@
     </div>
     <!--头部与导航end-->
     <div id="mainFrame">
-        <table width="100%" cellpadding="0" cellspacing="0" class="table_border0">
+        <table width="100%" height="100%" cellpadding="0" cellspacing="0" class="table_border0">
             <tbody>
-            <tr>
+            <tr style="height: 10%;">
                 <td colspan="3" style="position: relative;">
                     <!--顶部区域start-->
                     <div class="main_title">
@@ -452,7 +573,7 @@
                     <div class="main_user_box">
                         <div class="right_toggle">
                             <div class="user_information" title="用户中心">
-                                <b id="user_info"></b>
+                                <b id="user_info"></b><a href="javascript:;"  th:text="${user['name']}"></a>
                             </div>
                             <shiro:authenticated>
                                 <ul class="right_toggle_content" style="display: none;">
@@ -472,39 +593,44 @@
                     <!--顶部区域end-->
                 </td>
             </tr>
-            <tr>
+            <tr style="height: 60%;">
                 <!--第二层左侧区域start-->
                 <td class="main_left_top">
                     <div class="main_left_top_box">
                         <div class="main_date_box">
+                            <div class="main_image-border main_image-border1"></div>
+                            <div class="main_image-border main_image-border2"></div>
+                            <div class="main_image-border main_image-border3"></div>
+                            <div class="main_image-border main_image-border4"></div>
                             <div class="main_date_top_box">
                                 <div  class="main_date_top_title">累计服务时长总量（MIN）</div>
                                 <div  class="main_date_top_data">000274538</div>
                             </div>
-                            <div class="main_date_bottom_box">
+                            <div id="main_date_bottom_box" class="main_date_bottom_box">
                                 <div class="main_date_bottom_date">
-                                    <div>2020年4月22日</div>
-                                    <div>星期三</div>
+                                    <div></div>
+                                    <div></div>
                                 </div>
                                 <div class="main_date_bottom_time">
-                                    <span>1</span>
-                                    <span>5</span>
+                                    <span></span>
                                     <span class="time_colon">:</span>
-                                    <span>2</span>
-                                    <span>3</span>
+                                    <span></span>
                                     <span class="time_colon">:</span>
-                                    <span>1</span>
-                                    <span>2</span>
+                                    <span></span>
                                 </div>
                             </div>
                         </div>
                         <div class="main_statistics_box">
+                            <div class="main_image-border main_image-border1"></div>
+                            <div class="main_image-border main_image-border2"></div>
+                            <div class="main_image-border main_image-border3"></div>
+                            <div class="main_image-border main_image-border4"></div>
                             <div class="main_title_box">
                                 <i class="iconfont icon-qunzuduoren"></i>
                                 人数统计
                             </div>
                             <div class="main_chart_box">
-                                <div class="charts_container"></div>
+                                <div id="chart1" class="charts_container" style="width: 100%;height: 100%;"></div>
                             </div>
                         </div>
                     </div>
@@ -513,16 +639,16 @@
                 <!--第二层中间区域start-->
                 <td class="main_center_top">
                     <div class="main_center_top_box">
+                        <div class="main_image-border main_image-border1"></div>
+                        <div class="main_image-border main_image-border2"></div>
+                        <div class="main_image-border main_image-border3"></div>
+                        <div class="main_image-border main_image-border4"></div>
                         <div class="main_select_box">
-                            请选择播放源
-                            <select prompt="请选择播放源" data='{"list":[{"value":"1","key":"008569"},{"value":"2","key":"00567841"}]}'></select>
+                            <div class="select_main_title">请选择播放源</div>
+                            <select class="select_main" prompt="请选择播放源" data='{"list":[{"value":"1","key":"008569"},{"value":"2","key":"00567841"}]}'></select>
                         </div>
                         <div class="main_vedio_box">
 
-                        </div>
-                        <div class="main_vedio_title_box">
-                            <div>幼儿园</div>
-                            <div>为每个孩子的未来奠基</div>
                         </div>
                     </div>
                 </td>
@@ -530,6 +656,10 @@
                 <!--第二层右侧区域start-->
                 <td class="main_right_top">
                     <div class="main_right_top_box">
+                        <div class="main_image-border main_image-border1"></div>
+                        <div class="main_image-border main_image-border2"></div>
+                        <div class="main_image-border main_image-border3"></div>
+                        <div class="main_image-border main_image-border4"></div>
                         <div class="main_title_box">
                             <i class="iconfont icon-ren"></i>
                             进出人员
@@ -635,15 +765,33 @@
                 </td>
                 <!--第二层右侧区域end-->
             </tr>
-            <tr>
+            <tr  style="height: 30%;">
                 <!--第三层左侧区域start-->
                 <td class="main_left_bottom">
                     <div class="main_left_bottom_box">
+                        <div class="main_image-border main_image-border1"></div>
+                        <div class="main_image-border main_image-border2"></div>
+                        <div class="main_image-border main_image-border3"></div>
+                        <div class="main_image-border main_image-border4"></div>
                         <div class="main_title_box">
-                            <i class="iconfont icon-tianqi"></i>
-                            实时天气
+                            <i class="iconfont icon-tongjifenxi"></i>
+                            基础数据
                         </div>
-                        <div class="main_weather_list_box">
+                        <div class="main_data_list_box">
+                            <div class="main_data_list">
+                                <div class="main_data_list_item">学生总人数 <span>2</span> 个</div>
+                                <div class="main_data_list_item">家长总人数 <span>2</span> 个</div>
+                            </div>
+                            <div class="main_data_list">
+                                <div class="main_data_list_item">教职工总人数 <span>2</span> 个</div>
+                                <div class="main_data_list_item">黑名单总人数 <span>2</span> 个</div>
+                            </div>
+                            <div class="main_data_list">
+                                <div class="main_data_list_item">考勤平板数 <span>2</span> 个</div>
+                                <div class="main_data_list_item">闸机通道数 <span>2</span> 个</div>
+                            </div>
+                        </div>
+                        <!--<div class="main_weather_list_box">
                             <div class="main_weather_list_left">
                                 <div class="main_weather_item_title">实时温度</div>
                                 <div class="main_weather_item_title">27.0℃</div>
@@ -668,13 +816,20 @@
                                     <div class="main_weather_item_title">27.0℃</div>
                                 </div>
                             </div>
-                        </div>
+                        </div>-->
                     </div>
                 </td>
                 <!--第三层左侧区域end-->
                 <!--第三层中间区域start-->
                 <td class="main_center_bottom">
                     <div class="main_menu_box">
+                        <div class="main_image-border main_image-border1"></div>
+                        <div class="main_image-border main_image-border2"></div>
+                        <div class="main_image-border main_image-border3"></div>
+                        <div class="main_image-border main_image-border4"></div>
+                        <div id="main_menu_items" class="main_menu_items">
+                        </div>
+                        <!--
                         <div class="main_menu_item">
                             <div class="main_menu_item_left"></div>
                             <div class="main_menu_item_center"><span class="iconfont icon-fl-renshi"></span><span>底库管理</span></div>
@@ -692,7 +847,7 @@
                         </div>
                         <div class="main_menu_item">
                             <div class="main_menu_item_left"></div>
-                            <div class="main_menu_item_center"><span class="iconfont icon-shujujiekou"></span><span>接口管理</span></div>
+                            <div class="main_menu_item_center"><span class="iconfont icon-yewujiekoucanshu"></span><span>接口管理</span></div>
                             <div class="main_menu_item_right"></div>
                         </div>
                         <div class="main_menu_item">
@@ -724,38 +879,24 @@
                             <div class="main_menu_item_left"></div>
                             <div class="main_menu_item_center"><span class="iconfont icon-duibi1"></span><span>1:1比对</span></div>
                             <div class="main_menu_item_right"></div>
-                        </div>
-
-
-
-
-
-
-
-
-
+                        </div>-->
                     </div>
                 </td>
                 <!--第三层中间区域end-->
                 <!--第三层右侧区域start-->
                 <td class="main_right_bottom">
                     <div class="main_right_bottom_box">
+                        <div class="main_image-border main_image-border1"></div>
+                        <div class="main_image-border main_image-border2"></div>
+                        <div class="main_image-border main_image-border3"></div>
+                        <div class="main_image-border main_image-border4"></div>
                         <div class="main_title_box">
-                            <i class="iconfont icon-tongjifenxi"></i>
-                            基础数据
+                            <i class="iconfont icon-tianqi"></i>
+                            时间段统计
                         </div>
-                        <div class="main_data_list_box">
-                            <div class="main_data_list">
-                                <div class="main_data_list_item">学生总人数 <span>2</span> 个</div>
-                                <div class="main_data_list_item">家长总人数 <span>2</span> 个</div>
-                            </div>
-                            <div class="main_data_list">
-                                <div class="main_data_list_item">学生总人数 <span>2</span> 个</div>
-                                <div class="main_data_list_item">家长总人数 <span>2</span> 个</div>
-                            </div>
-                            <div class="main_data_list">
-                                <div class="main_data_list_item">学生总人数 <span>2</span> 个</div>
-                                <div class="main_data_list_item">家长总人数 <span>2</span> 个</div>
+                        <div class="main_line_box">
+                            <div id="chart2" style="width: 100%;height: 100%;">
+
                             </div>
                         </div>
                     </div>
@@ -769,24 +910,55 @@
 </div>
 
 <script type="text/javascript">
-
-    var setting = {
-        data: {
-            simpleData: {
-                idKey: "id",
-                pIdKey: "parentId",
-                enable: true
-            },
-            key: {
-                children: "children"
-            }
+    var weekList= ['星期天', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
+    var selDateMap= {
+            year: '',
+            date: '',
+            week: '',
+            month: '',
+            hour:'',
+            minute:'',
+            second:''
         }
-    };
 
     $(function () {
         $.get(ctxPath + "menu", {}, function (data) {
-            initMenuNav(data.data, setting);
+            console.log(data)
+            var hidd='';
+            if(data.code == 0 && data.data.length>0){
+                data.data.forEach((res,index)=>{
+                    hidd+='<div class="main_menu_item" data-id="'+res.id+'" data-url="'+res.url+'" data-value="'+res.name+'">\n' +
+                        '       <div class="main_menu_item_left"></div>\n' +
+                        '       <div class="main_menu_item_center"><span class="iconfont '+res.icon+'"></span><span>'+res.name+'</span></div>\n' +
+                        '       <div class="main_menu_item_right"></div>\n' +
+                        '  </div>'
+                })
+            }
+            $('#main_menu_items').html(hidd)
         });
+        $('#main_menu_items').on('click','.main_menu_item',function(ret){
+            var id=$(this).data('id')
+            var url=$(this).data('url')
+            var name=$(this).data('value')
+            var diag = new top.Dialog();
+            diag.Title = name;
+            diag.URL = ctxPath + url;
+            //自定义长度和宽度的设置
+            diag.Width = 960;
+            diag.Height = 650;
+            diag.ShowButtonRow = false;
+            diag.show();
+        })
+        //右侧头部js
+        $(".right_toggle").hover(function (event) {
+            event.stopPropagation()
+            $(this).find(".right_toggle_content").slideToggle(200);
+        })
+
+
+        setInterval(getDateData, 1000);
+        eachrts1()
+        eachrts2()
     })
 
 
@@ -824,6 +996,219 @@
             var demo = diag.innerFrame.contentWindow.save();
         };
         diag.show();
+    }
+
+    function getDateData(){
+        var date = new Date();
+        selDateMap.year = date.getFullYear()
+        selDateMap.month = ((date.getMonth() + 1)<10?'0'+(date.getMonth() + 1):(date.getMonth() + 1))
+        selDateMap.date = date.getDate()
+        selDateMap.week = weekList[date.getDay()]
+        selDateMap.hour = date.getHours();
+        selDateMap.minute = date.getMinutes();
+        selDateMap.second = date.getSeconds();
+        $('#main_date_bottom_box').html('<div class="main_date_bottom_date">\n' +
+            '            <div>'+selDateMap.year+'年'+selDateMap.month+'月'+selDateMap.date+'日</div>\n' +
+            '        <div>'+selDateMap.week+'</div>\n' +
+            '        </div>\n' +
+            '        <div class="main_date_bottom_time">\n' +
+            '            <span>'+selDateMap.hour+'</span>\n' +
+            '            <span class="time_colon">:</span>\n' +
+            '           <span>'+selDateMap.minute+'</span>\n' +
+            '           <span class="time_colon">:</span>\n' +
+            '           <span>'+selDateMap.second+'</span>\n' +
+            '        </div>')
+    }
+
+    function eachrts1(){
+        var myChart = echarts.init(document.getElementById('chart1'),'macarons');
+        var base = +new Date(2016, 9, 3);
+        var oneDay = 24 * 3600 * 1000;
+        var valueBase = Math.random() * 300;
+        var data1 = [];
+        var data2 = [];
+        var datelist = []
+        for (var i = 1; i < 5; i++) {
+            var now = new Date(base += oneDay);
+            var dayStr = [now.getMonth() + 1, now.getDate()].join('/');
+
+            valueBase = Math.round((Math.random() - 0.5) * 20 + valueBase);
+            valueBase <= 0 && (valueBase = Math.random() * 300);
+            datelist.push(dayStr);
+            data1.push(valueBase);
+            data2.push(valueBase);
+
+        }
+
+        option = {
+            color:['#83bff6','#004E52'],
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'shadow'
+                }
+            },
+            legend: {
+                textStyle: { //图例文字的样式
+                    color: '#fff'
+                },
+                data: ['进入人数', '离开人数']
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '10%',
+                containLabel: true
+            },
+            xAxis: {
+                type: 'value',
+                boundaryGap: [0, 0.01],
+                splitLine:{
+                    show: false
+                },
+                axisLine:{
+                    lineStyle:{
+                        color:'#ffffff',
+                        width:2
+                    }
+                }
+            },
+            yAxis: {
+                type: 'category',
+                data: datelist,
+                axisLine:{
+                    lineStyle:{
+                        color:'#ffffff',
+                        width:2
+                    }
+                }
+            },
+            series: [
+                {
+                    name: '进入人数',
+                    type: 'bar',
+                    data: data1
+                },
+                {
+                    name: '离开人数',
+                    type: 'bar',
+                    data: data2
+                }
+            ]
+        };
+        myChart.hideLoading();
+        myChart.setOption(option);
+    }
+
+
+    function eachrts2(){
+        var myChart = echarts.init(document.getElementById('chart2'),
+            'macarons');
+        var base = +new Date(2016, 9, 3);
+        var oneDay = 24 * 3600 * 1000;
+        var valueBase = Math.random() * 300;
+        var data = [];
+
+        for (var i = 1; i < 10; i++) {
+            var now = new Date(base += oneDay);
+            var dayStr = [now.getMonth() + 1, now.getDate()].join('-');
+
+            valueBase = Math.round((Math.random() - 0.5) * 20 + valueBase);
+            valueBase <= 0 && (valueBase = Math.random() * 300);
+            data.push([dayStr, valueBase]);
+
+        }
+
+        option = {
+            animation: false,
+            legend: {
+                top: 'bottom',
+                data: ['意向']
+            },
+            tooltip: {
+                triggerOn: 'none',
+                position: function (pt) {
+                    return [pt[0], 130];
+                }
+            },
+            xAxis: {
+                type: 'time',
+                axisLine:{
+                    lineStyle:{
+                        color:'#ffffff',
+                        width:2
+                    }
+                },
+                splitLine: {
+                    show: false
+                }
+            },
+            yAxis: {
+                type: 'value',
+                axisTick: {
+                    inside: true
+                },
+                axisLine:{
+                    lineStyle:{
+                        color:'#ffffff',
+                        width:2
+                    }
+                },
+                splitLine: {
+                    show: false
+                },
+                axisLabel: {
+                    inside: true,
+                    formatter: '{value}\n'
+                },
+                z: 10
+            },
+            grid: {
+                top: 20,
+                left: 20,
+                right: 20,
+                height: 110
+            },
+            dataZoom: [{
+                type: 'inside',
+                throttle: 50
+            }],
+            textStyle:{
+                color:'#90e1ff'
+            },
+            series: [
+                {
+                    name: '模拟数据',
+                    type: 'line',
+                    smooth: true,
+                    symbol: 'circle',
+                    symbolSize: 5,
+                    sampling: 'average',
+                    itemStyle: {
+                        normal: {   //颜色渐变函数 前四个参数分别表示四个位置依次为左、下、右、上
+                            color: new echarts.graphic.LinearGradient(0, 0, 0, 1,[{
+                                    offset: 0, color: '#09baff59' // 100% 处的颜色
+                                }, {
+                                    offset: 0.8, color: '#a3d9ff1c' // 100% 处的颜色
+                                }]
+                            ),  //背景渐变色
+                            lineStyle: {        // 系列级个性化折线样式
+                                width: 3,
+                                type: 'solid',
+                                color: "#008bb547"
+                            }
+                        }
+                    },//线条样式
+                    symbolSize:3, //折线点的大小
+                    areaStyle: {normal: {}},
+                    stack: 'a',
+                    data: data
+                }
+
+            ]
+        };
+        myChart.hideLoading();
+        myChart.setOption(option);
     }
 
 

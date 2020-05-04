@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2018-2025, Tjaide Group All rights reserved.
+  -->
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tjaide.nursery.barrier.web.mapper.SysDepotUserMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.tjaide.nursery.barrier.web.entity.SysDepotUser">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="depot_id" property="depotId"/>
+        <result column="user_type" property="userType"/>
+        <result column="photo" property="photo"/>
+        <result column="remark" property="remark"/>
+        <result column="nation" property="nation"/>
+        <result column="leave_flatbed" property="certificateType"/>
+        <result column="certificate_type" property="cardId"/>
+        <result column="birthday" property="birthday"/>
+        <result column="phone" property="phone"/>
+        <result column="hometown" property="hometown"/>
+        <result column="address" property="address"/>
+        <result column="gender" property="gender"/>
+        <result column="operator_id" property="operatorId"/>
+        <result column="operator_name" property="operatorName"/>
+        <result column="create_time" property="createTime"/>
+        <result column="del_flag" property="delFlag"/>
+    </resultMap>
+
+</mapper>
