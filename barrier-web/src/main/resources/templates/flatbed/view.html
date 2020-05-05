@@ -1,0 +1,133 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>平板管理</title>
+    <!--框架必需start-->
+    <script type="text/javascript" th:src="@{/static/js/public/base-util.js}" src="../../static/js/public/base-util.js"></script>
+    <script type="text/javascript" th:src="@{/libs/js/jquery.js}" src="../../libs/js/jquery.js"></script>
+    <script type="text/javascript" th:src="@{/libs/js/language/cn.js}" src="../../libs/js/language/cn.js"></script>
+    <script type="text/javascript" th:src="@{/libs/js/framework.js}" src="../../libs/js/framework.js"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{/libs/css/import_basic.css}"
+          href="../../libs/css/import_basic.css"/>
+    <link rel="stylesheet" type="text/css" id="skin" prePath="../../"/>
+    <link rel="stylesheet" type="text/css" id="customSkin"/>
+    <!--框架必需end-->
+
+    <!-- 表单验证start -->
+    <script type="text/javascript" th:src="@{/libs/js/form/validationRule.js}"
+            src="../../libs/js/form/validationRule.js"></script>
+    <script type="text/javascript" th:src="@{/libs/js/form/validation.js}"
+            src="../../libs/js/form/validation.js"></script>
+    <!-- 表单验证end -->
+
+    <!--表单异步提交start-->
+    <script type="text/javascript" th:src="@{/libs/js/form/form.js}" src="../../libs/js/form/form.js"></script>
+    <!--表单异步提交end-->
+    <!-- 树组件start -->
+    <script type="text/javascript" th:src="@{/libs/js/tree/ztree/ztree.js}"
+            src="../../libs/js/tree/ztree/ztree.js"></script>
+    <link type="text/css" rel="stylesheet" th:href="@{/libs/js/tree/ztree/ztree.css}"
+          href="../../libs/js/tree/ztree/ztree.css"></link>
+    <!-- 树组件end -->
+    <!-- 树形下拉框start -->
+    <script type="text/javascript" th:src="@{/libs/js/form/selectTree.js}"
+            src="../../libs/js/form/selectTree.js"></script>
+    <!-- 树形下拉框end -->
+    <script type="text/javascript" th:inline="javascript">
+        /*<![CDATA[*/
+        ctxPath = /*[[@{/}]]*/ '';
+        /*]]>*/
+    </script>
+    <style type="text/css">
+        .el-input {
+            position: relative;
+            font-size: 14px;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .el-input__inner {
+            width: 80%;
+            background-color: #f5f7fa;
+            border-color: #e4e7ed;
+            color: #c0c4cc;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+<div class="form_content" id="formContent">
+    <table class="tableStyle" formMode="view">
+        <tr>
+            <td width="30%"><span class="star">*</span>平板编码：</td>
+            <td>
+                <div class="el-input">
+                    <input type="text" id="number" name="number" disabled="disabled" class="el-input__inner"/>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td><span class="star">*</span>平板名称：</td>
+            <td>
+                <div class="el-input">
+                    <input type="text" id="name" name="name" disabled="disabled" class="el-input__inner"/>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td><span class="star">*</span>平板类型：</td>
+            <td>
+                <div class="el-input">
+                    <select id="passType" th:url="@{/dict/type/gate_type}" disabled="disabled" prompt="平板类型" dataRoot="data" labelField="label"
+                            valueField="value"  class="el-input__inner"></select>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td><span class="star">*</span>IP地址：</td>
+            <td>
+                <div class="el-input">
+                    <input type="text" id="ipAddress" name="ipAddress" disabled="disabled" class="el-input__inner"/>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td><span class="star">*</span>视频地址：</td>
+            <td>
+                <div class="el-input">
+                    <input type="text" id="rtspAddress" name="rtspAddress" disabled="disabled" class="el-input__inner"/>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>创建时间：</td>
+            <td>
+                <div class="el-input">
+                    <input type="text" id="createTime" name="createTime" disabled="disabled" class="el-input__inner"/>
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>
+<script type="text/javascript">
+    $(function () {
+        var id = [[${param.id}]];
+
+        $.ajax({
+            url: ctxPath + "flatbed/" + id,
+            type: 'get'
+        }).then(function (res) {
+            var data = res.data
+            $("#number").val(data.number);
+            $("#name").val(data.name);
+            $("#ipAddress").val(data.ipAddress);
+            $("#passType").setValue(data.passType);
+            $("#rtspAddress").val(data.rtspAddress);
+            $("#createTime").val(data.createTime);
+        })
+    })
+</script>
+</body>
+</html>

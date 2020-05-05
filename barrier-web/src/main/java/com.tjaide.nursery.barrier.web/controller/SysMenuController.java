@@ -43,7 +43,7 @@ public class SysMenuController {
      */
     @GetMapping(value = "/list")
     public R getList() {
-        return R.ok(sysMenuService.list());
+        return R.ok(sysMenuService.list(Wrappers.<SysMenu>lambdaQuery().orderByAsc(SysMenu::getSort)));
     }
 
 

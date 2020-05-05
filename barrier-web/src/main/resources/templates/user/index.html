@@ -41,7 +41,7 @@
 
 <body>
 <!--card-->
-<div class="content nobg" style="width: calc(100% - 10px);">
+<div class="content nobg" style="width: calc(100% - 25px);margin-left:15px;">
     <ul class="content_card">
         <li onclick="addUnit()">
             <div class="minute">
@@ -238,15 +238,15 @@
                     display: '操作', align: 'center', width: "25%",
                     render: function (rowdata, rowindex, value, column) {
                         var bar = '<div class="grid_user_container">';
-                        bar += '<div class="iconfont icon-bianji bg1 qTip" title="编辑" onclick="onEdit(\'' + rowdata.userId + '\')"></div>';
+                        bar += '<div class="bg1 qTip" title="编辑" onclick="onEdit(\'' + rowdata.userId + '\')">编辑</div>';
                         if (rowdata.builtIn != '0') {
-                            bar += '<div class="iconfont icon-shanchu bg2 qTip" title="删除" onclick="onDelete(\'' + rowdata.userId + '\')"></div>';
+                            bar += '<div class="bg2 qTip" title="删除" onclick="onDelete(\'' + rowdata.userId + '\')">删除</div>';
                         }
-                        bar += '<div class="iconfont icon-zhongzhi bg3 qTip" title="重置密码" onclick="resetPassword(\'' + rowdata.userId + '\')"></div>';
+                        bar += '<div class="bg3 qTip" title="重置密码" onclick="resetPassword(\'' + rowdata.userId + '\')">重置密码</div>';
                         if (0 == rowdata.lockFlag) {
-                            bar += '<div class="iconfont icon-suoding bg4 qTip" title="锁定" onclick="onLock(\'' + rowdata.userId + '\',\'' + rowdata.builtIn + '\', 1)"></div>';
+                            bar += '<div class="bg4 qTip" title="锁定" onclick="onLock(\'' + rowdata.userId + '\',\'' + rowdata.builtIn + '\', 1)">锁定</div>';
                         } else if (1 == rowdata.lockFlag) {
-                            bar += '<div class="iconfont icon-qiyong bg5 qTip" title="启用" onclick="onLock(\'' + rowdata.userId + '\',\'' + rowdata.builtIn + '\', 0)"></div>';
+                            bar += '<div class="bg5 qTip" title="启用" onclick="onLock(\'' + rowdata.userId + '\',\'' + rowdata.builtIn + '\', 0)">启用</div>';
                         }
                         bar += '</div>';
                         return bar;
@@ -564,7 +564,8 @@
         background-color: #ffffff;
         margin: 15px;
         height: calc(100vh - 140px);
-        width: calc(100% - 30px);
+        width: calc(100% - 45px);
+        margin: 15px !important;
     }
 
     .page_content > table {

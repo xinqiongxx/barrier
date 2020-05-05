@@ -24,6 +24,13 @@ public interface SysDeptRelationMapper extends BaseMapper<SysDeptRelation> {
     void deleteDeptRelationsById(String id);
 
     /**
+     * 删除部分关系表数据
+     *
+     * @param deptRelation
+     */
+    void deleteDeptRelations(SysDeptRelation deptRelation);
+
+    /**
      * 更改部分关系表数据
      *
      * @param deptRelation

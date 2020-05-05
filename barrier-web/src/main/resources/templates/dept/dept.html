@@ -34,7 +34,8 @@
             background-color: #ffffff;
             margin: 15px;
             height: calc(100vh - 140px);
-            width: calc(100% - 30px);
+            width: calc(100% - 45px);
+            margin: 15px !important;
         }
 
         .btns {
@@ -114,7 +115,7 @@
 <!--card-->
 
 <!--end-->
-<div class="content nobg" style="width: calc(100% - 10px);">
+<div class="content nobg" style="width: calc(100% - 25px);margin-left:15px;">
     <ul class="content_card">
         <li onclick="_add()">
             <div class="minute">
@@ -153,10 +154,20 @@
             <div class="minute">
                 <div class="minute-content">
                     <div class="minute_left">
-                        <div id="allNumberQ" style="font-weight:bold;font-size: 22px;">0</div>
-                        <div style="line-height: 18px;font-size: 14px;">区数量</div>
+                        <div id="allNumber" style="font-weight:bold;font-size: 22px;">0</div>
+                        <div style="line-height: 18px;font-size: 14px;">部门数量</div>
                     </div>
                     <div class="minute_right"><img src="../../system/skin/s5.png"></div>
+                </div>
+            </div>
+        </li>
+        <li>
+            <div class="minute">
+                <div class="minute-content">
+                    <div class="minute_left" style="width: 55%;">
+                        <div style="line-height: 18px;font-size: 14px;">对学校用户所在部门进行统计管理</div>
+                    </div>
+                    <div class="minute_right"><img src="../../system/skin/s4.png"></div>
                 </div>
             </div>
         </li>
@@ -183,7 +194,7 @@
             </div>
         </div>
         <div class="layout-r">
-            <div class="items edit">
+            <div class="items parentId">
                 <div class="lable"><p>*</p>父级节点</div>
                 <div class="item-c">
                     <input id="parentId" type="text" style="width:90%;" disabled="true"/>
@@ -204,10 +215,10 @@
                 </div>
             </div>
 
-            <div class="items edit">
+            <div class="items edit" style="display:none">
                 <div class="lable"><p>*</p>部门编码</div>
                 <div class="item-c">
-                    <input id="deptCode" type="text" style="width:90%;" disabled="true"/>
+                    <input id="deptCode" type="hidden" style="width:90%;" disabled="true"/>
                 </div>
             </div>
 
@@ -218,7 +229,7 @@
                     <label for="male-1" class="hand">管理部门</label>
 
                     <input type="radio" id="male-2" name="deptType" value="2" disabled="true"/>
-                    <label for="male-2" class="hand">班级 </label>
+                    <label for="male-2" class="hand">教学部门</label>
                 </div>
             </div>
 
@@ -245,13 +256,6 @@
                 </div>
             </div>
 
-            <div class="items user-hide" id="synchro">
-                <div class="lable"></div>
-                <div class="item-c">
-                    <input type="button" value="同步基础数据" class="primary" onclick="synchroData()"/>
-                </div>
-            </div>
-
         </div>
     </div>
 
@@ -272,7 +276,7 @@
     $(function () {
         initTree();
     })
-
+    var defaultDeptCode = "";
     function initTree() {
         $.ajax({
             url: ctxPath + "dept/list",
@@ -280,22 +284,17 @@
             data: {},
         }).then(function (res) {
             var menuTree = res.data
-            var qu = 0, yuan = 0
+            var size = 0
             for (var i = 0; i < menuTree.length; i++) {
-                if ('S' == menuTree[i].deptType) {
-                } else if ('Q' == menuTree[i].deptType) {
-                    qu += 1;
-                } else {
-                    yuan += 1;
-                }
+                size += 1;
                 menuTree[i].id = menuTree[i].deptId;
                 menuTree[i].name = menuTree[i].deptName;
                 if (-1 == menuTree[i].parentId) {
                     menuTree[i].open = true
+                    defaultDeptCode = menuTree[i].deptCode
                 }
             }
-            $('#allNumberQ').html(qu)
-            $('#allNumberY').html(yuan)
+            $('#allNumber').html(size)
             $.fn.zTree.init($("#deptTree"), setting, menuTree);
         }, function () {
             // top.Toast("showErrorToast", 'load tree error！');
@@ -304,9 +303,10 @@
 
     function onNodeClick(event, treeId, treeNode) {
         $('#u-position .-c').remove();
-        if ('S' == treeNode.deptType) {
+        var parentNode = treeNode.getParentNode();
+        if (!parentNode) {
             $('#u-position').append('<div class="-c">' + treeNode.name + '</div>')
-        } else if ('Q' == treeNode.deptType) {
+        } else if (!parentNode.getParentNode()) {
             var pid = $('.curSelectedNode').closest('ul').closest('li').attr('id');
             var str = '<div class="-c">' + $('.curSelectedNode').closest('ul').closest('li').find('#' + pid + '_span').html() + '</div>';
             str += '<div class="-c">></div>';
@@ -322,21 +322,19 @@
             str += '<div class="-c">' + treeNode.name + '</div>';
             $('#u-position').append(str)
         }
-
-
         selDept = treeNode.deptId
-        $('#deptId').val(treeNode.deptId);
-        $('#parentId').val(treeNode.parentId);
+        $('#parentId').val(treeNode.parentId?treeNode.parentId:-1);
         $('#deptName').val(treeNode.deptName);
+        $('#deptId').val(treeNode.deptId);
         $('#sort').val(treeNode.sort);
         $('#deptCode').val(treeNode.deptCode);
-        if ('Q' == treeNode.deptType && 'admin' == tuid) {
-            $('#synchro').removeClass('user-hide');
-        } else {
-            $('#synchro').addClass('user-hide');
+        $('#tenantId').val(treeNode.tenantId);
+        if(!treeNode.parentId){
+            $("input:radio[name=deptType]").closest(".items").hide();
+        }else{
+            $("input:radio[name=deptType]").closest(".items").show();
+            var type = $("input:radio[name=deptType][value=" + treeNode.deptType + "]").prop("checked", true);
         }
-        // $('#tenantId').val(treeNode.tenantId);
-        var type = $("input:radio[name=deptType][value=" + treeNode.deptType + "]").prop("checked", true);
         var zTree = $.fn.zTree.getZTreeObj("deptTree");
         zTree.expandNode(treeNode);
         if (isUpdate) {
@@ -349,6 +347,7 @@
         isUpdate = false
         // 显示主键ID
         $('.items.deptid').removeClass('user-hide')
+        $('.items.parentId').removeClass('user-hide')
 
         // 隐藏按钮
         $('.items.btn-edit').addClass('user-hide')
@@ -390,6 +389,7 @@
         if (selDept) {
             // 隐藏主键ID
             $('.items.deptid').addClass('user-hide')
+            $('.items.parentId').addClass('user-hide')
 
             // 显示保存按钮
             $('.items.btn-edit').removeClass('user-hide')
@@ -412,6 +412,7 @@
 
         // 隐藏主键ID
         $('.items.deptid').addClass('user-hide')
+        $('.items.parentId').addClass('user-hide')
 
         // 显示保存按钮
         $('.items.btn-edit').addClass('user-hide')
@@ -421,11 +422,15 @@
         $('.items.edit').find('input').attr("disabled", false)
         $('.items').find('input:text').val("")
 
+
         if (selDept) {
             $('#parentId').val(selDept);
         } else {
-            $('#parentId').val('-1');
+            $('#parentId').val('1');
         }
+        $("input:radio[name=deptType]").closest(".items").show();
+
+
     }
 
     // 添加
@@ -433,11 +438,8 @@
         var deptName = $('#deptName').val(),
             sort = $("#sort").val(),
             deptType = $("input:radio[name=deptType]:checked").val(),
-            deptCode = $("#deptCode").val();
-        if (!deptName || !sort || !deptType || !deptCode) {
-            top.Toast('showErrorToast', '请完善基本详细');
-            return
-        }
+            deptCode = $("#deptCode").val() ? $("#deptCode").val() : defaultDeptCode;
+
         var dept = {};
         var pid = $('#parentId').val();
         if (!pid) {
@@ -450,6 +452,21 @@
         dept.deptCode = deptCode;
         dept.deptType = deptType;
         dept.delFlag = 0;
+        if (!dept.deptName  ) {
+            top.Toast('showErrorToast', '请填写部门名称');
+            return
+        }
+        if (!dept.sort  ) {
+            top.Toast('showErrorToast', '请填写排序');
+            return
+        }
+        if(dept.parentId == -1){
+            dept.deptType = 0
+        }
+        if (dept.deptType!= 0 && !dept.deptType  ) {
+            top.Toast('showErrorToast', '请选择部门类型');
+            return
+        }
         $.jsonAjax({
             url: ctxPath + "dept",
             type: 'post',
@@ -471,10 +488,7 @@
     // 更新
     function toUpdate() {
         var deptName = $('#deptName').val()
-        if (!deptName) {
-            top.Toast('showErrorToast', '请完善基本详细');
-            return
-        }
+
         var dept = {};
         var pid = $('#parentId').val();
         if (!pid) {
@@ -486,7 +500,22 @@
         // deptId
         dept.deptCode = $("#deptCode").val();
         dept.deptType = $("input:radio[name=deptType]:checked").val();
-        dept.deptCode = $("#deptCode").val();
+
+        if (!dept.deptName  ) {
+            top.Toast('showErrorToast', '请填写部门名称');
+            return
+        }
+        if (!dept.sort  ) {
+            top.Toast('showErrorToast', '请填写排序');
+            return
+        }
+        if(dept.parentId == -1){
+            dept.deptType = 0
+        }
+        if (dept.deptType!= 0 && !dept.deptType  ) {
+            top.Toast('showErrorToast', '请选择部门类型');
+            return
+        }
         dept.delFlag = 0;
         dept.deptId = $('#deptId').val();
 

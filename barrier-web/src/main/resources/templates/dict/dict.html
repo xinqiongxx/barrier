@@ -44,7 +44,7 @@
 <body>
 
 <!--card-->
-<div class="content nobg" style="width: calc(100% - 10px);">
+<div class="content nobg" style="width: calc(100% - 25px);margin-left:15px;">
     <ul class="content_card">
         <li onclick="addDict()">
             <div class="minute">
@@ -180,11 +180,11 @@
                     display: '操作', align: 'center', width: "20%",
                     render: function (rowdata, rowindex, value, column) {
                         var bar = '<div class="grid_user_container">';
-                        bar += '<div class="iconfont icon-bianji bg1 qTip" title="编辑" onclick="onEdit(\'' + rowdata.id + '\')"></div>';
+                        bar += '<div class="bg1 qTip" title="编辑" onclick="onEdit(\'' + rowdata.id + '\')">编辑</div>';
                         if (1 != rowdata.system) {
-                            bar += '<div class="iconfont icon-shanchu bg2 qTip" title="删除" onclick="onDelete(\'' + rowdata.id + '\')"></div>';
+                            bar += '<div class="bg2 qTip" title="删除" onclick="onDelete(\'' + rowdata.id + '\')">删除</div>';
                         }
-                        bar += '<div class="iconfont icon-icon-all- bg5 qTip" title="字典项" onclick="onSubset(\'' + rowdata.id + '\')"></div>';
+                        bar += '<div class="bg5 qTip" title="字典项" onclick="onSubset(\'' + rowdata.id + '\')">字典项</div>';
                         bar += '</div>';
                         return bar;
                     }
@@ -425,7 +425,8 @@
         background-color: #ffffff;
         margin: 15px;
         height: calc(100vh - 140px);
-        width: calc(100% - 30px);
+        width: calc(100% - 45px);
+        margin: 15px !important;
     }
 </style>
 </body>

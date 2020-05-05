@@ -34,8 +34,12 @@ public class SysDepotUser extends Model<SysDepotUser> {
     private Integer id;
     @ApiModelProperty(value = "姓名")
     private String name;
-    @ApiModelProperty(value = "底库id")
+    @ApiModelProperty(value = "底库类型（0白名单1黑名单）")
+    private Integer depotType;
+    @ApiModelProperty(value = "底库详细")
     private Integer depotId;
+    @ApiModelProperty(value = "班级/部门ID")
+    private Integer deptId;
     @ApiModelProperty(value = "人员类型（1学生2教职工3家长9未知）")
     private Integer userType;
     @ApiModelProperty(value = "照片")
@@ -45,33 +49,26 @@ public class SysDepotUser extends Model<SysDepotUser> {
     @ApiModelProperty(value = "民族")
     private String nation;
     @ApiModelProperty(value = "证件类型")
-    private String certificateType;
-    @ApiModelProperty(value = "身份证号")
+    private Integer certificateType;
+    @ApiModelProperty(value = "证号")
     private String cardId;
     @ApiModelProperty(value = "出生日期")
     private LocalDateTime birthday;
     @ApiModelProperty(value = "电话")
     private String phone;
-    @ApiModelProperty(value = "籍贯")
-    private String hometown;
     @ApiModelProperty(value = "地址")
     private String address;
     @ApiModelProperty(value = "操作人")
+    @TableField(value = "operator_id", fill = FieldFill.INSERT_UPDATE)
     private Integer operatorId;
     @ApiModelProperty(value = "操作人姓名")
+    @TableField(value = "operator_name", fill = FieldFill.INSERT_UPDATE)
     private String operatorName;
     @ApiModelProperty(value = "性别1男生2女生")
     private Integer gender;
-    /**
-     * 创建时间
-     */
     @ApiModelProperty(value = "创建时间")
     @TableField(value = "create_time", fill = FieldFill.INSERT)
     private LocalDateTime createTime;
-
-    /**
-     * 是否删除  1：已删除  0：正常
-     */
     @TableLogic
     @ApiModelProperty(value = "删除标记,1:已删除,0:正常")
     private String delFlag;

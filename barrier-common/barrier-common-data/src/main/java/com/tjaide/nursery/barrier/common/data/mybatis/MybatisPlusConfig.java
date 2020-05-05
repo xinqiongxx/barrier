@@ -10,7 +10,7 @@ import com.baomidou.mybatisplus.extension.injector.LogicSqlInjector;
 import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.tenant.TenantSqlParser;
 import com.tjaide.nursery.barrier.common.data.datascope.DataScopeInterceptor;
-import com.tjaide.nursery.barrier.common.data.meta.CacxMetaObjectHandler;
+import com.tjaide.nursery.barrier.common.data.meta.BarrierMetaObjectHandler;
 import com.tjaide.nursery.barrier.common.data.tenant.CacxTenantHandler;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
@@ -97,7 +97,7 @@ public class MybatisPlusConfig {
      */
     @Bean
     @ConditionalOnMissingBean
-    public CacxMetaObjectHandler dcmxMetaObjectHandler() {
-        return new CacxMetaObjectHandler();
+    public BarrierMetaObjectHandler dcmxMetaObjectHandler() {
+        return new BarrierMetaObjectHandler();
     }
 }

@@ -101,7 +101,7 @@ public class TreeUtil {
             node.setUrl(menu.getPath());
             node.setCode(menu.getPermission());
             node.setLabel(menu.getName());
-            node.setIcon(menu.getIcon());
+            node.setIconclass(menu.getIconclass());
             trees.add(node);
         }
         return TreeUtil.build(trees, root);

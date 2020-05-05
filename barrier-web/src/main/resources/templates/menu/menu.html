@@ -82,21 +82,21 @@
                         </div>
                     </div>
                     <div class="items user-hide type0 edit add">
-                        <div class="lable"><p>*</p>地址
+                        <div class="lable">地址
                         </div>
                         <div class="item-c">
                             <input id="path" type="text" style="width:90%;" disabled="true"/>
                         </div>
                     </div>
                     <div class="items user-hide type0 edit add">
-                        <div class="lable"><p>*</p>图标
+                        <div class="lable">图标
                         </div>
                         <div class="item-c">
-                            <input id="icon" type="text" style="width:90%;" disabled="true"/>
+                            <input id="iconclass" type="text" style="width:90%;" disabled="true"/>
                         </div>
                     </div>
                     <div class="items user-hide type0 edit add">
-                        <div class="lable"><p>*</p>排序
+                        <div class="lable">排序
                         </div>
                         <div class="item-c">
                             <input id="sort" type="text" style="width:90%;" disabled="true"/>
@@ -179,7 +179,6 @@
                     menuTree = res.data
                     for (var i = 0; i < menuTree.length; i++) {
                         menuTree[i].id = menuTree[i].menuId;
-                        menuTree[i].icon = '';
                         menuTree[i].open = true;
                     }
                     $.fn.zTree.init($("#menuTree"), setting, menuTree);
@@ -206,11 +205,11 @@
                     $('#permission').val(treeNode.permission)
 
                     $('#path').val("");
-                    $('#icon').val("");
+                    $('#iconclass').val("");
                     $('#sort').val("");
                 } else if (0 == treeNode.type) {
                     $('#path').val(treeNode.path);
-                    $('#icon').val(treeNode.icon);
+                    $('#iconclass').val(treeNode.iconclass);
                     $('#sort').val(treeNode.sort);
 
                     $('#powerName').val("")
@@ -313,7 +312,7 @@
                 menu.name = $('#name').val();
                 menu.permission = $('#permission').val();
                 menu.parentId = $("#parentId").val();
-                menu.icon = $("#icon").val();
+                menu.iconclass = $("#iconclass").val();
                 menu.path = $("#path").val();
                 menu.sort = $("#sort").val();
                 menu.type = type;
@@ -352,7 +351,7 @@
                 menu.name = $('#name').val();
                 menu.permission = $('#permission').val();
                 menu.parentId = $("#parentId").val();
-                menu.icon = $("#icon").val();
+                menu.iconclass = $("#iconclass").val();
                 menu.path = $("#path").val();
                 menu.sort = $("#sort").val();
                 menu.type = $("input:radio[name=type]:checked").val();
@@ -380,7 +379,8 @@
                 background-color: #ffffff;
                 margin: 15px;
                 height: calc(100vh - 30px);
-                width: calc(100% - 30px);
+                width: calc(100% - 45px);
+                margin: 15px !important;
             }
 
             .btns {
@@ -460,7 +460,7 @@
 
             /*.ztree a.level1 {*/
                 /*padding-left: 30px;*/
-                /*width: calc(100% - 30px);*/
+                /*width: calc(100% - 45px);*/
 
                 /*text-overflow: ellipsis;*/
                 /*white-space: nowrap;*/

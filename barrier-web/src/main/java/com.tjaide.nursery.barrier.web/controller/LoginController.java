@@ -1,6 +1,7 @@
 package com.tjaide.nursery.barrier.web.controller;
 
 import com.tjaide.nursery.barrier.common.core.util.R;
+import com.tjaide.nursery.barrier.common.shiro.util.LoginException;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.ExcessiveAttemptsException;
 import org.apache.shiro.authc.IncorrectCredentialsException;
@@ -48,6 +49,9 @@ public class LoginController {
         } catch (ExcessiveAttemptsException eae) {
             model.addAttribute("msg", "登录失败次数过多");
             return R.failed("登录失败次数过多!");
+        } catch (LoginException e) {
+            model.addAttribute("msg",  e.getMessage());
+            return R.failed( e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
             model.addAttribute("msg", "未知错误" + e.getMessage());

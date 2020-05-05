@@ -43,21 +43,18 @@ public class SysBarrier extends Model<SysBarrier> {
     @ApiModelProperty(value = "离开平板")
     private String leaveFlatbed;
     @ApiModelProperty(value = "操作人")
+    @TableField(value = "operator_id", fill = FieldFill.INSERT_UPDATE)
     private Integer operatorId;
     @ApiModelProperty(value = "操作人姓名")
+    @TableField(value = "operator_name", fill = FieldFill.INSERT_UPDATE)
     private String operatorName;
-    /**
-     * 创建时间
-     */
     @ApiModelProperty(value = "创建时间")
     @TableField(value = "create_time", fill = FieldFill.INSERT)
     private LocalDateTime createTime;
-
-    /**
-     * 是否删除  1：已删除  0：正常
-     */
     @TableLogic
     @ApiModelProperty(value = "删除标记,1:已删除,0:正常")
     private String delFlag;
+    @ApiModelProperty(value = "用户所属租户id")
+    private Integer tenantId;
 
 }

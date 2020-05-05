@@ -31,15 +31,15 @@ public class HomeController {
     @GetMapping(value = "/")
     public String main(Model model) {
         model.addAttribute("user", ShiroUtils.getUser());
-        return "index/mainshow";
+        return "index/main";
     }
 
 
 
-    @GetMapping(value = "/main")
+    @GetMapping(value = "/data")
     public String tomain(Model model) {
-        model.addAttribute("user", ShiroUtils.getUser());
-        return "index/main";
+        //model.addAttribute("user", ShiroUtils.getUser());
+        return "index/data";
     }
 
 

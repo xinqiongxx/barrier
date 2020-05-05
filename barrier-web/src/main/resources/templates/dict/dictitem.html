@@ -64,8 +64,8 @@
                     display: '操作', align: 'center', width: "15%",
                     render: function (rowdata, rowindex, value, column) {
                         var bar = '<div class="grid_user_container">';
-                        bar += '<div class="iconfont icon-bianji bg1 qTip" title="编辑" onclick="onEdit(\'' + rowdata.id + '\')"></div>';
-                        bar += '<div class="iconfont icon-shanchu bg2 qTip" title="删除" onclick="onDelete(\'' + rowdata.id + '\')"></div>';
+                        bar += '<div class="bg1 qTip" title="编辑" onclick="onEdit(\'' + rowdata.id + '\')">编辑</div>';
+                        bar += '<div class="bg2 qTip" title="删除" onclick="onDelete(\'' + rowdata.id + '\')">删除</div>';
                         bar += '</div>';
                         return bar;
                     }
@@ -168,14 +168,16 @@
         position: fixed;
         background-color: #ffffff;
         height: calc(100% - 30px);
-        width: calc(100% - 30px);
+        width: calc(100% - 45px);
+        margin: 15px !important;
     }
     .page_content {
         position: fixed;
         background-color: #ffffff;
         padding: 15px;
         height: calc(100% - 30px);
-        width: calc(100% - 30px);
+        width: calc(100% - 45px);
+        margin: 15px !important;
     }
 </style>
 </body>

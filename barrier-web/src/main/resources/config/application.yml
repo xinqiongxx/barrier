@@ -19,11 +19,11 @@ spring:
   resources:
     static-locations: classpath:/
     chain:
-      strategy:
-        content:
-          # 策略
-          enabled: false
-          paths:  /**
+      cache: false
+      #strategy:
+        #content:
+          #enabled: false
+          #paths:  /**
   thymeleaf:
     cache: false
     prefix: classpath:/templates/
@@ -66,7 +66,7 @@ shiro:
     - /libs/**
     - /system/**
     - /favicon.ico
-    - /main
+    - /data
   authc:
     - /**
   user:

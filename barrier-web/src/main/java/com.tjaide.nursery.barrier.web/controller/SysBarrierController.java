@@ -83,7 +83,7 @@ public class SysBarrierController {
      * @return 分页对象
      */
     @GetMapping("/page")
-    public R getRolePage(Page page) {
+    public R getBBarrierPage(Page page) {
         return R.ok(sysBarrierService.page(page, Wrappers.emptyWrapper()));
     }
 }

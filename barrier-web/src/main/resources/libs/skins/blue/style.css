@@ -6691,18 +6691,16 @@ input.stepper-active.stepper-down, input.stepper-active.stepper-down-hover {
 }
 
 .grid_user_container > div {
-    width: 23px;
     height: 23px;
-    border-radius: 50%;
+    border-radius: 10px;
     margin: 0 5px;
     color: #ffffff;
     cursor: pointer;
     display: flex;
     justify-content: center;
     align-items: center;
-    /*line-height: 23px;*/
-    /*text-align: center;*/
-    /*padding: 2px 0 0 2px;*/
+    line-height: 23px;
+    padding: 5px 10px;
 }
 
 .grid_user_container > div.bg1 {

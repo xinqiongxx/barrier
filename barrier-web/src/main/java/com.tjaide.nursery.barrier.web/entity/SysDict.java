@@ -59,7 +59,7 @@ public class SysDict extends Model<SysDict> {
     /**
      * 是否是系统内置
      */
-    @TableField(value = "system")
+    @TableField(value = "`system`")
     @ApiModelProperty(value = "是否系统内置")
     private String system;
     /**
@@ -79,4 +79,8 @@ public class SysDict extends Model<SysDict> {
     @ApiModelProperty(value = "所属租户")
     private Integer tenantId;
 
+
+    public LocalDateTime getUpateTime(){
+        return this.updateTime;
+    }
 }

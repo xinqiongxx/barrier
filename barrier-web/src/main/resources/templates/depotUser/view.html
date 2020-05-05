@@ -1,0 +1,239 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>出入人员管理</title>
+    <!--框架必需start-->
+    <script type="text/javascript" th:src="@{/static/js/public/base-util.js}" src="../../static/js/public/base-util.js"></script>
+    <script type="text/javascript" th:src="@{/libs/js/jquery.js}" src="../../libs/js/jquery.js"></script>
+    <script type="text/javascript" th:src="@{/libs/js/language/cn.js}" src="../../libs/js/language/cn.js"></script>
+    <script type="text/javascript" th:src="@{/libs/js/framework.js}" src="../../libs/js/framework.js"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{/libs/css/import_basic.css}"
+          href="../../libs/css/import_basic.css"/>
+    <link rel="stylesheet" type="text/css" id="skin" prePath="../../"/>
+    <link rel="stylesheet" type="text/css" id="customSkin"/>
+    <!--框架必需end-->
+
+    <!-- 表单验证start -->
+    <script type="text/javascript" th:src="@{/libs/js/form/validationRule.js}"
+            src="../../libs/js/form/validationRule.js"></script>
+    <script type="text/javascript" th:src="@{/libs/js/form/validation.js}"
+            src="../../libs/js/form/validation.js"></script>
+    <!-- 表单验证end -->
+
+    <!--表单异步提交start-->
+    <script type="text/javascript" th:src="@{/libs/js/form/form.js}" src="../../libs/js/form/form.js"></script>
+    <!--表单异步提交end-->
+    <!-- 树组件start -->
+    <script type="text/javascript" th:src="@{/libs/js/tree/ztree/ztree.js}"
+            src="../../libs/js/tree/ztree/ztree.js"></script>
+    <link type="text/css" rel="stylesheet" th:href="@{/libs/js/tree/ztree/ztree.css}"
+          href="../../libs/js/tree/ztree/ztree.css"></link>
+    <!-- 树组件end -->
+    <!-- 树形下拉框start -->
+    <script type="text/javascript" th:src="@{/libs/js/form/selectTree.js}"
+            src="../../libs/js/form/selectTree.js"></script>
+    <!-- 树形下拉框end -->
+    <script type="text/javascript" th:inline="javascript">
+        /*<![CDATA[*/
+        ctxPath = /*[[@{/}]]*/ '';
+        /*]]>*/
+    </script>
+    <style type="text/css">
+        .el-input {
+            position: relative;
+            font-size: 14px;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .el-input__inner {
+            width: 80%;
+            background-color: #f5f7fa;
+            border-color: #e4e7ed;
+            color: #c0c4cc;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+<div class="form_content" id="formContent">
+    <table class="tableStyle" formMode="view">
+        <tr>
+            <td width="20%">姓名：</td>
+            <td width="30%">
+                <div class="el-input" id="name">
+                </div>
+            </td>
+            <td width="50%" rowspan="5" colspan="2"><img id="photo" src="" style="width: 80%; margin: 0px 10%;"/></td>
+        </tr>
+        <tr>
+            <td width="20%">性别：</td>
+            <td width="30%">
+                <div class="el-input" id="gender">
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td width="20%">类型：</td>
+            <td width="30%">
+                <div class="el-input"  id="userType" >
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td width="20%">班级/部门：</td>
+            <td width="30%">
+                <div class="el-input" id="deptName">
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td width="20%">底库名称：</td>
+            <td width="30%">
+                <div class="el-input" id="depotName">
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td width="20%">证件类型：</td>
+            <td width="30%">
+                <div class="el-input" id="certificateType">
+                </div>
+            </td>
+            <td width="20%">证件号：</td>
+            <td width="30%">
+                <div class="el-input" id="cardId">
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td width="20%">出生日期：</td>
+            <td width="30%">
+                <div class="el-input" id="birthday">
+                </div>
+            </td>
+            <td width="20%">电话：</td>
+            <td width="30%">
+                <div class="el-input" id="phone">
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td width="20%" >地址：</td>
+            <td colspan="3">
+                <div class="el-input" id="address">
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td width="20%" >备注：</td>
+            <td colspan="3">
+                <div class="el-input" id="remark">
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>
+<script type="text/javascript">
+    $(function () {
+        var id = [[${param.id}]];
+        $.ajax({
+            url: ctxPath + "depotuser/" + id,
+            type: 'get'
+        }).then(function (res) {
+            var data = res.data
+            if(data.userType == 2){
+                $.ajax({
+                    url: ctxPath + "dept/list",
+                    type: 'get'
+                }).then(function (res) {
+                    var deptName = "已失效"
+                    res.data.forEach(function(item){
+                        if( data.deptId == item.deptId ){
+                            deptName = item.deptName
+                        }
+                    })
+                    $("#deptName").html(deptName);
+                }, function () {
+                    top.Toast("showErrorToast", '请检查部门列表');
+                })
+            }else{
+                $.ajax({
+                    url: ctxPath + "dict/type/class_type",
+                    type: 'get'
+                }).then(function (res) {
+                    var deptName = "已失效"
+                    res.data.forEach(function(item){
+                        if( data.deptId == item.value ){
+                            deptName = item.label
+                        }
+                    })
+                    $("#deptName").html(deptName);
+                }, function () {
+                    top.Toast("showErrorToast", '请检查自定类型class_type');
+                })
+            }
+            $("#name").html(data.name);
+            $("#photo").attr("src",data.photo);
+            $("#gender").html(data.gender);
+            $("#userType").html(data.userType == 1?"学生":data.userType ==2?"教职工":data.userType == 3 ? "家长":"未知");
+            if(data.depotType == 0){
+                $.ajax({
+                    url: ctxPath + "dict/type/white_list",
+                    type: 'get'
+                }).then(function (res) {
+                    var depotName = "已失效"
+                    res.data.forEach(function(item){
+                        if( data.depotId == item.value ){
+                            depotName = item.label
+                        }
+                    })
+                    $("#depotName").html(depotName);
+                }, function () {
+                    top.Toast("showErrorToast", '请检查自定类型white_list');
+                })
+            }else{
+                $.ajax({
+                    url: ctxPath + "dict/type/black_list",
+                    type: 'get'
+                }).then(function (res) {
+                    var depotName = "已失效"
+                    res.data.forEach(function(item){
+                        if( data.depotId == item.value ){
+                            depotName = item.label
+                        }
+                    })
+                    $("#depotName").html(depotName);
+                }, function () {
+                    top.Toast("showErrorToast", '请检查自定类型black_list');
+                })
+            }
+
+            $.ajax({
+                url: ctxPath + "dict/type/certificate_type",
+                type: 'get'
+            }).then(function (res) {
+                var name = "已失效"
+                res.data.forEach(function(item){
+                    if( data.certificateType == item.value ){
+                        name = item.label
+                    }
+                })
+                $("#certificateType").html(name);
+            }, function () {
+                top.Toast("showErrorToast", '请检查自定类型certificate_type');
+            })
+
+            $("#cardId").html(data.cardId);
+            $("#birthday").html(data.birthday);
+            $("#phone").html(data.phone);
+            $("#address").html(data.address);
+            $("#remark").html(data.remark);
+        })
+
+    })
+</script>
+</body>
+</html>

@@ -42,7 +42,7 @@ public class MenuVO implements Serializable {
     /**
      * 图标
      */
-    private String icon;
+    private String iconclass;
     /**
      * 前端路由标识路径
      */

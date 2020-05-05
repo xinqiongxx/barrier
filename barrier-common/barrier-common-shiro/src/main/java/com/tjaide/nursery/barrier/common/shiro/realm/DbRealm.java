@@ -13,6 +13,8 @@ package com.tjaide.nursery.barrier.common.shiro.realm;
 
 import com.tjaide.nursery.barrier.common.core.entity.ShiroUser;
 import com.tjaide.nursery.barrier.common.shiro.service.UserDetailsService;
+import com.tjaide.nursery.barrier.common.shiro.util.LoginException;
+import lombok.SneakyThrows;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -63,6 +65,9 @@ public class DbRealm extends AuthorizingRealm {
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
         String username = (String) authenticationToken.getPrincipal();
         ShiroUser user = userDetailsService.loadUser(username);
+        if("1".equals(user.getLockFlag())){
+            throw new LoginException("用户已锁定，请联系60638284");
+        }
         SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(
                 user,
                 user.getPassword(),

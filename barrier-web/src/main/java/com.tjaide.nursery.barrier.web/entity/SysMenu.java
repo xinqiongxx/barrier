@@ -56,7 +56,7 @@ public class SysMenu extends Model<SysMenu> {
      * 图标
      */
     @ApiModelProperty(value = "菜单图标")
-    private String icon;
+    private String iconclass;
     /**
      * 前端路由标识路径，默认和 comment 保持一致
      * 过期

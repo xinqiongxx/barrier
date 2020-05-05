@@ -1,0 +1,136 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>平板管理</title>
+    <!--框架必需start-->
+    <script type="text/javascript" th:src="@{/static/js/public/base-util.js}" src="../../static/js/public/base-util.js"></script>
+    <script type="text/javascript" th:src="@{/libs/js/jquery.js}" src="../../libs/js/jquery.js"></script>
+    <script type="text/javascript" th:src="@{/libs/js/language/cn.js}" src="../../libs/js/language/cn.js"></script>
+    <script type="text/javascript" th:src="@{/libs/js/framework.js}" src="../../libs/js/framework.js"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{/libs/css/import_basic.css}" href="../../libs/css/import_basic.css"/>
+    <link rel="stylesheet" type="text/css" id="skin" prePath="../../"/>
+    <link rel="stylesheet" type="text/css" id="customSkin"/>
+    <!--框架必需end-->
+
+    <!-- 表单验证start -->
+    <script type="text/javascript" th:src="@{/libs/js/form/validationRule.js}" src="../../libs/js/form/validationRule.js"></script>
+    <script type="text/javascript" th:src="@{/libs/js/form/validation.js}" src="../../libs/js/form/validation.js"></script>
+    <!-- 表单验证end -->
+
+    <!--表单异步提交start-->
+    <script type="text/javascript" th:src="@{/libs/js/form/form.js}" src="../../libs/js/form/form.js"></script>
+    <!--表单异步提交end-->
+    <!-- 树组件start -->
+    <script type="text/javascript" th:src="@{/libs/js/tree/ztree/ztree.js}" src="../../libs/js/tree/ztree/ztree.js"></script>
+    <link type="text/css" rel="stylesheet" th:href="@{/libs/js/tree/ztree/ztree.css}" href="../../libs/js/tree/ztree/ztree.css"></link>
+    <!-- 树组件end -->
+    <!-- 树形下拉框start -->
+    <script type="text/javascript" th:src="@{/libs/js/form/selectTree.js}" src="../../libs/js/form/selectTree.js"></script>
+    <!-- 树形下拉框end -->
+    <script type="text/javascript" th:inline="javascript">
+        /*<![CDATA[*/
+        ctxPath = /*[[@{/}]]*/ '';
+        /*]]>*/
+    </script>
+</head>
+<body>
+<div class="form_content" id="formContent">
+    <form id="formAdd" method="post">
+        <table class="tableStyle" formMode="view">
+            <tr>
+                <td><span class="star">*</span>平板编码：</td>
+                <td>
+                    <input type="hidden" id="id" name="id"/>
+                    <input type="text" id="number" name="number" class="validate[required]"/>
+                </td>
+            </tr>
+            <tr>
+                <td><span class="star">*</span>平板名称：</td>
+                <td><input type="text" id="name" name="name" class="validate[required]"/>
+                </td>
+            </tr>
+            <tr>
+                <td><span class="star">*</span>IP地址：</td>
+                <td><input type="text" id="ipAddress" name="ipAddress" class="validate[required]"/>
+                </td>
+            </tr>
+            <tr>
+                <td><span class="star">*</span>平板类型：</td>
+                <td><select id="passType" th:url="@{/dict/type/gate_type}" prompt="平板类型" dataRoot="data" labelField="label"
+                            valueField="value" class="validate[required]"></select>
+                </td>
+            </tr>
+            <tr>
+                <td><span class="star">*</span>视频地址：</td>
+                <td><input type="text" id="rtspAddress" name="rtspAddress" class="validate[required]"/>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+
+<script type="text/javascript">
+    var id = '[[${param.id}]]';
+
+    //保存
+    function save() {
+        var valid = $(formAdd).validationEngine({returnIsValid: true});
+        if (valid == true) {
+            var flatbed = {};
+            flatbed.id = $('#id').val();
+            flatbed.number = $('#number').val();
+            flatbed.name = $('#name').val();
+            flatbed.passType = $("#passType").attr("relValue");
+            flatbed.ipAddress = $('#ipAddress').val();
+            flatbed.rtspAddress = $('#rtspAddress').val();
+            flatbed.delFlag = "0";
+            flatbed.tenantId = "1";
+
+            var type = 'post';
+            if ('' != id) {
+                type = 'put';
+            }
+            $.jsonAjax({
+                url: ctxPath + "flatbed",
+                type: type,
+                data: flatbed,
+            }).then(function (res) {
+                if (0 == res.code) {
+                    if(top.frmright){
+                        top.frmright.refresh();
+                    }
+                    top.Dialog.close()
+                } else {
+                    top.Toast("showErrorToast", '操作异常');
+                }
+            }, function () {
+                top.Toast("showErrorToast", '提交失败！');
+            })
+        } else {
+            top.Toast("showErrorToast", '表单填写不正确，请按要求填写！');
+        }
+    }
+
+    //查询角色信息
+    $(function () {
+        if ('' != id) {
+            $.ajax({
+                url: ctxPath + "flatbed/" + id,
+                type: 'get'
+            }).then(function (res) {
+                var data = res.data
+                $("#id").val(data.id);
+                $("#number").val(data.number);
+                $("#name").val(data.name);
+                $("#ipAddress").val(data.ipAddress);
+                $("#passType").setValue(data.passType);
+                $("#rtspAddress").val(data.rtspAddress);
+            })
+        }
+    })
+
+</script>
+</body>
+</html>

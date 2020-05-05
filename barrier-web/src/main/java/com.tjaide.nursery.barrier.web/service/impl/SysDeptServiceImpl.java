@@ -63,9 +63,7 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
     public Boolean saveDept(SysDept dept) {
         SysDept sysDept = new SysDept();
         BeanUtils.copyProperties(dept, sysDept);
-        sysDept.setDeptId(sysDept.getDeptCode());
         this.saveOrUpdate(sysDept);
-//        this.save(sysDept);
         sysDeptRelationService.insertDeptRelation(sysDept);
         return Boolean.TRUE;
     }

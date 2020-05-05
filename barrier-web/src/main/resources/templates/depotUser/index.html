@@ -3,7 +3,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>角色管理</title>
+    <title>出入人员管理</title>
     <!--框架必需start-->
     <script type="text/javascript" th:src="@{/static/js/public/base-util.js}"
             src="../../static/js/public/base-util.js"></script>
@@ -32,13 +32,26 @@
         ctxPath = /*[[@{/}]]*/ '';
         /*]]>*/
     </script>
+    <style>
+        .user-img{
+            width: 40px;
+            height: 40px;
+            line-height: 40px;
+            margin: auto;
+        }
+        .user-img img{
+            width:100%;
+            height: 100%;
+            border-radius: 50%;
+        }
+    </style>
 </head>
 
 <body>
 <!--card-->
 <div class="content nobg" style="width: calc(100% - 25px);margin-left:15px;">
     <ul class="content_card">
-        <li onclick="addUnit()">
+        <li onclick="addUser()">
             <div class="minute">
                 <div class="minute-content">
                     <div class="minute_left">
@@ -65,33 +78,31 @@
                 <div class="minute-content">
                     <div class="minute_left">
                         <div style="font-weight:bold;font-size: 22px;">批量删除</div>
-                        <div style="line-height: 18px;font-size: 9px;">Batch delete</div>
+                        <div style="line-height: 18px;font-size: 9px;">Batch Delete</div>
                     </div>
                     <div class="minute_right"><img src="../../system/skin/s3.png"></div>
                 </div>
             </div>
         </li>
-
+        <li>
+            <div class="minute">
+                <div class="minute-content">
+                    <div class="minute_left" style="width: 55%;">
+                        <div style="font-weight:bold;font-size: 22px;">批量导入</div>
+                        <div style="line-height: 18px;font-size: 9px;">Batch Import</div>
+                    </div>
+                    <div class="minute_right"><img src="../../system/skin/s4.png"></div>
+                </div>
+            </div>
+        </li>
         <li>
             <div class="minute">
                 <div class="minute-content">
                     <div class="minute_left">
                         <div id="allNumber" style="font-weight:bold;font-size: 22px;">0</div>
-                        <div style="line-height: 18px;font-size: 14px;">角色总数</div>
+                        <div style="line-height: 18px;font-size: 14px;">人员总数</div>
                     </div>
                     <div class="minute_right"><img src="../../system/skin/s5.png"></div>
-                </div>
-            </div>
-        </li>
-
-        <li>
-            <div class="minute">
-                <div class="minute-content">
-                    <div class="minute_left" style="width: 55%;">
-                        <!--<div style="font-weight:bold;font-size: 22px;"></div>-->
-                        <div style="line-height: 18px;font-size: 14px;">系统中用户的操作权限通过角色来控制</div>
-                    </div>
-                    <div class="minute_right"><img src="../../system/skin/s4.png"></div>
                 </div>
             </div>
         </li>
@@ -100,68 +111,120 @@
 <!--end-->
 <div class="page_content">
     <div class="titleContent" style="margin:3px 5px">
-        系统角色权限管理
+        校园进出人员管理
     </div>
     <div id="dataBasic"></div>
 </div>
 <script type="text/javascript">
     var grid;
     $(function () {
+        var classArray = [],deptArray = [];
+        $.ajax({
+            url: ctxPath + "dict/type/class_type",
+            type: 'get'
+        }).then(function (res) {
+            classArray = res.data;
+            console.log(classArray)
+        }, function () {
+            top.Toast("showErrorToast", '请检查自定类型class_type');
+        })
+        $.ajax({
+            url: ctxPath + "dept/list",
+            type: 'get'
+        }).then(function (res) {
+            deptArray = res.data;
+        }, function () {
+            top.Toast("showErrorToast", '请检查部门列表');
+        })
+
         grid = $("#dataBasic").quiGrid({
             columns: [
-                {display: '角色标识', name: 'roleCode', align: 'center', width: "10%"},
-                {display: '角色名称', name: 'roleName', align: 'center', width: "15%"},
-                {
-                    display: '数据权限', name: 'dsType', align: 'center', width: "10%",
+                {display: '照片', name: 'photo', align: 'center', width: "10%",
+                    render: function (rowdata, rowindex, value, column) {
+                        var img = '<div class="user-img">';
+                        img += '<img src="'+value+'"/>';
+                        img += '</div>';
+                        return img;
+                    }},
+                {display: '姓名', name: 'name', align: 'center', width: "10%",cellClick:true},
+                {display: '性别', name: 'gender', align: 'center', width: "10%",
+                    render: function (rowdata, rowindex, value, column) {
+                        switch (value) {
+                            case 1:
+                                return "男"
+                            case 2:
+                                return "女"
+                        }
+                    }},
+                {display: '类型', name: 'userType', align: 'center', width: "15%",
+                    render: function (rowdata, rowindex, value, column) {
+                    //1学生2教职工3家长9未知
+                        switch (value) {
+                            case 1:
+                                return "学生"
+                            case 2:
+                                return "教职工"
+                            case 3:
+                                return "家长"
+                            case 9:
+                                return "未知"
+                        }
+                    }},
+                {display: '班级/部门', name: 'deptId', align: 'center', width: "15%",
+                    render: function (rowdata, rowindex, value, column) {
+                        if(rowdata.userType == 2){
+                            var res = "部门已失效"
+                            deptArray.forEach(function(item){
+                                if( value == item.deptId ){
+                                    res = item.deptName
+                                }
+                            })
+                            return res
+                        }else{
+                            var res = "班级已失效"
+                            classArray.forEach(function(item){
+                                if( value == item.value ){
+                                    res = item.label
+                                }
+                            })
+                            return res
+                        }
+                    }},
+                {display: '黑白名单', name: 'depotType', align: 'center', width: "17%",
                     render: function (rowdata, rowindex, value, column) {
                         switch (value) {
                             case 0:
-                                return "全部"
+                                return "白名单"
                             case 1:
-                                return "自定义"
-                            case 2:
-                                return "本级及子级"
-                            case 3:
-                                return "本级"
+                                return "黑名单"
                         }
-                    }
-                },
-                {
-                    display: '角色描述', name: 'roleDesc', align: 'center', width: "45%",
-                    render: function (rowdata, rowindex, value, column) {
-                        return value ? '(' + replacehtml(rowdata.roleDesc) + ')' : "无";
-                    }
-                },
+                    }},
                 {
                     display: '操作', align: 'center', width: "20%",
                     render: function (rowdata, rowindex, value, column) {
                         var bar = '<div class="grid_user_container">';
-                        bar += '<div class="bg4 qTip" title="查看" onclick="onView(\'' + rowdata.roleId + '\')">查看</div>';
-                        bar += '<div class="bg1 qTip" title="编辑" onclick="onEdit(\'' + rowdata.roleId + '\')">编辑</div>';
-                        if ('ROLE_ADMIN' != rowdata.roleCode) {
-                            bar += '<div class="bg2 qTip" title="删除" onclick="onDelete(\'' + rowdata.roleId + '\')">删除</div>';
-                        }
-                        bar += '<div class="bg3 qTip" title="权限" onclick="onPpermissions(\'' + rowdata.roleId + '\')">权限</div>';
+                        bar += '<div class="bg1 qTip" title="编辑" onclick="onEdit(\'' + rowdata.id + '\')">编辑</div>';
+                        bar += '<div class="bg2 qTip" title="删除" onclick="onDelete(\'' + rowdata.id + '\')">删除</div>';
                         bar += '</div>';
                         return bar;
                     }
                 }
             ],
-            url: ctxPath + 'role/page',
+            url: ctxPath + 'depotuser/page',
             method: 'get',
-            sortName: 'role_id',
+            sortName: 'create_time',
             sortOrder: "ASC",
-            rownumbers: true,
-            checkbox: true,
             height: '100%',
             width: "100%",
+            rownumbers: true,
+            checkbox: true,
             pageSize: 10,
             percentWidthMode: false,
             onComplete: isnull,
             onAfterShowData: onAfterShowData,
             onClickCell: function (rowdata, rowid, rowobj) {
                 $(".maingrid_content").show();
-                $(".maingrid_content").find("iframe").attr("src", "/role/view?role_id=" + rowdata.role_id);
+                $(".maingrid_content").find("iframe").attr("src", "/page/depotuser/view?id=" + rowdata.id);
                 $(".maingrid_content").stop().animate({marginRight: "0"}, 500);
             }
         });
@@ -191,13 +254,13 @@
     }
 
     //新增
-    function addUnit() {
+    function addUser() {
         var diag = new top.Dialog();
-        diag.URL = ctxPath + "page/role/add";
-        diag.Title = "添加角色";
+        diag.URL = ctxPath + "page/depotuser/add";
+        diag.Title = "添加出入人员";
         //自定义宽度和长度的设置
         diag.Width = 570;
-        diag.Height = 340;
+        diag.Height = 360;
         diag.ShowButtonRow = true;
         diag.OkButtonText = " 提 交 ";
         diag.OKEvent = function () {
@@ -206,22 +269,10 @@
         diag.show();
     }
 
-    //查看
-    function onView(rowid) {
-        var diag = new top.Dialog();
-        diag.Title = "角色查看";
-        diag.URL = ctxPath + "page/role/view?role_id=" + rowid;
-        //自定义长度和宽度的设置
-        diag.Width = 570;
-        diag.Height = 350;
-        diag.ShowButtonRow = true;
-        diag.show();
-    }
-
     //删除
-    function onDelete(rowid) {
+    function onDelete(id) {
         $.ajax({
-            url: ctxPath + "role/" + rowid,
+            url: ctxPath + "depotuser/" + id,
             type: 'delete'
         }).then(function (res) {
             if (0 == res.code) {
@@ -237,10 +288,10 @@
     }
 
     //修改角色
-    function onEdit(rowid) {
+    function onEdit(id) {
         var diag = new top.Dialog();
         diag.Title = "编辑";
-        diag.URL = ctxPath + "page/role/add?role_id=" + rowid;
+        diag.URL = ctxPath + "page/depotuser/add?id=" + id;
         //自定义长度和宽度的设置
         diag.Width = 570;
         diag.Height = 350;
@@ -254,32 +305,16 @@
     function _onEdit() {
         var sr = grid.getSelectedRows()
         if(1 == sr.length) {
-            onEdit(sr[0].roleId)
+            onEdit(sr[0].id)
         } else if(0 == sr.length) {
-            top.Toast("showErrorToast", '请选择需要编辑的角色！');
+            top.Toast("showErrorToast", '请选择需要编辑的出入人员！');
         } else {
-            top.Toast("showErrorToast", '您选择了多个角色');
+            top.Toast("showErrorToast", '您选择了多个出入人员');
         }
 
     }
 
-    //修改权限
-    function onPpermissions(rowid) {
-        var diag = new top.Dialog();
-        diag.Title = "编辑";
-        diag.URL = ctxPath + "page/role/permissions?role_id=" + rowid;
-        //自定义长度和宽度的设置
-        diag.Width = 570;
-        diag.Height = 340;
-        diag.ShowButtonRow = true;
-        diag.OkButtonText = " 提 交 ";
-        diag.OKEvent = function () {
-            var demo = diag.innerFrame.contentWindow.save();
-        };
-        diag.show();
-    }
-
-    //刷新页面方法
+    //刷新
     function refresh(isUpdate) {
         if (!isUpdate) {
             grid.setNewPage(1);

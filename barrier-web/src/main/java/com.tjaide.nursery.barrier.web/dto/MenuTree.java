@@ -22,7 +22,7 @@ public class MenuTree extends TreeNode {
      * 菜单图标
      */
     @ApiModelProperty(value = "菜单图标")
-    private String icon;
+    private String iconclass;
     /**
      * 菜单名称
      */
@@ -80,7 +80,7 @@ public class MenuTree extends TreeNode {
     public MenuTree(MenuVO menuVo) {
         this.id = menuVo.getMenuId();
         this.parentId = menuVo.getParentId();
-        this.icon = menuVo.getIcon();
+        this.iconclass = menuVo.getIconclass();
         this.name = menuVo.getName();
         this.url = menuVo.getUrl();
         this.type = menuVo.getType();

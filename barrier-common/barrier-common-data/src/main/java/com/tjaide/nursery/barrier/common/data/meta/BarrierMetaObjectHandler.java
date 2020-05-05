@@ -21,7 +21,7 @@ import java.time.LocalDateTime;
  *
  * @author 86130
  */
-public class CacxMetaObjectHandler implements MetaObjectHandler {
+public class BarrierMetaObjectHandler implements MetaObjectHandler {
 
     /**
      * Field 创建时间
@@ -53,22 +53,21 @@ public class CacxMetaObjectHandler implements MetaObjectHandler {
     @Override
     public void insertFill(MetaObject metaObject) {
 
-
         // 创建时间
-        if (metaObject.hasGetter(CREATETIME) && StrUtil.isEmptyIfStr(metaObject.getValue(CREATETIME))) {
-            metaObject.setValue(CREATETIME, LocalDateTime.now());
+        if (StrUtil.isEmptyIfStr(getFieldValByName(CREATETIME,metaObject))) {
+            setFieldValByName(CREATETIME, LocalDateTime.now(),metaObject);
         }
         // 更新时间
-        if (metaObject.hasGetter(UPDATETIME) && StrUtil.isEmptyIfStr(metaObject.getValue(UPDATETIME))) {
-            metaObject.setValue(UPDATETIME, LocalDateTime.now());
+        if (StrUtil.isEmptyIfStr(getFieldValByName(UPDATETIME,metaObject))) {
+            setFieldValByName(UPDATETIME, LocalDateTime.now(),metaObject);
         }
         // 用户ID
-        if (metaObject.hasGetter(OPERATORID) && StrUtil.isEmptyIfStr(metaObject.getValue(OPERATORID))) {
-            metaObject.setValue(OPERATORID, ShiroUtils.getUser().getUserId());
+        if (StrUtil.isEmptyIfStr(getFieldValByName(OPERATORID,metaObject))) {
+            setFieldValByName(OPERATORID, Integer.parseInt(ShiroUtils.getUser().getUserId()),metaObject);
         }
         // 用户名
-        if (metaObject.hasGetter(OPERATORNAME) && StrUtil.isEmptyIfStr(metaObject.getValue(OPERATORNAME))) {
-            metaObject.setValue(OPERATORNAME, ShiroUtils.getUser().getName());
+        if (StrUtil.isEmptyIfStr(getFieldValByName(OPERATORNAME,metaObject))) {
+            setFieldValByName(OPERATORNAME, ShiroUtils.getUser().getName(),metaObject);
         }
     }
 
@@ -80,16 +79,16 @@ public class CacxMetaObjectHandler implements MetaObjectHandler {
     @Override
     public void updateFill(MetaObject metaObject) {
         // 更新时间
-        if (metaObject.hasGetter(UPDATETIME) && StrUtil.isEmptyIfStr(metaObject.getValue(UPDATETIME))) {
-            metaObject.setValue(UPDATETIME, LocalDateTime.now());
+        if (StrUtil.isEmptyIfStr(getFieldValByName(UPDATETIME,metaObject))) {
+            setFieldValByName(UPDATETIME, LocalDateTime.now(),metaObject);
         }
         // 用户ID
-        if (metaObject.hasGetter(OPERATORID) && StrUtil.isEmptyIfStr(metaObject.getValue(OPERATORID))) {
-            metaObject.setValue(OPERATORID, ShiroUtils.getUser().getUserId());
+        if (StrUtil.isEmptyIfStr(getFieldValByName(OPERATORID,metaObject))) {
+            setFieldValByName(OPERATORID, Integer.parseInt(ShiroUtils.getUser().getUserId()),metaObject);
         }
         // 用户名
-        if (metaObject.hasGetter(OPERATORNAME) && StrUtil.isEmptyIfStr(metaObject.getValue(OPERATORNAME))) {
-            metaObject.setValue(OPERATORNAME, ShiroUtils.getUser().getName());
+        if (StrUtil.isEmptyIfStr(getFieldValByName(OPERATORNAME,metaObject))) {
+            setFieldValByName(OPERATORNAME, ShiroUtils.getUser().getName(),metaObject);
         }
     }
 }

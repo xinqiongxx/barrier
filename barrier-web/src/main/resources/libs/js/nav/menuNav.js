@@ -15,20 +15,20 @@ function creatOption(a, b, c, d) {
 			g = e.id,
 			h = e.url,
 			i = e.target,
-			j = e.backgroundPosition,
+			j = e.iconclass,
 			k = e.leftIcon,
 			l = e.map,
 			n = e.img;
-		if(-1 == e.parentId){
-			j = '0px ' + (b*-16) + 'px';
-		}else{
-			j = '0px -128px';
-		}
-		a.data.subMenu ? a.data.tab ? void 0 == h ? (h = "javascript:;", o = $('<li><a href="' + h + '">' + f + "</a></li>")) : o = $('<li><a id="' + g + '" taburl="' + h + '">' + f + "</a></li>") : void 0 == h ? (h = "javascript:;", o = $('<li><a href="' + h + '">' + f + "</a></li>")) : o = $('<li><a  onclick="showProgressBar(\'加载中...\')"  href="' + h + '">' + f + "</a></li>") : a.data.tab ? void 0 == h ? (h = "", o = $('<div><a id="' + g + '" taburl="' + h + '" class="clearfloat"><i class="leftmenu_icon" style="background-position:' + j + '"></i><span>' + f + '</span><b style="display:block;"></b><em></em></a></div>')) : o = $('<div><a id="' + g + '" taburl="' + h + '" class="clearfloat"><i class="leftmenu_icon" style="background-position:' + j + '"></i><span>' + f + "</span><b></b><em></em></a></div>") : void 0 == h ? (h = "javascript:;", o = $('<div><a href="' + h + '" class="clearfloat"><i class="leftmenu_icon" style="background-position:' + j + '"></i><span>' + f + '</span><b style="display:block;"></b><em></em></a></div>')) : o = $('<div><a onclick="showProgressBar(\'加载中...\')"  href="' + h + '" class="clearfloat"><i class="leftmenu_icon" style="background-position:' + j + '"></i><span>' + f + "</span><b></b><em></em></a></div>"), void 0 != i && o.find("a").attr("target", i), void 0 != k && o.find("i").css("backgroundImage", "url(" + k + ")"), a.data.subMenu ? (0 == e.parentId && (p = $('<li onclick="showProgressBar(\'加载中...\')"><a href="javascript:;"><i style="background-position:' + j + '"></i><span>' + f + "</span></a></li>"), $(".header_menu").append(p), p.click(function() {
+		// if(-1 == e.parentId){
+		// 	j = '0px ' + (b*-16) + 'px';
+		// }else{
+		// 	j = '0px -128px';
+		// }
+		a.data.subMenu ? a.data.tab ? void 0 == h ? (h = "javascript:;", o = $('<li><a href="' + h + '">' + f + "</a></li>")) : o = $('<li><a id="' + g + '" taburl="' + h + '">' + f + "</a></li>") : void 0 == h ? (h = "javascript:;", o = $('<li><a href="' + h + '">' + f + "</a></li>")) : o = $('<li><a  onclick="showProgressBar(\'加载中...\')"  href="' + h + '">' + f + "</a></li>") : a.data.tab ? void 0 == h ? (h = "", o = $('<div><a id="' + g + '" taburl="' + h + '" class="clearfloat"><i class="leftmenu_icon iconfont '+j+' "></i><span>' + f + '</span><b style="display:block;"></b><em></em></a></div>')) : o = $('<div><a id="' + g + '" taburl="' + h + '" class="clearfloat"><i class="leftmenu_icon iconfont '+j+' "></i><span>' + f + "</span><b></b><em></em></a></div>") : void 0 == h ? (h = "javascript:;", o = $('<div><a href="' + h + '" class="clearfloat"><i class="leftmenu_icon iconfont '+j+' "></i><span>' + f + '</span><b style="display:block;"></b><em></em></a></div>')) : o = $('<div><a onclick="showProgressBar(\'加载中...\')"  href="' + h + '" class="clearfloat"><i class="leftmenu_icon iconfont '+j+' "></i><span>' + f + "</span><b></b><em></em></a></div>"), void 0 != i && o.find("a").attr("target", i), void 0 != k && o.find("i").css("backgroundImage", "url(" + k + ")"), a.data.subMenu ? (0 == e.parentId && (p = $('<li onclick="showProgressBar(\'加载中...\')"><a href="javascript:;"><i style="background-position:' + j + '"></i><span>' + f + "</span></a></li>"), $(".header_menu").append(p), p.click(function() {
 			var a = $(this).index();
 			$(this).find("a").addClass("active").parent("li").siblings("li").find("a").removeClass("active"), $(".menu_content ul").eq(a).show().siblings("ul").hide()
 		}), m = $("<ul class='menuContent'></ul>"), $(".menu_content").append(m)), void 0 == c || "menuContent" == c.attr("class") && (c.append(o), o.find("a").click(function() {
-			$(this).addClass("active").parent("li").siblings("li").find("a").removeClass("active"), $("#positionContent").text($(".header_menu").find("a.active span").text() + " / " + $(this).text()), "" != $(this).attr("taburl") && a.data.tab && document.getElementById("frmright").contentWindow.tabAddHandler("tab_" + $(this).attr("id"), $(this).text(), $(this).attr("taburl"))
+			$(this).addClass("active").parent("li").siblings("li").find("a").removeClass("active"),$(".header_menu").find("a.active span").text()  == $(this).text()?$("#positionContent").text("首页/"+$(this).text()):$("#positionContent").text($(".header_menu").find("a.active span").text() + " / " + $(this).text()), "" != $(this).attr("taburl") && a.data.tab && document.getElementById("frmright").contentWindow.tabAddHandler("tab_" + $(this).attr("id"), $(this).text(), $(this).attr("taburl"))
 		})), e.children && (q = e.children, creatOption(a, q, m, d)), $(".header_menu li").eq(0).find("a").addClass("active"), $(".menu_content ul").eq(0).show()) : a.data.topMenu ? (0 == e.parentId ? ("top" == a.data.iconPos ? p = $('<div class="nav_icon_h_item"><a ><div class="nav_icon_h_item_img"><img src="' + e.img + '"></div><div class="nav_icon_h_item_text">' + f + "</div></a></div>") : (p = $('<li onclick="showProgressBar(\'加载中...\')"><a href="javascript:;"><span>' + f + "</span></a></li>"), $(".header_menu").append(p), p.click(function() {
 			var b = $(this).index();
 			$(this).find("a").addClass("active").parent("li").siblings("li").find("a").removeClass("active"), $(".stair_win .menuContent").eq(b).show().siblings(".menuContent").hide(), a.data.map && ($(this).attr("map") ? (switchMenu(0), $(".LeftNav_title").hide()) : ($(".map_content").hide().stop().animate({
@@ -55,13 +55,14 @@ function creatOption(a, b, c, d) {
 		}), c.append(o), m = o, o.find("a i").css("marginLeft", d)), e.children ? (q = e.children, creatOption(a, q, m, d), o.find("a").click(function() {
 			o.find("a em").remove()
 		})) : (o.find("a b").addClass("active_b"), o.find(".childContent").remove(), o.find("a").click(function() {
-			$("#positionContent").text($(".header_menu").find("a.active span").text() + " / " + $(this).find("span").text()), $(".style1 a").removeClass("hover"), $(this).addClass("hover"), o.find("a em").remove(), "" != $(this).attr("taburl") && a.data.tab && document.getElementById("frmright").contentWindow.tabAddHandler("tab_" + $(this).attr("id"), $(this).text(), $(this).attr("taburl"))
+			$(".header_menu").find("a.active span").text()  == $(this).text()?$("#positionContent").text("首页/"+$(this).text()):$("#positionContent").text($(".header_menu").find("a.active span").text() + " / " + $(this).text())
+			$(".style1 a").removeClass("hover"), $(this).addClass("hover"), o.find("a em").remove(), "" != $(this).attr("taburl") && a.data.tab && document.getElementById("frmright").contentWindow.tabAddHandler("tab_" + $(this).attr("id"), $(this).text(), $(this).attr("taburl"))
 		}))) : ("stair_win" == c.attr("class") ? (a.data.leftIcon ? o.addClass("style1").find("a").attr("href", "javascript:;").addClass("bigNav").prepend('<img src="' + n + '" />').find("i").hide() : o.addClass("style1"), l && o.attr("map", l), c.append(o), m = $("<div class='childContent'></div>"), o.append(m)) : (o.addClass("style2"), "stair_win" == c.parent().attr("class") ? c.find(".childContent").append(o) : c.append(o), o.find("a i").css("marginLeft", d)), e.children ? (q = e.children, m = o, creatOption(a, q, m, d)) : (o.find("a b").css("display", "none"), o.find(".childContent").remove(), o.parents(".style1").addClass("mapshow"), o.find("a").hover(function() {
 			$(this).find("em").show()
 		}, function() {
 			$(this).find("em").hide()
 		}), o.find("a").click(function() {
-			if ($("#positionContent").text($(this).parents(".style1").find(">a span").text() + " / " + $(this).find("span").text()), $(".style1 a").removeClass("hover"), $(".style1 a").removeClass("active"), $(this).addClass("hover").parents(".style1").find(">a").addClass("active"), "" != $(this).attr("taburl") && a.data.tab && document.getElementById("frmright").contentWindow.tabAddHandler("tab_" + $(this).attr("id"), $(this).text(), $(this).attr("taburl")), $(this).parents(".style1").attr("map")) {
+			if ($(this).parents(".style1").find(">a span").text() == $(this).find("span").text() ? $("#positionContent").text("首页/"+$(this).find("span").text()):$("#positionContent").text($(this).parents(".style1").find(">a span").text() + " / " + $(this).find("span").text()), $(".style1 a").removeClass("hover"), $(".style1 a").removeClass("active"), $(this).addClass("hover").parents(".style1").find(">a").addClass("active"), "" != $(this).attr("taburl") && a.data.tab && document.getElementById("frmright").contentWindow.tabAddHandler("tab_" + $(this).attr("id"), $(this).text(), $(this).attr("taburl")), $(this).parents(".style1").attr("map")) {
 				$(".map_content").stop().show(), $(this).parents(".style1").hasClass("mapshow") || ($("#frmright").attr("src", $("#hbox .home").attr("href")), $(this).parents(".style1").addClass("mapshow"));
 				try {
 					top.bottomHide()

@@ -8,9 +8,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.tjaide.nursery.barrier.common.core.util.R;
 import com.tjaide.nursery.barrier.common.log.annotation.SysLog;
-import com.tjaide.nursery.barrier.web.entity.SysDepot;
 import com.tjaide.nursery.barrier.web.entity.SysFlatbed;
-import com.tjaide.nursery.barrier.web.service.SysDepotService;
 import com.tjaide.nursery.barrier.web.service.SysFlatbedService;
 import io.swagger.annotations.Api;
 import lombok.AllArgsConstructor;
@@ -83,7 +81,18 @@ public class SysFlatbedController {
      * @return 分页对象
      */
     @GetMapping("/page")
-    public R getRolePage(Page page) {
+    public R getFlatbedPage(Page page) {
         return R.ok(sysFlatbedService.page(page, Wrappers.emptyWrapper()));
     }
+
+    /**
+     * 获取角色列表
+     *
+     * @return 角色列表
+     */
+    @GetMapping("/list")
+    public R listFlatbeds() {
+        return R.ok(sysFlatbedService.list(Wrappers.emptyWrapper()));
+    }
+
 }

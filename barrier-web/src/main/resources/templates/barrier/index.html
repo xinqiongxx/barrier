@@ -3,7 +3,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>角色管理</title>
+    <title>门闸管理</title>
     <!--框架必需start-->
     <script type="text/javascript" th:src="@{/static/js/public/base-util.js}"
             src="../../static/js/public/base-util.js"></script>
@@ -38,7 +38,7 @@
 <!--card-->
 <div class="content nobg" style="width: calc(100% - 25px);margin-left:15px;">
     <ul class="content_card">
-        <li onclick="addUnit()">
+        <li onclick="addBarrier()">
             <div class="minute">
                 <div class="minute-content">
                     <div class="minute_left">
@@ -64,32 +64,30 @@
             <div class="minute">
                 <div class="minute-content">
                     <div class="minute_left">
-                        <div style="font-weight:bold;font-size: 22px;">批量删除</div>
-                        <div style="line-height: 18px;font-size: 9px;">Batch delete</div>
-                    </div>
-                    <div class="minute_right"><img src="../../system/skin/s3.png"></div>
-                </div>
-            </div>
-        </li>
-
-        <li>
-            <div class="minute">
-                <div class="minute-content">
-                    <div class="minute_left">
                         <div id="allNumber" style="font-weight:bold;font-size: 22px;">0</div>
-                        <div style="line-height: 18px;font-size: 14px;">角色总数</div>
+                        <div style="line-height: 18px;font-size: 14px;">门闸总数</div>
                     </div>
                     <div class="minute_right"><img src="../../system/skin/s5.png"></div>
                 </div>
             </div>
         </li>
-
+        <li>
+            <div class="minute">
+                <div class="minute-content">
+                    <div class="minute_left">
+                        <div style="font-weight:bold;font-size: 22px;">批量开闸</div>
+                        <div style="line-height: 18px;font-size: 9px;">Batch Open</div>
+                    </div>
+                    <div class="minute_right"><img src="../../system/skin/s3.png"></div>
+                </div>
+            </div>
+        </li>
         <li>
             <div class="minute">
                 <div class="minute-content">
                     <div class="minute_left" style="width: 55%;">
-                        <!--<div style="font-weight:bold;font-size: 22px;"></div>-->
-                        <div style="line-height: 18px;font-size: 14px;">系统中用户的操作权限通过角色来控制</div>
+                        <div style="font-weight:bold;font-size: 22px;">批量关闸</div>
+                        <div style="line-height: 18px;font-size: 9px;">Batch Close</div>
                     </div>
                     <div class="minute_right"><img src="../../system/skin/s4.png"></div>
                 </div>
@@ -100,68 +98,77 @@
 <!--end-->
 <div class="page_content">
     <div class="titleContent" style="margin:3px 5px">
-        系统角色权限管理
+        校园进出管控门闸管理
     </div>
     <div id="dataBasic"></div>
 </div>
 <script type="text/javascript">
     var grid;
     $(function () {
+        var flatbeds = [];
+        $.ajax({
+            url: ctxPath + "flatbed/list",
+            type: 'get'
+        }).then(function (res) {
+            flatbeds = res.data
+        }, function () {
+            top.Toast("showErrorToast", '获取平板列表发生错误');
+        })
         grid = $("#dataBasic").quiGrid({
             columns: [
-                {display: '角色标识', name: 'roleCode', align: 'center', width: "10%"},
-                {display: '角色名称', name: 'roleName', align: 'center', width: "15%"},
-                {
-                    display: '数据权限', name: 'dsType', align: 'center', width: "10%",
+                {display: '门闸编号', name: 'number', align: 'center', width: "10%",cellClick:true},
+                {display: '门闸名称', name: 'name', align: 'center', width: "10%"},
+                {display: '进入平板', name: 'enterFlatbed', align: 'center', width: "15%",
                     render: function (rowdata, rowindex, value, column) {
-                        switch (value) {
-                            case 0:
-                                return "全部"
-                            case 1:
-                                return "自定义"
-                            case 2:
-                                return "本级及子级"
-                            case 3:
-                                return "本级"
-                        }
-                    }
-                },
-                {
-                    display: '角色描述', name: 'roleDesc', align: 'center', width: "45%",
+                        var res = "已失效"
+                        flatbeds.forEach(function(item){
+                            if( value == item.id ){
+                                res = item.name
+                            }
+                        })
+                        return res
+                    }},
+                {display: '离开平板', name: 'leaveFlatbed', align: 'center', width: "15%",
                     render: function (rowdata, rowindex, value, column) {
-                        return value ? '(' + replacehtml(rowdata.roleDesc) + ')' : "无";
-                    }
+                        var res = "已失效"
+                        flatbeds.forEach(function(item){
+                            if( value == item.id ){
+                                res = item.name
+                            }
+                        })
+                        return res
+                    }},
+                {
+                    display: '描述', name: 'description', align: 'center', width: "27%"
                 },
                 {
                     display: '操作', align: 'center', width: "20%",
                     render: function (rowdata, rowindex, value, column) {
                         var bar = '<div class="grid_user_container">';
-                        bar += '<div class="bg4 qTip" title="查看" onclick="onView(\'' + rowdata.roleId + '\')">查看</div>';
-                        bar += '<div class="bg1 qTip" title="编辑" onclick="onEdit(\'' + rowdata.roleId + '\')">编辑</div>';
-                        if ('ROLE_ADMIN' != rowdata.roleCode) {
-                            bar += '<div class="bg2 qTip" title="删除" onclick="onDelete(\'' + rowdata.roleId + '\')">删除</div>';
-                        }
-                        bar += '<div class="bg3 qTip" title="权限" onclick="onPpermissions(\'' + rowdata.roleId + '\')">权限</div>';
+                        bar += '<div class="bg4 qTip" title="开闸" onclick="onOpen(\'' + rowdata.id + '\')">开闸</div>';
+                        bar += '<div class="bg3 qTip" title="闭闸" onclick="onClose(\'' + rowdata.id + '\')">闭闸</div>';
+                        bar += '<div class="bg1 qTip" title="编辑" onclick="onEdit(\'' + rowdata.id + '\')">编辑</div>';
+                        bar += '<div class="bg2 qTip" title="删除" onclick="onDelete(\'' + rowdata.id + '\')">删除</div>';
                         bar += '</div>';
                         return bar;
                     }
                 }
             ],
-            url: ctxPath + 'role/page',
+            url: ctxPath + 'barrier/page',
             method: 'get',
-            sortName: 'role_id',
+            sortName: 'number',
             sortOrder: "ASC",
-            rownumbers: true,
-            checkbox: true,
             height: '100%',
             width: "100%",
+            rownumbers: true,
+            checkbox: true,
             pageSize: 10,
             percentWidthMode: false,
             onComplete: isnull,
             onAfterShowData: onAfterShowData,
             onClickCell: function (rowdata, rowid, rowobj) {
                 $(".maingrid_content").show();
-                $(".maingrid_content").find("iframe").attr("src", "/role/view?role_id=" + rowdata.role_id);
+                $(".maingrid_content").find("iframe").attr("src", "/page/barrier/view?id=" + rowdata.id);
                 $(".maingrid_content").stop().animate({marginRight: "0"}, 500);
             }
         });
@@ -191,13 +198,13 @@
     }
 
     //新增
-    function addUnit() {
+    function addBarrier() {
         var diag = new top.Dialog();
-        diag.URL = ctxPath + "page/role/add";
-        diag.Title = "添加角色";
+        diag.URL = ctxPath + "page/barrier/add";
+        diag.Title = "添加门闸";
         //自定义宽度和长度的设置
         diag.Width = 570;
-        diag.Height = 340;
+        diag.Height = 360;
         diag.ShowButtonRow = true;
         diag.OkButtonText = " 提 交 ";
         diag.OKEvent = function () {
@@ -207,21 +214,14 @@
     }
 
     //查看
-    function onView(rowid) {
-        var diag = new top.Dialog();
-        diag.Title = "角色查看";
-        diag.URL = ctxPath + "page/role/view?role_id=" + rowid;
-        //自定义长度和宽度的设置
-        diag.Width = 570;
-        diag.Height = 350;
-        diag.ShowButtonRow = true;
-        diag.show();
+    function onClose(id) {
+
     }
 
     //删除
-    function onDelete(rowid) {
+    function onDelete(id) {
         $.ajax({
-            url: ctxPath + "role/" + rowid,
+            url: ctxPath + "barrier/" + id,
             type: 'delete'
         }).then(function (res) {
             if (0 == res.code) {
@@ -237,10 +237,10 @@
     }
 
     //修改角色
-    function onEdit(rowid) {
+    function onEdit(id) {
         var diag = new top.Dialog();
         diag.Title = "编辑";
-        diag.URL = ctxPath + "page/role/add?role_id=" + rowid;
+        diag.URL = ctxPath + "page/barrier/add?id=" + id;
         //自定义长度和宽度的设置
         diag.Width = 570;
         diag.Height = 350;
@@ -254,32 +254,21 @@
     function _onEdit() {
         var sr = grid.getSelectedRows()
         if(1 == sr.length) {
-            onEdit(sr[0].roleId)
+            onEdit(sr[0].id)
         } else if(0 == sr.length) {
-            top.Toast("showErrorToast", '请选择需要编辑的角色！');
+            top.Toast("showErrorToast", '请选择需要编辑的门闸！');
         } else {
-            top.Toast("showErrorToast", '您选择了多个角色');
+            top.Toast("showErrorToast", '您选择了多个门闸');
         }
 
     }
 
-    //修改权限
-    function onPpermissions(rowid) {
-        var diag = new top.Dialog();
-        diag.Title = "编辑";
-        diag.URL = ctxPath + "page/role/permissions?role_id=" + rowid;
-        //自定义长度和宽度的设置
-        diag.Width = 570;
-        diag.Height = 340;
-        diag.ShowButtonRow = true;
-        diag.OkButtonText = " 提 交 ";
-        diag.OKEvent = function () {
-            var demo = diag.innerFrame.contentWindow.save();
-        };
-        diag.show();
+    //同步
+    function onOpen(id) {
+
     }
 
-    //刷新页面方法
+    //刷新
     function refresh(isUpdate) {
         if (!isUpdate) {
             grid.setNewPage(1);

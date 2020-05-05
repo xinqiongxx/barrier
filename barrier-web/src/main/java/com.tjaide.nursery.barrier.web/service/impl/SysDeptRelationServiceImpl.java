@@ -77,6 +77,7 @@ public class SysDeptRelationServiceImpl extends ServiceImpl<SysDeptRelationMappe
      */
     @Override
     public void updateDeptRealtion(SysDeptRelation relation) {
+        baseMapper.deleteDeptRelations(relation);
         baseMapper.updateDeptRelations(relation);
     }
 

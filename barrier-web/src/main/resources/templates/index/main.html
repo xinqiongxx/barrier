@@ -2,18 +2,20 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <meta charset="UTF-8">
-    <title>幼儿园进出管控系统</title>
+    <title>幼儿园进出管控后台</title>
+    <link rel="shortcut icon" href="static/favicon.ico" type="image/x-icon">
+    <!-- iconfont start -->
+    <link rel="stylesheet" type="text/css" th:href="@{/static/iconfont/iconfont.css}" href="../../static/iconfont/iconfont.css"/>
+    <!-- iconfont end -->
     <!--框架必需start-->
     <link rel="stylesheet" type="text/css" th:href="@{/libs/css/import_basic.css}" href="../../libs/css/import_basic.css"/>
-    <link rel="stylesheet" type="text/css" id="theme" themeColor="blue" th:href="@{/libs/skins/blue/style.css}" href="../../libs/skins/blue/style.css"
-          positionTarget="positionContent"/>
-    <link rel="stylesheet" type="text/css" th:href="@{/system/skin/style.css}" href="../../system/skin/style.css" skinPath="system/skin/"/>
+    <link rel="stylesheet" type="text/css" id="theme" themeColor="blue" th:href="@{/libs/skins/blue/style.css}"
+          href="../../libs/skins/blue/style.css" positionTarget="positionContent"/>
+    <link rel="stylesheet" type="text/css" id="skin" th:href="@{/system/skin/style.css}" href="../../system/skin/style.css" skinPath="system/skin/"/>
     <link rel="stylesheet" type="text/css" th:href="@{/system/skin/animate.min.css}" href="../../system/skin/animate.min.css"/>
     <script type="text/javascript" th:src="@{/libs/js/jquery.js}" src="../../libs/js/jquery.js"></script>
     <script type="text/javascript" th:src="@{/libs/js/language/cn.js}" src="../../libs/js/language/cn.js"></script>
-    <!--框架必需end-->
-    <!--框架必需start-->
-    <script type="text/javascript" th:src="@{/libs/js/framework.js}" src="../../libs/js/framework.js"></script>
+    <script type="text/javascript" th:src="@{/libs/js/main.js}" src="../../libs/js/main.js"></script>
     <!--框架必需end-->
 
     <!--引入弹窗组件start-->
@@ -25,940 +27,331 @@
     <script type="text/javascript" th:src="@{/libs/js/popup/toast.js}" src="../../libs/js/popup/toast.js"></script>
     <script type="text/javascript" th:src="@{/libs/js/popup/notice.js}" src="../../libs/js/popup/notice.js"></script>
     <!--引入提示组件end-->
-    <!-- iconfont start -->
-    <link rel="stylesheet" type="text/css" th:href="@{/static/iconfont/iconfont.css}" href="../../static/mainiconfont/iconfont.css"/>
-    <!-- iconfont end -->
-    <script type="text/javascript" th:src="@{/libs/js/echarts/echarts.min.js}" src="../../libs/js/echarts/echarts.min.js"></script>
+
+    <!--左侧导航start-->
+    <script type="text/javascript" th:src="@{/libs/js/nav/menuNav.js}" src="../../libs/js/nav/menuNav.js"></script>
+    <!--左侧导航end-->
+
+    <!--引入小铃铛start-->
+    <link rel="stylesheet" type="text/css" th:href="@{/libs/skins/blue/msgbox.css}" href="../../libs/skins/blue/msgbox.css"/>
+    <script th:src="@{/libs/js/popup/msgbox.js}" src="../../libs/js/popup/msgbox.js" type="text/javascript" charset="utf-8"></script>
+    <!--引入小铃铛end-->
     <script type="text/javascript" th:inline="javascript">
         /*<![CDATA[*/
         ctxPath = /*[[@{/}]]*/ '';
         /*]]>*/
     </script>
     <style>
-        html,body {
+        body {
             width: 100% !important;
-            height: 100%;
-        }
-        * {
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-            -moz-box-sizing: border-box;
-            -webkit-box-sizing: border-box;
         }
 
-        .main_box{
-            background: url("../../static/image/main_bg.png") no-repeat;
-            background-size: 100% 100%;
+        /*修改小铃铛样式*/
+        .right_tip {
+            width: 60px !important;
+            height: 30px;
+            margin-left: 0;
+            background: none !important;
         }
 
-        #mainFrame {
-            width: 95%;
-            height: 100%;
-            margin: auto;
-            background: none;
+        .tip_icon {
+            margin-top: 20px;
+            margin-left: 5px;
         }
 
-        .main_title {
-            width: 100%;
-            height: 100%;
-            text-align: center;
-            font-size: 25px;
-            font-weight: bold;
-            padding: 20px 0px;
-            background: none;
-            color: #ffffff;
-        }
-
-        .main_user_box {
-            position: absolute;
-            right: 20px;
-            top: 15px;
-        }
-        .user_information a{
-            color: #FFFFFF;
-        }
-
-        #hideCon {
-            width: 20%;
-            border: 1px solid;
-        }
-
-        .main_left_top {
-            width: 25%;
-        }
-        .main_center_top {
-            width: 50%;
-        }
-
-        .main_right_top {
-            width: 25%;
-        }
-        .main_left_top,.main_center_top,.main_right_top,.main_left_bottom,.main_center_bottom,.main_right_bottom {
-            padding:5px;
-            height: 100%;
-        }
-        .main_left_top_box{
-            width: 100%;
-            height: 100%;
-        }
-        .main_center_top_box,.main_right_top_box,.main_left_bottom_box,.main_menu_box,.main_right_bottom_box {
-            width: 100%;
-            height: 100%;
-            border: 1px solid #1e6ab1;
-            background: rgba(164, 164, 164, 0.2);
-            border-radius: 5px;
-            position: relative;
-        }
-
-        .main_title_box {
-            padding: 5px 0px 0px 10px;
-            color: #ffffff;
-            height: 50px;
-            line-height: 50px;
-            position: relative;
-        }
-        .main_title_box .iconfont {
-            margin-right: 3px;
-        }
-        .main_title_box .iconfont:nth-child(2) {
-            position: absolute;
-            right: 20px;
-            top: 10px;
-        }
-
-
-        .main_image-border {
-            position: absolute;
-            width: 10px;
-            height: 10px;
-        }
-
-        .main_image-border1 {
-            top: -2px;
-            left: -2px;
-            border-left: 1px solid #FFFFFF;
-            border-top: 1px solid #FFFFFF;
-        }
-
-        .main_image-border2 {
-            top: -2px;
-            right: -2px;
-            border-right: 1px solid #FFFFFF;
-            border-top: 1px solid #FFFFFF;
-        }
-
-        .main_image-border3 {
-            bottom: -2px;
-            left: -2px;
-            border-bottom: 1px solid #FFFFFF;
-            border-left: 1px solid #FFFFFF;
-        }
-
-        .main_image-border4 {
-            bottom: -2px;
-            right: -2px;
-            border-right: 1px solid #FFFFFF;
-            border-bottom: 1px solid #FFFFFF;
-        }
-
-
-
-        /*第一块start*/
-        .main_date_box {
-            position: relative;
-            border: 1px solid #1e6ab1;
-            background: rgba(164, 164, 164, 0.2);
-            border-radius: 5px;
-            height: 40%;
-            min-height: 150px;
-            padding: 5px 0px;
-            box-sizing: border-box;
-            -moz-box-sizing: border-box;
-            -webkit-box-sizing: border-box;
-        }
-
-
-
-        .main_statistics_box {
-            position: relative;
-            border: 1px solid #1e6ab1;
-            background: rgba(164, 164, 164, 0.2);
-            border-radius: 5px;
+        .tip_balloons {
             margin-top: 10px;
-            height: calc(60% - 10px);
-            box-sizing: border-box;
-            -moz-box-sizing: border-box;
-            -webkit-box-sizing: border-box;
         }
 
-        .main_date_top_box {
-            margin: 2px 15px 10px;
-            padding: 0px;
-            height: calc(50% - 6px);
-            background: -moz-linear-gradient(right, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0) 100%);
-            background: -webkit-linear-gradient(right, rgba(255,255,255,0.5) 0%,rgba(255,255,255,0) 100%);
-            background: -o-linear-gradient(right, rgba(255,255,255,0.5) 0%,rgba(255,255,255,0) 100%);
-            background: -ms-linear-gradient(right, rgba(255,255,255,0.5) 0%,rgba(255,255,255,0) 100%);
-            background: linear-gradient(to right, rgba(255,255,255,0.5) 0%,rgba(255,255,255,0) 100%);
-            border-left: 3px solid #2da9fa;
-        }
-        .main_date_top_title {
-            color: #ffffff;
-            font-weight: bold;
-            padding: 3px 5px;
-            height: 50%;
-            position: relative;
-            top: 25%;
-            transform: translateY(-50%);
+        .tip_toggle_content {
+            top: 60px;
+            right: -16px;
         }
 
-        .main_date_top_data {
-            padding: 0px 10px;
-            font-size: 16px;
-            font-weight: bold;
-            letter-spacing: 5px;
-            color: #f7ff02;
-            height: 50%;
-            position: relative;
-            top: 25%;
-            transform: translateY(-50%);
+        .tip_allcontent_win,
+        .tip_allcontent {
+            top: 0px;
         }
 
-        .main_date_bottom_box {
-            display: flex;
-            height: calc(50% - 6px);
-            position: relative;
+        .tip_icon {
+            background: url(../../system/skin/page_head_ico.png) 0 -60px no-repeat;
         }
 
-        .main_date_bottom_date {
-            margin: 10px 15px 0px;
-            width: calc(50% - 30px);
-            background-color: rgba(224, 224, 224, 0.5);
-            padding: 0px;
-            border-radius: 1px;
-            color: #ffffff;
-            font-size: 14px;
-            font-weight: bold;
-            text-align: center;
-            box-sizing: border-box;
-            -moz-box-sizing: border-box;
-            -webkit-box-sizing: border-box;
+        .tip_icon_win:hover .tip_icon {
+            background: url(../../system/skin/page_head_ico.png) 0 -60px no-repeat;
         }
 
-        .main_date_bottom_date div:nth-child(1) {
-            height: 50%;
-            position: relative;
-            top: 25%;
-            transform: translateY(-50%);
-        }
-        .main_date_bottom_date div:nth-child(2) {
-            height: 50%;
-            position: relative;
-            top: 25%;
-            transform: translateY(-50%);
-        }
-        .main_date_bottom_time {
-            margin-left: 10px;
-            width:50%;
-            height: 30px;
-            line-height: 30px;
-            position: absolute;
-            bottom: 5px;
-            color: #ffffff;
-            right: 0;
-        }
-
-        .main_date_bottom_time span {
-            background: rgba(130, 130, 130, 0.5);
-            width: 20px;
-            display: inline-block;
-            text-align: center;
-        }
-
-        span.time_colon {
-            background: none;
-            width: 5px;
-            color: #999999;
-        }
-
-        .main_chart_box {
-            height: calc(100% - 50px);
-        }
-        /*第一块end*/
-        /*第二块start*/
-        .main_select_box {
-            background-color: #575757;
-            padding: 0px 5px;
-            height: 30px;
-            line-height: 30px;
-        }
-        .select_main_title {
-            color: #ffffff;
-            display: inline-block;
+        #positionContent {
             float: left;
-            margin-right: 10px;
-            line-height: 30px;
-        }
-        .main_vedio_box {
-            width: 100%;
-            height: calc(100% - 30px);
-            background: #000000;
-        }
-
-        .main_vedio_title_box {
-            height: 19%;
-            text-align: center;
-            padding: 10px 0px;
-        }
-
-        .main_vedio_title_box div:nth-child(1) {
-            font-size: 30px;
-            font-weight: bold;
-            color: #ffffff;
-        }
-
-        .main_vedio_title_box div:nth-child(2) {
-            display: inline-block;
-            padding: 0px 15px;
-            background: rgba(224, 224, 224, 0.5);
-            margin-top: 10px;
-            border-radius: 20px;
-            color: #ffffff;
-        }
-        /*第二块end*/
-        /*第三块start*/
-        .main_message_list_item {
-            display: flex;
-            border: 2px solid rgb(205, 222, 255,0.2);
-            margin: 10px;
-            position: relative;
-        }
-
-        .image-border {
-            position: absolute;
-            width: 10px;
-            height: 10px;
-        }
-
-        .image-border1 {
-            top: -3px;
-            left: -3px;
-            border-left: 2px solid #FFFFFF;
-            border-top: 2px solid #FFFFFF;
-        }
-
-        .image-border2 {
-            top: -3px;
-            right: -3px;
-            border-right: 2px solid #FFFFFF;
-            border-top: 2px solid #FFFFFF;
-        }
-
-        .image-border3 {
-            bottom: -3px;
-            left: -3px;
-            border-bottom: 2px solid #FFFFFF;
-            border-left: 2px solid #FFFFFF;
-        }
-
-        .image-border4 {
-            bottom: -3px;
-            right: -3px;
-            border-right: 2px solid #FFFFFF;
-            border-bottom: 2px solid #FFFFFF;
-        }
-
-        .main_message_list_box {
-            height: calc(100% - 50px);
-        }
-
-        .main_message_list_item_left {
-            width: 70%;
-            display: flex;
-            padding: 0px 20px;
-        }
-
-        .user_photo_box {
-            width: 50px;
-            height: 50px;
-            border-radius: 5px;
-            margin: 5px;
-            background-color: rgba(255,255,255,0.3);
-        }
-        .user_photo_icon_box {
-            border: 1px solid #cbe6f8;
-            width: 100%;
-            height: 100%;
-            line-height: 70px;
-            border-radius: 50%;
-            text-align: center;
-            background-color: rgba(255,255,255,0.5);
-        }
-
-        .user_photo_icon_box .iconfont {
-            font-size: 30px;
-            color: #ffffff;
-        }
-
-        .user_icon_box {
-            color: #006dff;
-            width: 30px;
+            width: 250px;
+            height: 60px;
             line-height: 60px;
-            text-align: center;
-        }
-
-        .main_message_list_item_right {
-            color: #ffffff;
-        }
-        /*第三块end*/
-        /*第四块start*/
-        .main_line_box {
-            height: calc(100% - 50px);
+            color: #4C4A4A;
+            margin-left: 20px;
         }
 
 
-
-
-        .main_weather_list_box {
-            display: flex;
-            padding: 10px 20px;
-        }
-        .main_weather_list_left {
-            background: rgba(255,255,255,0.3);
-            width: 30%;
-            margin: 5px;
-            border-radius: 10px 0px;
-            text-align: center;
-            padding-top: 20px;
-            color: #ffffff;
+        #user_info {
+            background-image: url(../../system/skin/user_information.png);
+            width: 40px;
+            height: 40px;
         }
 
-        .main_weather_list_right {
-            width: 35%;
-        }
-
-        .main_weather_list_right_item {
-            text-align: center;
-            color: #ffffff;
-            background-color: rgba(255,255,255,0.3);
-            margin: 5px;
-            border-radius: 10px 0px;
-        }
-
-        .main_weather_list_right_item .main_weather_item_title:nth-child(1) {
-            font-size: 12px;
-            position: relative;
-            top: 3px;
-        }
-
-        .main_weather_item_title:nth-child(2) {
-            color: #009aff;
-            font-size: 12px;
-            position: relative;
-            top: -5px;
-        }
-        /*第四块end*/
-        /*第五块start*/
-        .main_menu_box {
-            padding: 10px 30px;
-            text-align: center;
-        }
-        .main_menu_item{
-            position:relative;
-            width:100px;
-            display: inline-block;
-            margin: 5px;
-        }
-
-        .main_menu_item_left {
-            width: 50px;
-            height: 86.6px;
-            margin: 0 auto;
-            transform: translate(-50%,-50%);
-            transform: rotate(60deg);
-            border-top: 1px solid #d4e7f3;
-            border-bottom: 1px solid #d4e7f3;
-        }
-        .main_menu_item_center {
-            position: absolute;
-            width: 50px;
-            height: 86.6px;
-            left: 25px;
-            top: 0;
-            color: #FFFFFF;
-            border-top: 1px solid #d4e7f3;
-            border-bottom: 1px solid #d4e7f3;
-        }
-        .main_menu_item_right {
-            position: absolute;
-            width: 50px;
-            height: 86.6px;
-            left: 25px;
-            top: 0;
-            transform: translate(-50%,-50%);
-            transform: rotate(300deg);
-            border-top: 1px solid #d4e7f3;
-            border-bottom: 1px solid #d4e7f3;
-        }
-
-        .main_menu_item_center .iconfont {
+        .header_right > div.search em {
             display: block;
-            text-align: center;
-            font-size: 35px;
-            position: relative;
-            height: 70%;
-            top: 25px;
+            width: 15px;
+            height: 15px;
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: url(../../system/skin/user_information.png) no-repeat center center;
         }
 
-        .main_menu_item_center span:nth-child(2) {
-            font-size: 12px;
-            display: inline-block;
-            width: 50px;
-            overflow: hidden;
-            white-space: nowrap;
+        ._uname {
+            height: 60px;
+            line-height: 60px;
+            color: #4C4A4A;
         }
 
-        /*第五块end*/
-        /*第六块start*/
-        .main_data_list_box {
-            padding: 5px 20px;
-            height: calc(100% - 50px);
-        }
-        .main_data_list {
-            display: flex;
-            border-bottom: 1px solid rgba(144,144,144,0.2);
-            margin: 10px 0px;
+
+        .LeftNav_title {
+            position: absolute;
         }
 
-        .main_data_list_item {
-            width: 50%;
-            text-align: center;
-            color: #ffffff;
-        }
-
-        .main_data_list_item span {
-            font-size: 16px;
-            margin: 0px 3px;
-            color: #00ff24;
-        }
-        /*第六块end*/
-        .right_toggle_content{
-            top: 40px !important;
-        }
-        .right_toggle_content li {
-            cursor: pointer;
-        }
-        table {
-            width: 100% !important;
+        #positionContent {
+            position: absolute;
+            left: 22px;
         }
     </style>
 </head>
 <body>
-<div class="main_box" style="height: 100%;">
+<div id="mainFrame">
     <!--头部与导航start-->
     <div id="hbox" style="">
 
     </div>
     <!--头部与导航end-->
     <div id="mainFrame">
-        <table width="100%" height="100%" cellpadding="0" cellspacing="0" class="table_border0">
+        <table width="100%" cellpadding="0" cellspacing="0" class="table_border0">
             <tbody>
-            <tr style="height: 10%;">
-                <td colspan="3" style="position: relative;">
-                    <!--顶部区域start-->
-                    <div class="main_title">
-                        幼儿园进出管控系统
-                    </div>
-                    <div class="main_user_box">
-                        <div class="right_toggle">
-                            <div class="user_information" title="用户中心">
-                                <b id="user_info"></b><a href="javascript:;"  th:text="${user['name']}"></a>
-                            </div>
-                            <shiro:authenticated>
-                                <ul class="right_toggle_content" style="display: none;">
-                                    <li class="clearfloat right_toggle_home" onclick="information()"><i></i>
-                                        <div>个人信息</div>
-                                    </li>
-                                    <li class="clearfloat right_toggle_lock_screen" onclick="changePassword()"><i></i>
-                                        <div>修改密码</div>
-                                    </li>
-                                    <li class="clearfloat right_toggle_sign_out" onclick="exitHandler()"><i></i>
-                                        <div>退出</div>
-                                    </li>
-                                </ul>
-                            </shiro:authenticated>
-                        </div>
-                    </div>
-                    <!--顶部区域end-->
-                </td>
-            </tr>
-            <tr style="height: 60%;">
-                <!--第二层左侧区域start-->
-                <td class="main_left_top">
-                    <div class="main_left_top_box">
-                        <div class="main_date_box">
-                            <div class="main_image-border main_image-border1"></div>
-                            <div class="main_image-border main_image-border2"></div>
-                            <div class="main_image-border main_image-border3"></div>
-                            <div class="main_image-border main_image-border4"></div>
-                            <div class="main_date_top_box">
-                                <div  class="main_date_top_title">累计服务时长总量（MIN）</div>
-                                <div  class="main_date_top_data">000274538</div>
-                            </div>
-                            <div id="main_date_bottom_box" class="main_date_bottom_box">
-                                <div class="main_date_bottom_date">
-                                    <div></div>
-                                    <div></div>
-                                </div>
-                                <div class="main_date_bottom_time">
-                                    <span></span>
-                                    <span class="time_colon">:</span>
-                                    <span></span>
-                                    <span class="time_colon">:</span>
-                                    <span></span>
-                                </div>
+            <tr>
+                <!--左侧区域start-->
+                <td id="hideCon" class="ver01 ali01">
+                    <div id="lbox" class="">
+                        <div class="LeftNav_logo" id="lbox_topcenter">
+                            <div class="top">
+                                <img th:src="${'/system/skin/logo.png'}" src="../../system/skin/logo.png"/>
+                                <span class="font"><img src="../../system/skin/font.png"></span>
+                                <div class="clear"></div>
                             </div>
                         </div>
-                        <div class="main_statistics_box">
-                            <div class="main_image-border main_image-border1"></div>
-                            <div class="main_image-border main_image-border2"></div>
-                            <div class="main_image-border main_image-border3"></div>
-                            <div class="main_image-border main_image-border4"></div>
-                            <div class="main_title_box">
-                                <i class="iconfont icon-qunzuduoren"></i>
-                                人数统计
-                            </div>
-                            <div class="main_chart_box">
-                                <div id="chart1" class="charts_container" style="width: 100%;height: 100%;"></div>
-                            </div>
-                        </div>
-                    </div>
-                </td>
-                <!--第二层左侧区域end-->
-                <!--第二层中间区域start-->
-                <td class="main_center_top">
-                    <div class="main_center_top_box">
-                        <div class="main_image-border main_image-border1"></div>
-                        <div class="main_image-border main_image-border2"></div>
-                        <div class="main_image-border main_image-border3"></div>
-                        <div class="main_image-border main_image-border4"></div>
-                        <div class="main_select_box">
-                            <div class="select_main_title">请选择播放源</div>
-                            <select class="select_main" prompt="请选择播放源" data='{"list":[{"value":"1","key":"008569"},{"value":"2","key":"00567841"}]}'></select>
-                        </div>
-                        <div class="main_vedio_box">
+                        <div id="lbox_middlecenter">
+                            <div id="lbox_middleleft">
+                                <div id="lbox_middleright">
+                                    <div id="bs_left" style="height: 685px; width: 220px;">
 
+
+                                        <div class="LeftNav_win" style="overflow: auto;">
+
+                                            <div class="stair_win" id="stair_win">
+
+
+                                            </div>
+                                        </div>
+                                        <!--更改左侧栏的宽度需要修改id="bs_left"的样式-->
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="lbox_bottomcenter" style="">
+                                <div id="lbox_bottomleft">
+                                    <div id="lbox_bottomright">
+                                        <div class="lbox_foot"></div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
                 </td>
-                <!--第二层中间区域end-->
-                <!--第二层右侧区域start-->
-                <td class="main_right_top">
-                    <div class="main_right_top_box">
-                        <div class="main_image-border main_image-border1"></div>
-                        <div class="main_image-border main_image-border2"></div>
-                        <div class="main_image-border main_image-border3"></div>
-                        <div class="main_image-border main_image-border4"></div>
-                        <div class="main_title_box">
-                            <i class="iconfont icon-ren"></i>
-                            进出人员
-                            <i class="iconfont icon-gengduomore10"></i>
-                        </div>
-                        <div class="main_message_list_box">
-                            <div>
-                                <div class="main_message_list_item">
-                                    <div class="image-border image-border1"></div>
-                                    <div class="image-border image-border2"></div>
-                                    <div class="image-border image-border3"></div>
-                                    <div class="image-border image-border4"></div>
-                                    <div class="main_message_list_item_left">
-                                        <div class="user_photo_box">
-                                            <div class="user_photo_icon_box">
-                                                <i class="iconfont icon-wo"></i>
-                                            </div>
+                <!--左侧区域end-->
+
+                <!--右侧区域start-->
+                <td class="ali01 ver01" width="100%">
+                    <div id="rbox">
+                        <div id="rbox_topcenter" style="display: flex;">
+                            <!--<div id="rbox_topleft">
+                                <div id="rbox_topright"></div>
+                            </div>-->
+                            <div class="LeftNav_title" style="margin-left: 0px;"><b class=""></b></div>
+                            <div id="positionContent">首页</div>
+
+                            <!--<div class="navigation" style="flex: 1;">-->
+                            <!--<ul class="sub-navigation">-->
+                            <!--<li class="hvr-underline-from-center">基础信息</li>-->
+                            <!--<li class="hvr-underline-from-center">安全追溯</li>-->
+                            <!--<li class="hvr-underline-from-center">安全协作</li>-->
+                            <!--<li class="hvr-underline-from-center">文件管理</li>-->
+                            <!--<li class="hvr-underline-from-center">基础平台</li>-->
+                            <!--</ul>-->
+                            <!--</div>-->
+
+                            <div class="header_right">
+                                <!--<div class="search">-->
+                                <!--<input type="text" name="" id="" value="">-->
+                                <!--<em></em>-->
+                                <!--</div>-->
+
+<!--                                <div class="_uname" style="width:100px;overflow: hidden;">-->
+<!--                                    <shiro:principal property="name"/>-->
+<!--                                </div>-->
+
+                                <!--<div class="right_tip">-->
+                                <!--<div class="tip_icon_win">-->
+                                <!--<span class="tip_icon"></span>-->
+                                <!--<div class="tip_balloons">3</div>-->
+                                <!--</div>-->
+                                <!--<ul class="tip_toggle_content">-->
+                                <!--<li class="tip_title clearfloat">-->
+                                <!--<div class="tip_img"></div>-->
+                                <!--<div class="tip_num">-->
+                                <!--<span>3</span>条未读-->
+                                <!--</div>-->
+                                <!--<span class="tip_close"></span>-->
+                                <!--</li>-->
+                                <!--<li class="clearfloat tip_details_win">-->
+                                <!--<div class="tip_details"><div class="tip_img tip_news"></div>-->
+                                <!--<span class="tip_txt">请假正在审批中</span></div>-->
+                                <!--<div class="tip_details"><div class="tip_img tip_news"></div>-->
+                                <!--<span class="tip_txt">请各位周五前提交周报</span></div>-->
+                                <!--<div class="tip_details"><div class="tip_img tip_news"></div>-->
+                                <!--<span class="tip_txt">QUICKUI新版本上线啦</span></div></li>-->
+                                <!--<li class="clearfloat tip_bottom"><span class="tip_txt_more">进入信件箱&gt;&gt;</span></li>-->
+                                <!--</ul>-->
+                                <!--</div>-->
+                                <div class="home" title="首页">
+                                    <a th:href="@{'/'}"></a>
+                                </div>
+
+
+                                <div class="setting" slide="false">
+                                    <div class="right_toggle">
+                                        <div class="user_information" title="用户中心">
+                                            <b id="user_info"></b> <a href="javascript:;" target="frmright">
+
+                                        </a>
                                         </div>
-                                        <div class="user_icon_box"><i class="iconfont icon-jiaohuan1"></i></div>
-                                        <div class="user_photo_box">
-                                            <div class="user_photo_icon_box">
-                                                <i class="iconfont icon-wo"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="main_message_list_item_right">
-                                        <div class="user_name_box">张三</div>
-                                        <div class="user_time_box">00:00:00</div>
+                                        <!--<span></span>-->
+                                        <shiro:authenticated>
+                                            <ul class="right_toggle_content" style="display: none;">
+                                               <li class="clearfloat right_toggle_home" onclick="openData()"><i></i>
+                                                    <div>数据大屏</div>
+                                                </li>
+                                                <li class="clearfloat right_toggle_lock_screen" onclick="changePassword()"><i></i>
+                                                    <div>修改密码</div>
+                                                </li>
+                                                <li class="clearfloat right_toggle_sign_out" onclick="exitHandler()"><i></i>
+                                                    <div>退出</div>
+                                                </li>
+                                            </ul>
+                                        </shiro:authenticated>
                                     </div>
                                 </div>
-                                <div class="main_message_list_item">
-                                    <div class="image-border image-border1"></div>
-                                    <div class="image-border image-border2"></div>
-                                    <div class="image-border image-border3"></div>
-                                    <div class="image-border image-border4"></div>
-                                    <div class="main_message_list_item_left">
-                                        <div class="user_photo_box">
-                                            <div class="user_photo_icon_box">
-                                                <i class="iconfont icon-wo"></i>
-                                            </div>
-                                        </div>
-                                        <div class="user_icon_box"><i class="iconfont icon-jiaohuan1"></i></div>
-                                        <div class="user_photo_box">
-                                            <div class="user_photo_icon_box">
-                                                <i class="iconfont icon-wo"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="main_message_list_item_right">
-                                        <div class="user_name_box">张三</div>
-                                        <div class="user_time_box">00:00:00</div>
-                                    </div>
-                                </div>
-                                <div class="main_message_list_item">
-                                    <div class="image-border image-border1"></div>
-                                    <div class="image-border image-border2"></div>
-                                    <div class="image-border image-border3"></div>
-                                    <div class="image-border image-border4"></div>
-                                    <div class="main_message_list_item_left">
-                                        <div class="user_photo_box">
-                                            <div class="user_photo_icon_box">
-                                                <i class="iconfont icon-wo"></i>
-                                            </div>
-                                        </div>
-                                        <div class="user_icon_box"><i class="iconfont icon-jiaohuan1"></i></div>
-                                        <div class="user_photo_box">
-                                            <div class="user_photo_icon_box">
-                                                <i class="iconfont icon-wo"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="main_message_list_item_right">
-                                        <div class="user_name_box">张三</div>
-                                        <div class="user_time_box">00:00:00</div>
-                                    </div>
-                                </div>
-                                <div class="main_message_list_item">
-                                    <div class="image-border image-border1"></div>
-                                    <div class="image-border image-border2"></div>
-                                    <div class="image-border image-border3"></div>
-                                    <div class="image-border image-border4"></div>
-                                    <div class="main_message_list_item_left">
-                                        <div class="user_photo_box">
-                                            <div class="user_photo_icon_box">
-                                                <i class="iconfont icon-wo"></i>
-                                            </div>
-                                        </div>
-                                        <div class="user_icon_box"><i class="iconfont icon-jiaohuan1"></i></div>
-                                        <div class="user_photo_box">
-                                            <div class="user_photo_icon_box">
-                                                <i class="iconfont icon-wo"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="main_message_list_item_right">
-                                        <div class="user_name_box">张三</div>
-                                        <div class="user_time_box">00:00:00</div>
-                                    </div>
-                                </div>
+                                <!--<div class="setting">-->
+                                <!--<div class="right_toggle">-->
+                                <!--<span></span>-->
+                                <!--<ul class="right_toggle_content" style="display: none;">-->
+                                <!--&lt;!&ndash;<li class="clearfloat right_toggle_home"><a href="index.html" target="frmright"><i></i>首页</a></li>&ndash;&gt;-->
+                                <!--<li class="clearfloat right_toggle_lock_screen" onclick="lockScreen()"><a href="javascript:;" target="frmright"><i></i>锁屏</a></li>-->
+                                <!--<li class="clearfloat right_toggle_sign_out" onclick="top.Dialog.confirm(&#39;确定要退出系统吗&#39;,function(){});"><a href="javascript:;" target="frmright"><i></i>退出</a></li>-->
+                                <!--</ul>-->
+                                <!--</div>-->
+                                <!--</div>-->
+                                <span class="clear"></span>
                             </div>
-                        </div>
-                    </div>
-                </td>
-                <!--第二层右侧区域end-->
-            </tr>
-            <tr  style="height: 30%;">
-                <!--第三层左侧区域start-->
-                <td class="main_left_bottom">
-                    <div class="main_left_bottom_box">
-                        <div class="main_image-border main_image-border1"></div>
-                        <div class="main_image-border main_image-border2"></div>
-                        <div class="main_image-border main_image-border3"></div>
-                        <div class="main_image-border main_image-border4"></div>
-                        <div class="main_title_box">
-                            <i class="iconfont icon-tongjifenxi"></i>
-                            基础数据
-                        </div>
-                        <div class="main_data_list_box">
-                            <div class="main_data_list">
-                                <div class="main_data_list_item">学生总人数 <span>2</span> 个</div>
-                                <div class="main_data_list_item">家长总人数 <span>2</span> 个</div>
-                            </div>
-                            <div class="main_data_list">
-                                <div class="main_data_list_item">教职工总人数 <span>2</span> 个</div>
-                                <div class="main_data_list_item">黑名单总人数 <span>2</span> 个</div>
-                            </div>
-                            <div class="main_data_list">
-                                <div class="main_data_list_item">考勤平板数 <span>2</span> 个</div>
-                                <div class="main_data_list_item">闸机通道数 <span>2</span> 个</div>
-                            </div>
-                        </div>
-                        <!--<div class="main_weather_list_box">
-                            <div class="main_weather_list_left">
-                                <div class="main_weather_item_title">实时温度</div>
-                                <div class="main_weather_item_title">27.0℃</div>
-                            </div>
-                            <div class="main_weather_list_right">
-                                <div class="main_weather_list_right_item">
-                                    <div class="main_weather_item_title">预报温度</div>
-                                    <div class="main_weather_item_title">6℃-27.0℃</div>
-                                </div>
-                                <div class="main_weather_list_right_item">
-                                    <div class="main_weather_item_title">实时湿度</div>
-                                    <div class="main_weather_item_title">54%</div>
-                                </div>
-                            </div>
-                            <div class="main_weather_list_right">
-                                <div class="main_weather_list_right_item">
-                                    <div class="main_weather_item_title">体感温度</div>
-                                    <div class="main_weather_item_title">18.0℃</div>
-                                </div>
-                                <div class="main_weather_list_right_item">
-                                    <div class="main_weather_item_title">空气质量指数</div>
-                                    <div class="main_weather_item_title">27.0℃</div>
-                                </div>
-                            </div>
-                        </div>-->
-                    </div>
-                </td>
-                <!--第三层左侧区域end-->
-                <!--第三层中间区域start-->
-                <td class="main_center_bottom">
-                    <div class="main_menu_box">
-                        <div class="main_image-border main_image-border1"></div>
-                        <div class="main_image-border main_image-border2"></div>
-                        <div class="main_image-border main_image-border3"></div>
-                        <div class="main_image-border main_image-border4"></div>
-                        <div id="main_menu_items" class="main_menu_items">
-                        </div>
-                        <!--
-                        <div class="main_menu_item">
-                            <div class="main_menu_item_left"></div>
-                            <div class="main_menu_item_center"><span class="iconfont icon-fl-renshi"></span><span>底库管理</span></div>
-                            <div class="main_menu_item_right"></div>
-                        </div>
-                        <div class="main_menu_item">
-                            <div class="main_menu_item_left"></div>
-                            <div class="main_menu_item_center"><span class="iconfont icon-quanxianchaxun"></span><span>权限管理</span></div>
-                            <div class="main_menu_item_right"></div>
-                        </div>
-                        <div class="main_menu_item">
-                            <div class="main_menu_item_left"></div>
-                            <div class="main_menu_item_center"><span class="iconfont icon-rizhi"></span><span>日志管理</span></div>
-                            <div class="main_menu_item_right"></div>
-                        </div>
-                        <div class="main_menu_item">
-                            <div class="main_menu_item_left"></div>
-                            <div class="main_menu_item_center"><span class="iconfont icon-yewujiekoucanshu"></span><span>接口管理</span></div>
-                            <div class="main_menu_item_right"></div>
-                        </div>
-                        <div class="main_menu_item">
-                            <div class="main_menu_item_left"></div>
-                            <div class="main_menu_item_center"><span class="iconfont icon-dv_pingban"></span><span>平板管理</span></div>
-                            <div class="main_menu_item_right"></div>
-                        </div>
-                        <div class="main_menu_item">
-                            <div class="main_menu_item_left"></div>
-                            <div class="main_menu_item_center"><span class="iconfont icon-anquan1"></span><span>安全管理</span></div>
-                            <div class="main_menu_item_right"></div>
-                        </div>
-                        <div class="main_menu_item">
-                            <div class="main_menu_item_left"></div>
-                            <div class="main_menu_item_center"><span class="iconfont icon-dazhongxingshuizha"></span><span>闸机管理</span></div>
-                            <div class="main_menu_item_right"></div>
-                        </div>
-                        <div class="main_menu_item">
-                            <div class="main_menu_item_left"></div>
-                            <div class="main_menu_item_center"><span class="iconfont icon-xitong"></span><span>系统管理</span></div>
-                            <div class="main_menu_item_right"></div>
-                        </div>
-                        <div class="main_menu_item">
-                            <div class="main_menu_item_left"></div>
-                            <div class="main_menu_item_center"><span class="iconfont icon-_renlianshibie"></span><span>1:N比对</span></div>
-                            <div class="main_menu_item_right"></div>
-                        </div>
-                        <div class="main_menu_item">
-                            <div class="main_menu_item_left"></div>
-                            <div class="main_menu_item_center"><span class="iconfont icon-duibi1"></span><span>1:1比对</span></div>
-                            <div class="main_menu_item_right"></div>
-                        </div>-->
-                    </div>
-                </td>
-                <!--第三层中间区域end-->
-                <!--第三层右侧区域start-->
-                <td class="main_right_bottom">
-                    <div class="main_right_bottom_box">
-                        <div class="main_image-border main_image-border1"></div>
-                        <div class="main_image-border main_image-border2"></div>
-                        <div class="main_image-border main_image-border3"></div>
-                        <div class="main_image-border main_image-border4"></div>
-                        <div class="main_title_box">
-                            <i class="iconfont icon-tianqi"></i>
-                            时间段统计
-                        </div>
-                        <div class="main_line_box">
-                            <div id="chart2" style="width: 100%;height: 100%;">
+                            <div class="clear"></div>
+                            <!--<div class="rbox_topcenter_left" id="mainPos">
 
                             </div>
+                            -->
+                        </div>
+                        <div id="rbox_middlecenter">
+                            <div id="rbox_middleleft">
+                                <div id="rbox_middleright">
+                                    <div id="bs_right" style="height: 685px;">
+                                        <IFRAME style="box-sizing: border-box;"
+                                                height="100%" width="100%" frameBorder="0" id="frmright"
+                                                name="frmright" th:src="@{'/page/user/index'}" allowTransparency="true"></IFRAME>
+                                        <div class="loadmask"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="rbox_bottomcenter">
+                            <div id="rbox_bottomleft">
+                                <div id="rbox_bottomright">
+
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </td>
-                <!--第三层右侧区域end-->
+                <!--右侧区域end-->
             </tr>
             </tbody>
         </table>
     </div>
 
 </div>
+<!--尾部区域end-->
+<!--浏览器resize事件修正start-->
+<div id="resizeFix"></div>
+<!--浏览器resize事件修正end-->
 
+<!--窗口任务栏区域start-->
+<div id="dialogTask" class="dialogTaskBg" style="display: none;"></div>
+<!--窗口任务栏区域end-->
+
+<!--载进度条start-->
+<div class="progressBg" id="progress" style="display: none;">
+    <div class="progressBar"></div>
+</div>
+<!--载进度条end-->
 <script type="text/javascript">
-    var weekList= ['星期天', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
-    var selDateMap= {
-            year: '',
-            date: '',
-            week: '',
-            month: '',
-            hour:'',
-            minute:'',
-            second:''
+
+
+    // var setting = {
+    //     data: {
+    //         state: 'min',
+    //         simpleData: {
+    //             idKey: "id",
+    //             pIdKey: "parentId",
+    //             enable: true
+    //         },
+    //         key: {
+    //             children: "children"
+    //         },
+    //         minWidth: 100,
+    //         lefticonTab: true
+    //     }
+    // };
+
+    var setting = {
+        data: {
+            simpleData: {
+                idKey: "id",
+                pIdKey: "parentId",
+                enable: true
+            },
+            key: {
+                children: "children"
+            }
         }
+    };
 
     $(function () {
         $.get(ctxPath + "menu", {}, function (data) {
-            console.log(data)
-            var hidd='';
-            if(data.code == 0 && data.data.length>0){
-                data.data.forEach((res,index)=>{
-                    hidd+='<div class="main_menu_item" data-id="'+res.id+'" data-url="'+res.url+'" data-value="'+res.name+'">\n' +
-                        '       <div class="main_menu_item_left"></div>\n' +
-                        '       <div class="main_menu_item_center"><span class="iconfont '+res.icon+'"></span><span>'+res.name+'</span></div>\n' +
-                        '       <div class="main_menu_item_right"></div>\n' +
-                        '  </div>'
-                })
-            }
-            $('#main_menu_items').html(hidd)
+            initMenuNav(data.data, setting);
         });
-        $('#main_menu_items').on('click','.main_menu_item',function(ret){
-            var id=$(this).data('id')
-            var url=$(this).data('url')
-            var name=$(this).data('value')
-            var diag = new top.Dialog();
-            diag.Title = name;
-            diag.URL = ctxPath + url;
-            //自定义长度和宽度的设置
-            diag.Width = 960;
-            diag.Height = 650;
-            diag.ShowButtonRow = false;
-            diag.show();
-        })
-        //右侧头部js
-        $(".right_toggle").hover(function (event) {
-            event.stopPropagation()
-            $(this).find(".right_toggle_content").slideToggle(200);
-        })
-
-
-        setInterval(getDateData, 1000);
-        eachrts1()
-        eachrts2()
     })
 
 
@@ -998,219 +391,9 @@
         diag.show();
     }
 
-    function getDateData(){
-        var date = new Date();
-        selDateMap.year = date.getFullYear()
-        selDateMap.month = ((date.getMonth() + 1)<10?'0'+(date.getMonth() + 1):(date.getMonth() + 1))
-        selDateMap.date = date.getDate()
-        selDateMap.week = weekList[date.getDay()]
-        selDateMap.hour = date.getHours();
-        selDateMap.minute = date.getMinutes();
-        selDateMap.second = date.getSeconds();
-        $('#main_date_bottom_box').html('<div class="main_date_bottom_date">\n' +
-            '            <div>'+selDateMap.year+'年'+selDateMap.month+'月'+selDateMap.date+'日</div>\n' +
-            '        <div>'+selDateMap.week+'</div>\n' +
-            '        </div>\n' +
-            '        <div class="main_date_bottom_time">\n' +
-            '            <span>'+selDateMap.hour+'</span>\n' +
-            '            <span class="time_colon">:</span>\n' +
-            '           <span>'+selDateMap.minute+'</span>\n' +
-            '           <span class="time_colon">:</span>\n' +
-            '           <span>'+selDateMap.second+'</span>\n' +
-            '        </div>')
+    function openData(){
+        window.open("data");
     }
-
-    function eachrts1(){
-        var myChart = echarts.init(document.getElementById('chart1'),'macarons');
-        var base = +new Date(2016, 9, 3);
-        var oneDay = 24 * 3600 * 1000;
-        var valueBase = Math.random() * 300;
-        var data1 = [];
-        var data2 = [];
-        var datelist = []
-        for (var i = 1; i < 5; i++) {
-            var now = new Date(base += oneDay);
-            var dayStr = [now.getMonth() + 1, now.getDate()].join('/');
-
-            valueBase = Math.round((Math.random() - 0.5) * 20 + valueBase);
-            valueBase <= 0 && (valueBase = Math.random() * 300);
-            datelist.push(dayStr);
-            data1.push(valueBase);
-            data2.push(valueBase);
-
-        }
-
-        option = {
-            color:['#83bff6','#004E52'],
-            tooltip: {
-                trigger: 'axis',
-                axisPointer: {
-                    type: 'shadow'
-                }
-            },
-            legend: {
-                textStyle: { //图例文字的样式
-                    color: '#fff'
-                },
-                data: ['进入人数', '离开人数']
-            },
-            grid: {
-                left: '3%',
-                right: '4%',
-                bottom: '10%',
-                containLabel: true
-            },
-            xAxis: {
-                type: 'value',
-                boundaryGap: [0, 0.01],
-                splitLine:{
-                    show: false
-                },
-                axisLine:{
-                    lineStyle:{
-                        color:'#ffffff',
-                        width:2
-                    }
-                }
-            },
-            yAxis: {
-                type: 'category',
-                data: datelist,
-                axisLine:{
-                    lineStyle:{
-                        color:'#ffffff',
-                        width:2
-                    }
-                }
-            },
-            series: [
-                {
-                    name: '进入人数',
-                    type: 'bar',
-                    data: data1
-                },
-                {
-                    name: '离开人数',
-                    type: 'bar',
-                    data: data2
-                }
-            ]
-        };
-        myChart.hideLoading();
-        myChart.setOption(option);
-    }
-
-
-    function eachrts2(){
-        var myChart = echarts.init(document.getElementById('chart2'),
-            'macarons');
-        var base = +new Date(2016, 9, 3);
-        var oneDay = 24 * 3600 * 1000;
-        var valueBase = Math.random() * 300;
-        var data = [];
-
-        for (var i = 1; i < 10; i++) {
-            var now = new Date(base += oneDay);
-            var dayStr = [now.getMonth() + 1, now.getDate()].join('-');
-
-            valueBase = Math.round((Math.random() - 0.5) * 20 + valueBase);
-            valueBase <= 0 && (valueBase = Math.random() * 300);
-            data.push([dayStr, valueBase]);
-
-        }
-
-        option = {
-            animation: false,
-            legend: {
-                top: 'bottom',
-                data: ['意向']
-            },
-            tooltip: {
-                triggerOn: 'none',
-                position: function (pt) {
-                    return [pt[0], 130];
-                }
-            },
-            xAxis: {
-                type: 'time',
-                axisLine:{
-                    lineStyle:{
-                        color:'#ffffff',
-                        width:2
-                    }
-                },
-                splitLine: {
-                    show: false
-                }
-            },
-            yAxis: {
-                type: 'value',
-                axisTick: {
-                    inside: true
-                },
-                axisLine:{
-                    lineStyle:{
-                        color:'#ffffff',
-                        width:2
-                    }
-                },
-                splitLine: {
-                    show: false
-                },
-                axisLabel: {
-                    inside: true,
-                    formatter: '{value}\n'
-                },
-                z: 10
-            },
-            grid: {
-                top: 20,
-                left: 20,
-                right: 20,
-                height: 110
-            },
-            dataZoom: [{
-                type: 'inside',
-                throttle: 50
-            }],
-            textStyle:{
-                color:'#90e1ff'
-            },
-            series: [
-                {
-                    name: '模拟数据',
-                    type: 'line',
-                    smooth: true,
-                    symbol: 'circle',
-                    symbolSize: 5,
-                    sampling: 'average',
-                    itemStyle: {
-                        normal: {   //颜色渐变函数 前四个参数分别表示四个位置依次为左、下、右、上
-                            color: new echarts.graphic.LinearGradient(0, 0, 0, 1,[{
-                                    offset: 0, color: '#09baff59' // 100% 处的颜色
-                                }, {
-                                    offset: 0.8, color: '#a3d9ff1c' // 100% 处的颜色
-                                }]
-                            ),  //背景渐变色
-                            lineStyle: {        // 系列级个性化折线样式
-                                width: 3,
-                                type: 'solid',
-                                color: "#008bb547"
-                            }
-                        }
-                    },//线条样式
-                    symbolSize:3, //折线点的大小
-                    areaStyle: {normal: {}},
-                    stack: 'a',
-                    data: data
-                }
-
-            ]
-        };
-        myChart.hideLoading();
-        myChart.setOption(option);
-    }
-
 
 </script>
 </body>
