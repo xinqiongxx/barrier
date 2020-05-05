@@ -1,0 +1,275 @@
+{
+  "id": "1796903",
+  "name": "幼儿园道闸",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "10817368",
+      "name": "竖线图标",
+      "font_class": "shuxiantubiao",
+      "unicode": "e607",
+      "unicode_decimal": 58887
+    },
+    {
+      "icon_id": "3996231",
+      "name": "我",
+      "font_class": "wo",
+      "unicode": "e636",
+      "unicode_decimal": 58934
+    },
+    {
+      "icon_id": "5334202",
+      "name": "我的",
+      "font_class": "wode",
+      "unicode": "e62d",
+      "unicode_decimal": 58925
+    },
+    {
+      "icon_id": "606303",
+      "name": "更多",
+      "font_class": "gengduomore10",
+      "unicode": "e61e",
+      "unicode_decimal": 58910
+    },
+    {
+      "icon_id": "1630751",
+      "name": "交换",
+      "font_class": "jiaohuan",
+      "unicode": "e665",
+      "unicode_decimal": 58981
+    },
+    {
+      "icon_id": "5327626",
+      "name": "交换",
+      "font_class": "jiaohuan1",
+      "unicode": "e732",
+      "unicode_decimal": 59186
+    },
+    {
+      "icon_id": "741927",
+      "name": "统计分析",
+      "font_class": "tongjifenxi",
+      "unicode": "e63d",
+      "unicode_decimal": 58941
+    },
+    {
+      "icon_id": "782231",
+      "name": "统计5",
+      "font_class": "tongji5",
+      "unicode": "e6d0",
+      "unicode_decimal": 59088
+    },
+    {
+      "icon_id": "1254791",
+      "name": "时间",
+      "font_class": "shijian",
+      "unicode": "e602",
+      "unicode_decimal": 58882
+    },
+    {
+      "icon_id": "139829",
+      "name": "群组多人",
+      "font_class": "qunzuduoren",
+      "unicode": "e6d6",
+      "unicode_decimal": 59094
+    },
+    {
+      "icon_id": "521036",
+      "name": "系统管理",
+      "font_class": "xitongguanli",
+      "unicode": "e614",
+      "unicode_decimal": 58900
+    },
+    {
+      "icon_id": "649696",
+      "name": "人",
+      "font_class": "ren",
+      "unicode": "e647",
+      "unicode_decimal": 58951
+    },
+    {
+      "icon_id": "797505",
+      "name": "业务接口参数",
+      "font_class": "yewujiekoucanshu",
+      "unicode": "e68a",
+      "unicode_decimal": 59018
+    },
+    {
+      "icon_id": "1119184",
+      "name": "系统",
+      "font_class": "xitong",
+      "unicode": "e626",
+      "unicode_decimal": 58918
+    },
+    {
+      "icon_id": "1275052",
+      "name": "水闸",
+      "font_class": "shuizha",
+      "unicode": "e603",
+      "unicode_decimal": 58883
+    },
+    {
+      "icon_id": "2130287",
+      "name": "数据接口",
+      "font_class": "shujujiekou",
+      "unicode": "e625",
+      "unicode_decimal": 58917
+    },
+    {
+      "icon_id": "2380665",
+      "name": "天气",
+      "font_class": "tianqi",
+      "unicode": "e61a",
+      "unicode_decimal": 58906
+    },
+    {
+      "icon_id": "2525720",
+      "name": "人事",
+      "font_class": "fl-renshi",
+      "unicode": "e62c",
+      "unicode_decimal": 58924
+    },
+    {
+      "icon_id": "3947711",
+      "name": "安全",
+      "font_class": "anquan",
+      "unicode": "e604",
+      "unicode_decimal": 58884
+    },
+    {
+      "icon_id": "4186858",
+      "name": "AK-DV平板",
+      "font_class": "dv_pingban",
+      "unicode": "e600",
+      "unicode_decimal": 58880
+    },
+    {
+      "icon_id": "4553687",
+      "name": "权限管理",
+      "font_class": "quanxianguanli",
+      "unicode": "e608",
+      "unicode_decimal": 58888
+    },
+    {
+      "icon_id": "5208778",
+      "name": "平板",
+      "font_class": "pingban",
+      "unicode": "e605",
+      "unicode_decimal": 58885
+    },
+    {
+      "icon_id": "5330127",
+      "name": "平板电脑",
+      "font_class": "pingbandiannao",
+      "unicode": "e761",
+      "unicode_decimal": 59233
+    },
+    {
+      "icon_id": "5390841",
+      "name": "大中型水闸",
+      "font_class": "dazhongxingshuizha",
+      "unicode": "e799",
+      "unicode_decimal": 59289
+    },
+    {
+      "icon_id": "5838455",
+      "name": "对比",
+      "font_class": "duibi",
+      "unicode": "e851",
+      "unicode_decimal": 59473
+    },
+    {
+      "icon_id": "7579563",
+      "name": "对比",
+      "font_class": "zaixianduibiweijihuo",
+      "unicode": "e7dc",
+      "unicode_decimal": 59356
+    },
+    {
+      "icon_id": "8156891",
+      "name": "日志",
+      "font_class": "rizhi",
+      "unicode": "e63e",
+      "unicode_decimal": 58942
+    },
+    {
+      "icon_id": "8225384",
+      "name": "系统参数",
+      "font_class": "xitongcanshu",
+      "unicode": "e61b",
+      "unicode_decimal": 58907
+    },
+    {
+      "icon_id": "8802652",
+      "name": "对比2",
+      "font_class": "duibi1",
+      "unicode": "e64e",
+      "unicode_decimal": 58958
+    },
+    {
+      "icon_id": "8922353",
+      "name": "天气",
+      "font_class": "tianqi1",
+      "unicode": "e60b",
+      "unicode_decimal": 58891
+    },
+    {
+      "icon_id": "9058307",
+      "name": "8_7人脸识别",
+      "font_class": "_renlianshibie",
+      "unicode": "e610",
+      "unicode_decimal": 58896
+    },
+    {
+      "icon_id": "10047383",
+      "name": "人脸核身",
+      "font_class": "renlianheshen",
+      "unicode": "e6b2",
+      "unicode_decimal": 59058
+    },
+    {
+      "icon_id": "11753247",
+      "name": "人物",
+      "font_class": "V",
+      "unicode": "e6ce",
+      "unicode_decimal": 59086
+    },
+    {
+      "icon_id": "11883277",
+      "name": "权限查询",
+      "font_class": "quanxianchaxun",
+      "unicode": "e634",
+      "unicode_decimal": 58932
+    },
+    {
+      "icon_id": "12268059",
+      "name": "人脸检索",
+      "font_class": "renlianjiansuo",
+      "unicode": "e606",
+      "unicode_decimal": 58886
+    },
+    {
+      "icon_id": "14033570",
+      "name": "权限",
+      "font_class": "quanxian",
+      "unicode": "e7ae",
+      "unicode_decimal": 59310
+    },
+    {
+      "icon_id": "14112848",
+      "name": "安全",
+      "font_class": "anquan1",
+      "unicode": "e63c",
+      "unicode_decimal": 58940
+    },
+    {
+      "icon_id": "14313252",
+      "name": "人员离开",
+      "font_class": "renyuanlikai",
+      "unicode": "e64c",
+      "unicode_decimal": 58956
+    }
+  ]
+}

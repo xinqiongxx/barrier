@@ -159,36 +159,6 @@
                     <div class="minute_right"><img src="../../system/skin/s5.png"></div>
                 </div>
             </div>
-            <!--<div class="minute">
-                <div class="minute-content">
-                    <div class="minute_left">
-                        <div style="font-weight:bold;font-size: 22px;">信息配置</div>
-                        <div style="line-height: 18px;font-size: 9px;">Configuration</div>
-                    </div>
-                    <div class="minute_right"><img src="../../system/skin/s2.png"></div>
-                </div>
-            </div>-->
-        </li>
-        <li class="">
-            <div class="minute">
-                <div class="minute-content">
-                    <div class="minute_left">
-                        <div id="allNumberYs" style="font-weight:bold;font-size: 22px;">2036</div>
-                        <div style="line-height: 18px;font-size: 14px;">园数量</div>
-                    </div>
-                    <div class="minute_right"><img src="../../system/skin/s5.png"></div>
-                </div>
-            </div>
-
-            <!--<div class="minute">
-                <div class="minute-content">
-                    <div class="minute_left">
-                        <div style="font-weight:bold;font-size: 22px;">上传附件</div>
-                        <div style="line-height: 18px;font-size: 9px;">upload attachments</div>
-                    </div>
-                    <div class="minute_right"><img src="../../system/skin/s5.png"></div>
-                </div>
-            </div>-->
         </li>
     </ul>
 </div>
@@ -203,16 +173,11 @@
         <div class="u-position" id="u-position" style="flex: 1;">
             <div class="-star"></div>
             <div class="-a">当前位置：</div>
-            <!--<div class="-c">市教委</div>-->
-            <!--<div class="-c"> ></div>-->
-            <!--<div class="-c">和平区</div>-->
         </div>
     </div>
 
     <div class="layout">
         <div class="layout-l">
-
-
             <div class="trees">
                 <ul id="deptTree" class="ztree blueTree"></ul>
             </div>
@@ -249,23 +214,11 @@
             <div class="items edit">
                 <div class="lable"><p>*</p>部门类型</div>
                 <div class="item-c">
-                    <input type="radio" id="male-1" name="deptType" value="S" disabled="true"/>
-                    <label for="male-1" class="hand">市</label>
+                    <input type="radio" id="male-1" name="deptType" value="1" disabled="true"/>
+                    <label for="male-1" class="hand">管理部门</label>
 
-                    <input type="radio" id="male-2" name="deptType" value="Q" disabled="true"/>
-                    <label for="male-2" class="hand">区</label>
-
-                    <input type="radio" id="male-3" name="deptType" value="Y" disabled="true"/>
-                    <label for="male-3" class="hand">园</label>
-
-                    <input type="radio" id="male-4" name="deptType" value="Y-1" disabled="true"/>
-                    <label for="male-4" class="hand">公办</label>
-
-                    <input type="radio" id="male-5" name="deptType" value="Y-2" disabled="true"/>
-                    <label for="male-5" class="hand">民办</label>
-
-                    <input type="radio" id="male-6" name="deptType" value="Y-3" disabled="true"/>
-                    <label for="male-6" class="hand">托幼点</label>
+                    <input type="radio" id="male-2" name="deptType" value="2" disabled="true"/>
+                    <label for="male-2" class="hand">班级 </label>
                 </div>
             </div>
 
@@ -451,10 +404,10 @@
     }
 
     function _add() {
-        if (!selDept) {
+       /* if (!selDept) {
             top.Toast('showWarningToast', '请选择父级节点');
             return;
-        }
+        }*/
         isUpdate = true
 
         // 隐藏主键ID
