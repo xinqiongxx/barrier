@@ -55,7 +55,7 @@ public class ShiroUser implements Serializable {
     /**
      * 部门ID
      */
-    private String deptId;
+    private List<Integer> depts;
 
     /**
      * 角色ID

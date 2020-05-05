@@ -203,7 +203,6 @@
             columns: [
                 {display: '用户名', name: 'username', align: 'center', width: "15%"},
                 // {display: '手机号', name: 'phone', align: 'center', width: "15%"},
-                {display: '邮箱', name: 'email', align: 'center', width: "15%"},
                 {
                     display: '角色', name: 'roleList', align: 'center', width: "10%",
                     render: function (rowdata, rowindex, value, column) {
@@ -224,7 +223,6 @@
                         }
                     }
                 },
-                {display: '创建时间', name: 'createTime', align: 'center', width: "15%"},
                 {display: '所属部门', name: 'deptList', align: 'center', width: "10%",
                     render: function (rowdata, rowindex, value, column) {
                         var deptStr = "";
@@ -234,6 +232,8 @@
                         return deptStr;
                     }
                 },
+                {display: '邮箱', name: 'email', align: 'center', width: "15%"},
+                {display: '创建时间', name: 'createTime', align: 'center', width: "15%"},
                 {
                     display: '操作', align: 'center', width: "25%",
                     render: function (rowdata, rowindex, value, column) {
@@ -256,7 +256,7 @@
             url: ctxPath + 'user/page',
             method: 'get',
             sortName: 'ucreate_time',
-            sortOrder: "ASC",
+            sortOrder: "DESC",
             rownumbers: true,
             checkbox: true,
             height: '100%',

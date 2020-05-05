@@ -6,6 +6,7 @@ package com.tjaide.nursery.barrier.common.data.datascope;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.db.Db;
 import cn.hutool.db.Entity;
 import com.baomidou.mybatisplus.core.toolkit.PluginUtils;
@@ -66,7 +67,7 @@ public class DataScopeInterceptor extends AbstractSqlParserHandler implements In
         }
 
         String scopeName = dataScope.getScopeName();
-        List<String> deptIds = dataScope.getDeptIds();
+        List<Integer> deptIds = dataScope.getDeptIds();
         // 优先获取赋值数据
         if (CollUtil.isEmpty(deptIds)) {
             ShiroUser user = ShiroUtils.getUser();
@@ -88,19 +89,24 @@ public class DataScopeInterceptor extends AbstractSqlParserHandler implements In
             // 自定义
             if (DataScopeTypeEnum.CUSTOM.getType() == dsType) {
                 String dsScope = query.getStr("ds_scope");
-                deptIds.addAll(Arrays.stream(dsScope.split(",")).collect(Collectors.toList()));
+                deptIds.addAll(Arrays.stream(dsScope.split(StrUtil.COMMA))
+                        .map(Integer::parseInt).collect(Collectors.toList()));
             }
             // 查询本级及其下级
             if (DataScopeTypeEnum.OWN_CHILD_LEVEL.getType() == dsType) {
-                List<String> deptIdList = Db.use(dataSource)
-                        .findBy("sys_dept_relation", "ancestor", user.getDeptId())
-                        .stream().map(entity -> entity.getStr("descendant"))
-                        .collect(Collectors.toList());
-                deptIds.addAll(deptIdList);
+                for(Integer deptid:user.getDepts()){
+                    List<Integer> deptIdList = Db.use(dataSource)
+                            .findBy("sys_dept_relation", "ancestor", deptid)
+                            .stream().map(entity -> entity.getInt("descendant"))
+                            .collect(Collectors.toList());
+                    deptIds.addAll(deptIdList);
+                }
             }
             // 只查询本级
             if (DataScopeTypeEnum.OWN_LEVEL.getType() == dsType) {
-                deptIds.add(user.getDeptId());
+                for(Integer deptid:user.getDepts()){
+                    deptIds.add(deptid);
+                }
             }
         }
         String join = CollectionUtil.join(deptIds, "','");

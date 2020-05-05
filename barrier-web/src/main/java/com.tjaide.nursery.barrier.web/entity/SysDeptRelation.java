@@ -28,12 +28,12 @@ public class SysDeptRelation extends Model<SysDeptRelation> {
      * 祖先节点
      */
     @ApiModelProperty(value = "祖先节点")
-    private String ancestor;
+    private Integer ancestor;
     /**
      * 后代节点
      */
     @ApiModelProperty(value = "后代节点")
-    private String descendant;
+    private Integer descendant;
 
 
 }

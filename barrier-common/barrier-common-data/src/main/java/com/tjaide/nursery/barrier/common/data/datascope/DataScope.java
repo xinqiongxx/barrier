@@ -27,7 +27,7 @@ public class DataScope extends HashMap {
     /**
      * 具体的数据范围
      */
-    private List<String> deptIds = new ArrayList<>();
+    private List<Integer> deptIds = new ArrayList<>();
 
     /**
      * 是否只查询本部门

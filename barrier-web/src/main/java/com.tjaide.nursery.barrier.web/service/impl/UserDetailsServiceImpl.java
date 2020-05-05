@@ -56,8 +56,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         BeanUtil.copyProperties(sysUser, user);
         user.setRoles(sysRoleService.findRolesByUserId(user.getUserId()).stream()
                 .map(sysRole -> sysRole.getRoleId()).collect(Collectors.toList()));
-        user.setDeptId(sysDeptService.findDeptsByUserId(user.getUserId()).stream()
-                .map(sysDept -> sysDept.getDeptId()).collect(Collectors.toList()).get(0));
+
+        user.setDepts(sysDeptService.findDeptsByUserId(user.getUserId()).stream()
+                .map(sysDept -> sysDept.getDeptId()).collect(Collectors.toList()));
         asyncService.syncDept();
         return user;
     }
