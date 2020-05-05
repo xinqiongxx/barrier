@@ -4,6 +4,7 @@
 
 package com.tjaide.nursery.barrier.web.service.impl;
 
+import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
@@ -45,6 +46,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     private final SysRoleService sysRoleService;
     private final SysDeptService sysDeptService;
     private final SysUserRoleService sysUserRoleService;
+    private final SysUserDeptService sysUserDeptService;
     private final SysDeptRelationService sysDeptRelationService;
     /**
      * 保存用户信息
@@ -58,7 +60,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         SysUser sysUser = new SysUser();
         BeanUtils.copyProperties(userDto, sysUser);
         sysUser.setDelFlag(CommonConstants.STATUS_NORMAL);
-        Map<String, Object> passwordMap = PasswordUtil.encryptPassword(userDto.getPassword());
+        Map<String, Object> passwordMap = PasswordUtil.encryptSaltPassword(userDto.getPassword());
+        sysUser.setSalt(passwordMap.get("salt").toString());
         sysUser.setPassword(passwordMap.get("password").toString());
         this.saveOrUpdate(sysUser);
         List<SysUserRole> userRoleList = userDto.getRole().stream().map(roleId -> {
@@ -67,8 +70,13 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             userRole.setRoleId(roleId);
             return userRole;
         }).collect(Collectors.toList());
-
-        return sysUserRoleService.saveBatch(userRoleList);
+        List<SysUserDept> userDeptList = userDto.getDepts().stream().map(deptId -> {
+            SysUserDept userDept = new SysUserDept();
+            userDept.setUserId(sysUser.getUserId());
+            userDept.setDeptId(deptId);
+            return userDept;
+        }).collect(Collectors.toList());
+        return sysUserRoleService.saveBatch(userRoleList)&&sysUserDeptService.saveBatch(userDeptList);
     }
 
     /**
@@ -129,7 +137,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
                 && StrUtil.isNotBlank(userDto.getNewpassword1())) {
             if (PasswordUtil.matches(userVO.getSalt(), userDto.getPassword(), userVO.getPassword())) {
                 //Todo 先这样加密 后续再做处理
-                Map<String, Object> passwordMap = PasswordUtil.encryptPassword(userDto.getNewpassword1());
+                Map<String, Object> passwordMap = PasswordUtil.encryptSaltPassword(userDto.getNewpassword1());
+                sysUser.setSalt(passwordMap.get("salt").toString());
                 sysUser.setPassword(passwordMap.get("password").toString());
             } else {
                 log.warn("原密码错误，修改密码失败:{}", userDto.getUsername());
@@ -150,7 +159,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
         if (StringUtils.isNotEmpty(userDto.getPassword()) && userDto.getPassword().length()< 35) {
             //Todo 先这样加密 后续再做处理
-            Map<String, Object> passwordMap = PasswordUtil.encryptPassword(userDto.getPassword());
+            Map<String, Object> passwordMap = PasswordUtil.encryptSaltPassword(userDto.getPassword());
+            sysUser.setSalt(passwordMap.get("salt").toString());
             sysUser.setPassword(passwordMap.get("password").toString());
         }
         this.saveOrUpdate(sysUser);
@@ -165,7 +175,18 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
                 if (ObjectUtils.isNotEmpty(userRole.getRoleId())) {
                     userRole.insert();
                 }
-
+            });
+        }
+        if (ObjectUtil.isNotNull(userDto.getDepts()) && userDto.getDepts().size() > 0) {
+            sysUserDeptService.remove(Wrappers.<SysUserDept>update().lambda()
+                    .eq(SysUserDept::getUserId, userDto.getUserId()));
+            userDto.getDepts().forEach(deptId -> {
+                SysUserDept userDept = new SysUserDept();
+                userDept.setUserId(sysUser.getUserId());
+                userDept.setDeptId(deptId);
+                if (ObjectUtils.isNotEmpty(userDept.getDeptId())) {
+                    userDept.insert();
+                }
             });
         }
         return Boolean.TRUE;
@@ -232,8 +253,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
                 map.put("deptId", deptMap.getDeptId());
             }
             //Todo 先这样加密 后续再做处理
-            Map<String, Object> passwordMap = PasswordUtil.encryptPassword("111111");
-//            map.put("salt", passwordMap.get("salt").toString());
+            Map<String, Object> passwordMap = PasswordUtil.encryptSaltPassword(userDto.getPassword());
+            map.put("salt", passwordMap.get("salt").toString());
             map.put("password", passwordMap.get("password").toString());
 
             SysUser userNew = BeanUtil.toBean(map, SysUser.class);
@@ -306,7 +327,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     public R resetPassword(String userid) {
         SysUser sysUser = new SysUser();
         sysUser.setUserId(userid);
-        Map<String, Object> passwordMap = PasswordUtil.encryptPassword("111111");
+        Map<String, Object> passwordMap = PasswordUtil.encryptSaltPassword("111111");
+        sysUser.setSalt(passwordMap.get("salt").toString());
         sysUser.setPassword(passwordMap.get("password").toString());
         boolean ret = this.updateById(sysUser);
         if (ret) {
@@ -323,7 +345,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
         SysUser sysUser = new SysUser();
         sysUser.setUserId(su.getUserId());
-        Map<String, Object> passwordMap = PasswordUtil.encryptPassword(userDto.getPassword());
+        Map<String, Object> passwordMap = PasswordUtil.encryptSaltPassword(userDto.getPassword());
+        sysUser.setSalt(passwordMap.get("salt").toString());
         sysUser.setPassword(passwordMap.get("password").toString());
         SysUser luser = this.getOne(Wrappers.<SysUser>lambdaQuery()
                 .eq(SysUser::getUserId, su.getUserId())
@@ -334,7 +357,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
         if (StringUtils.isNotEmpty(userDto.getNewpassword1())) {
             //Todo 先这样加密 后续再做处理
-            passwordMap = PasswordUtil.encryptPassword(userDto.getNewpassword1());
+            passwordMap = PasswordUtil.encryptSaltPassword(userDto.getNewpassword1());
+            sysUser.setSalt(passwordMap.get("salt").toString());
             sysUser.setPassword(passwordMap.get("password").toString());
         }
 

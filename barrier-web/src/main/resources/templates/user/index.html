@@ -152,18 +152,6 @@
                 </div>
             </td>
         </tr>
-        <!--<tr>-->
-        <!--<td width="230px" style="vertical-align: top;">-->
-        <!---->
-        <!---->
-        <!--</td>-->
-        <!--<td style="vertical-align: top;">-->
-        <!--&lt;!&ndash;<div class="page_content">&ndash;&gt;-->
-        <!---->
-        <!---->
-        <!--&lt;!&ndash;</div>&ndash;&gt;-->
-        <!--</td>-->
-        <!--</tr>-->
     </table>
 </div>
 <script type="text/javascript">
@@ -237,26 +225,29 @@
                     }
                 },
                 {display: '创建时间', name: 'createTime', align: 'center', width: "15%"},
-                {display: '所属部门', name: 'deptName', align: 'center', width: "25%"},
+                {display: '所属部门', name: 'deptList', align: 'center', width: "10%",
+                    render: function (rowdata, rowindex, value, column) {
+                        var deptStr = "";
+                        for (var i = 0; i < value.length; i++) {
+                            deptStr += (i < value.length-1)?(value[i].deptName + ","):(value[i].deptName);
+                        }
+                        return deptStr;
+                    }
+                },
                 {
-                    display: '操作', align: 'center', width: "15%",
+                    display: '操作', align: 'center', width: "25%",
                     render: function (rowdata, rowindex, value, column) {
                         var bar = '<div class="grid_user_container">';
-
                         bar += '<div class="iconfont icon-bianji bg1 qTip" title="编辑" onclick="onEdit(\'' + rowdata.userId + '\')"></div>';
-
                         if (rowdata.builtIn != '0') {
                             bar += '<div class="iconfont icon-shanchu bg2 qTip" title="删除" onclick="onDelete(\'' + rowdata.userId + '\')"></div>';
                         }
                         bar += '<div class="iconfont icon-zhongzhi bg3 qTip" title="重置密码" onclick="resetPassword(\'' + rowdata.userId + '\')"></div>';
-
-
                         if (0 == rowdata.lockFlag) {
                             bar += '<div class="iconfont icon-suoding bg4 qTip" title="锁定" onclick="onLock(\'' + rowdata.userId + '\',\'' + rowdata.builtIn + '\', 1)"></div>';
                         } else if (1 == rowdata.lockFlag) {
                             bar += '<div class="iconfont icon-qiyong bg5 qTip" title="启用" onclick="onLock(\'' + rowdata.userId + '\',\'' + rowdata.builtIn + '\', 0)"></div>';
                         }
-
                         bar += '</div>';
                         return bar;
                     }

@@ -16,7 +16,6 @@
         <result column="update_time" property="updateTime"/>
         <result column="del_flag" property="delFlag"/>
         <result column="tenant_id" property="tenantId"/>
-        <result column="dept_rpc" property="deptRpc"/>
         <result column="dept_type" property="deptType"/>
     </resultMap>
 

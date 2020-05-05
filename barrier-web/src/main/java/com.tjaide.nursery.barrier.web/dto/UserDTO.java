@@ -35,4 +35,10 @@ public class UserDTO extends SysUser {
      */
     @ApiModelProperty(value = "新密码")
     private String newpassword1;
+
+    /**
+     * 部门id
+     */
+    @ApiModelProperty(value = "部门id")
+    private String deptId;
 }

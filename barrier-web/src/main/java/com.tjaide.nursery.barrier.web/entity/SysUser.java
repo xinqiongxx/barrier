@@ -11,10 +11,11 @@ import java.time.LocalDateTime;
 @Data
 @ApiModel(value = "用户")
 public class SysUser {
+    //@TableId(value = "user_id", type = IdType.UUID)
     /**
      * 用户ID
      */
-    @TableId(value = "user_id", type = IdType.UUID)
+    @TableId(value = "user_id")
     @ApiModelProperty(value = "主键id")
     private String userId;
 

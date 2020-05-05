@@ -70,7 +70,7 @@
             <tr>
                 <td>所属部门：</td>
                 <td>
-                    <div id="deptId" class="selectTree validate[required]" boxHeight="400"></div>
+                    <div id="deptId" class="selectTree validate[required]" multiMode="true" noGroup="true"></div>
                     <span class="star">*</span>
                 </td>
             </tr>
@@ -83,20 +83,8 @@
             <tr>
                 <td>角色：</td>
                 <td>
-                    <!-- <select id="roleId" class="validate[required]" data='{"list":[{"value":"1","key":"管理员"},
-                         {"value":"2","key":"测试股"},
-                         {"value":"3","key":"本级及子级"},
-                         {"value":"4","key":"本级"}]}'>
-                     </select>-->
                     <div id="roleId" class="selectTree validate[required]" multiMode="true" noGroup="true"></div>
                     <span class="star">*</span>
-                </td>
-            </tr>
-            <tr>
-                <td>内置用户：</td>
-                <td>
-                    <select id="builtIn" data='{"list":[{"value":"1","key":"否"},{"value":"0","key":"是"}]}'>
-                    </select>
                 </td>
             </tr>
         </table>
@@ -122,23 +110,16 @@
         }).then(function (res) {
             var data = res.data
             for (var i = 0; i < data.length; i++) {
-                //console.log(res[i])
                 data[i].id = data[i].deptId;
                 data[i].name = data[i].deptName;
                 if (1 == data[i].deptId) {
                     data[i].open = true;
                 }
             }
-
             //赋给data属性
             $("#deptId").data("data", data);
             //刷新树形下拉框
             $("#deptId").render();
-            // $("#deptId").selectTreeRender(setting);
-
-
-
-
         }, function () {
             top.Toast("showErrorToast", 'load tree error！');
         })
@@ -174,14 +155,12 @@
             user.username = $('#username').val();
             user.name = $('#name').val();
             user.password = $("#password").val();
-            user.deptId = $("#deptId").attr("relValue");
+            user.depts = $("#deptId").attr("relValue").split(',');
             user.phone = $("#phone").val();
             user.role = $("#roleId").attr("relValue").split(',');
-            // user.lockFlag = $('#lockFlag').attr("relValue");
             user.lockFlag = "0";
             user.delFlag = "0";
             user.tenantId = "1";
-            user.builtIn = $('#builtIn').val();
             $.jsonAjax({
                 url: ctxPath + "user",
                 type: 'post',

@@ -41,9 +41,6 @@ public class Pac4jAutoConfiguration {
      */
     @Bean("authcConfig")
     public Config config(Clients clients, ShiroSessionStore shiroSessionStore) {
-
-        System.out.println("123123");
-
         Config config = new Config(clients);
         config.setSessionStore(shiroSessionStore);
         return config;

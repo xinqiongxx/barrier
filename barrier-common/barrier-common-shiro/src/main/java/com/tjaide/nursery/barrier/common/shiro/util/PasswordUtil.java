@@ -4,6 +4,7 @@ import lombok.experimental.UtilityClass;
 import org.apache.shiro.crypto.RandomNumberGenerator;
 import org.apache.shiro.crypto.SecureRandomNumberGenerator;
 import org.apache.shiro.crypto.hash.SimpleHash;
+import org.apache.shiro.util.ByteSource;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.security.SecureRandom;
@@ -55,6 +56,18 @@ public class PasswordUtil {
         return res;
     }
 
+    public Map<String, Object> encryptSaltPassword(String password) {
+        Map<String, Object> res = new HashMap<>();
+        res.put("salt", randomNumberGenerator.nextBytes().toHex());
+        String newPassword = new SimpleHash(
+                algorithmName,
+                password,
+                ByteSource.Util.bytes(res.get("salt")),
+                hashIterations).toHex();
+        res.put("password", newPassword);
+        return res;
+    }
+
     public boolean matches(String salt, String password, String oldPassword) {
         String newPassword = new SimpleHash(
                 algorithmName,
@@ -72,7 +85,7 @@ public class PasswordUtil {
         String newPassword = new SimpleHash(
                 algorithmName,
                 "111111",
-                null,
+                salt,
                 hashIterations).toHex();
         System.out.println(newPassword);
         System.out.println(encryptPassword("111111"));

@@ -247,20 +247,6 @@
             </div>
 
             <div class="items edit">
-                <div class="lable"><p>*</p>消息队列地址</div>
-                <div class="item-c">
-                    <input id="deptRpc" type="text" style="width:90%;" disabled="true"/>
-                </div>
-            </div>
-
-            <!--<div class="items edit">-->
-            <!--<div class="lable">tenantId</div>-->
-            <!--<div class="item-c">-->
-            <!--<input id="tenantId" type="text" style="width:80%;" disabled="true" />-->
-            <!--</div>-->
-            <!--</div>-->
-
-            <div class="items edit">
                 <div class="lable"><p>*</p>部门类型</div>
                 <div class="item-c">
                     <input type="radio" id="male-1" name="deptType" value="S" disabled="true"/>
@@ -391,7 +377,6 @@
         $('#deptName').val(treeNode.deptName);
         $('#sort').val(treeNode.sort);
         $('#deptCode').val(treeNode.deptCode);
-        $('#deptRpc').val(treeNode.deptRpc);
         if ('Q' == treeNode.deptType && 'admin' == tuid) {
             $('#synchro').removeClass('user-hide');
         } else {
@@ -510,8 +495,6 @@
         dept.sort = sort;
         // deptId
         dept.deptCode = deptCode;
-        dept.deptRpc = $("#deptRpc").val();
-        // dept.tenantId = $("#tenantId").val();
         dept.deptType = deptType;
         dept.delFlag = 0;
         $.jsonAjax({
@@ -549,8 +532,6 @@
         dept.sort = $("#sort").val();
         // deptId
         dept.deptCode = $("#deptCode").val();
-        dept.deptRpc = $("#deptRpc").val();
-        // dept.tenantId = $("#tenantId").val();
         dept.deptType = $("input:radio[name=deptType]:checked").val();
         dept.deptCode = $("#deptCode").val();
         dept.delFlag = 0;

@@ -15,7 +15,6 @@
         <result column="lock_flag" property="lockFlag"/>
         <result column="udel_flag" property="delFlag"/>
         <result column="tenantId" property="tenantId"/>
-        <result column="deptName" property="deptName"/>
         <result column="email" property="email"/>
         <collection property="roleList" ofType="com.tjaide.nursery.barrier.web.entity.SysRole"
                     select="com.tjaide.nursery.barrier.web.mapper.SysRoleMapper.listRolesByUserId" column="user_id">
@@ -39,7 +38,6 @@
         <result column="lock_flag" property="lockFlag"/>
         <result column="udel_flag" property="delFlag"/>
         <result column="tenantId" property="tenantId"/>
-        <result column="deptName" property="deptName"/>
         <result column="email" property="email"/>
         <collection property="roleList" ofType="com.tjaide.nursery.barrier.web.entity.SysRole">
             <id column="role_id" property="roleId"/>
@@ -68,12 +66,12 @@
 		suser.salt,
 		suser.phone,
 		suser.avatar,
-		suser.dept_id,
+		suser.name,
+		suser.email,
 		suser.create_time AS ucreate_time,
 		suser.update_time AS uupdate_time,
 		suser.del_flag AS udel_flag,
 		suser.lock_flag AS lock_flag,
-		suser.dept_id AS deptId,
 		suser.tenant_id AS tenantId,
 		r.role_id,
 		r.role_name,
@@ -100,7 +98,7 @@
         LEFT JOIN sys_user_role AS ur ON ur.user_id = suser.user_id
         LEFT JOIN sys_role AS r ON r.role_id = ur.role_id
         LEFT JOIN sys_user_dept AS ud ON ud.user_id = suser.user_id
-        LEFT JOIN sys_dept AS d ON rd.role_id = ud.role_id
+        LEFT JOIN sys_dept AS d ON d.dept_id = ud.dept_id
         WHERE suser.username = #{username}
     </select>
 
@@ -112,7 +110,7 @@
         LEFT JOIN sys_user_role AS ur ON ur.user_id = suser.user_id
         LEFT JOIN sys_role AS r ON r.role_id = ur.role_id
         LEFT JOIN sys_user_dept AS ud ON ud.user_id = suser.user_id
-        LEFT JOIN sys_dept AS d ON rd.role_id = ud.role_id
+        LEFT JOIN sys_dept AS d ON d.dept_id = ud.dept_id
         WHERE
         suser.user_id = #{id}
     </select>
@@ -132,10 +130,16 @@
         suser.tenant_id AS tenantId
         FROM
         sys_user AS suser
+        LEFT JOIN sys_user_dept AS ud ON ud.user_id = suser.user_id
         <where>
             and suser.del_flag = '0'
             <if test="query.username != null and query.username != ''">
-                and suser.username LIKE CONCAT('%',#{query.username},'%')
+                and (suser.username LIKE CONCAT('%',#{query.username},'%') or
+                suser.name LIKE CONCAT('%',#{query.username},'%')
+                )
+            </if>
+            <if test="query.deptId != null and query.deptId != ''">
+                and ud.dept_id=#{query.deptId}
             </if>
         </where>
         ORDER BY suser.create_time DESC

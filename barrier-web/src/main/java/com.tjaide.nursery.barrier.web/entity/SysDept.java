@@ -30,7 +30,7 @@ public class SysDept extends Model<SysDept> {
 
     private static final long serialVersionUID = 1L;
 
-    @TableId(value = "dept_id", type = IdType.UUID)
+    @TableId(value = "dept_id")
     @ApiModelProperty(value = "部门id")
     private String deptId;
     /**
@@ -68,11 +68,6 @@ public class SysDept extends Model<SysDept> {
      */
     @ApiModelProperty(value = "父级部门id")
     private String parentId;
-    /**
-     * 消息队列地址
-     */
-    @ApiModelProperty(value = "消息队列地址")
-    private String deptRpc;
     /**
      * 是否删除  1：已删除  0：正常
      */

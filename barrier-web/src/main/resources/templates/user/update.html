@@ -9,31 +9,25 @@
     <script type="text/javascript" th:src="@{/libs/js/jquery.js}" src="../../libs/js/jquery.js"></script>
     <script type="text/javascript" th:src="@{/libs/js/language/cn.js}" src="../../libs/js/language/cn.js"></script>
     <script type="text/javascript" th:src="@{/libs/js/framework.js}" src="../../libs/js/framework.js"></script>
-    <link rel="stylesheet" type="text/css" th:href="@{/libs/css/import_basic.css}"
-          href="../../libs/css/import_basic.css"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/libs/css/import_basic.css}" href="../../libs/css/import_basic.css"/>
     <link rel="stylesheet" type="text/css" id="skin" prePath="../../"/>
     <link rel="stylesheet" type="text/css" id="customSkin"/>
     <!--框架必需end-->
 
     <!-- 表单验证start -->
-    <script type="text/javascript" th:src="@{/libs/js/form/validationRule.js}"
-            src="../../libs/js/form/validationRule.js"></script>
-    <script type="text/javascript" th:src="@{/libs/js/form/validation.js}"
-            src="../../libs/js/form/validation.js"></script>
+    <script type="text/javascript" th:src="@{/libs/js/form/validationRule.js}" src="../../libs/js/form/validationRule.js"></script>
+    <script type="text/javascript" th:src="@{/libs/js/form/validation.js}" src="../../libs/js/form/validation.js"></script>
     <!-- 表单验证end -->
 
     <!--表单异步提交start-->
     <script type="text/javascript" th:src="@{/libs/js/form/form.js}" src="../../libs/js/form/form.js"></script>
     <!--表单异步提交end-->
     <!-- 树组件start -->
-    <script type="text/javascript" th:src="@{/libs/js/tree/ztree/ztree.js}"
-            src="../../libs/js/tree/ztree/ztree.js"></script>
-    <link type="text/css" rel="stylesheet" th:href="@{/libs/js/tree/ztree/ztree.css}"
-          href="../../libs/js/tree/ztree/ztree.css"></link>
+    <script type="text/javascript" th:src="@{/libs/js/tree/ztree/ztree.js}" src="../../libs/js/tree/ztree/ztree.js"></script>
+    <link type="text/css" rel="stylesheet" th:href="@{/libs/js/tree/ztree/ztree.css}" href="../../libs/js/tree/ztree/ztree.css"></link>
     <!-- 树组件end -->
     <!-- 树形下拉框start -->
-    <script type="text/javascript" th:src="@{/libs/js/form/selectTree.js}"
-            src="../../libs/js/form/selectTree.js"></script>
+    <script type="text/javascript" th:src="@{/libs/js/form/selectTree.js}" src="../../libs/js/form/selectTree.js"></script>
     <!-- 树形下拉框end -->
     <script type="text/javascript" th:inline="javascript">
         /*<![CDATA[*/
@@ -62,7 +56,8 @@
             <tr>
                 <td>所属部门：</td>
                 <td>
-                    <div id="deptId" class="selectTree validate[required]" boxHeight="400"></div>
+                    <div id="deptId" class="selectTree validate[required]" multiMode="true" noGroup="true"></div>
+                    <!--<div id="deptId" class="selectTree validate[required]" boxHeight="400"></div>-->
                     <span class="star">*</span>
                 </td>
             </tr>
@@ -76,20 +71,8 @@
             <tr>
                 <td>角色：</td>
                 <td>
-                    <!-- <select id="roleId" class="validate[required]" data='{"list":[{"value":"1","key":"管理员"},
-                         {"value":"2","key":"测试股"},
-                         {"value":"3","key":"本级及子级"},
-                         {"value":"4","key":"本级"}]}'>
-                     </select>-->
                     <div id="roleId" class="selectTree validate[required]" multiMode="true" noGroup="true"></div>
                     <span class="star">*</span>
-                </td>
-            </tr>
-            <tr>
-                <td>内置用户：</td>
-                <td>
-                    <select id="builtIn" data='{"list":[{"value":"1","key":"否"},{"value":"0","key":"是"}]}'>
-                    </select>
                 </td>
             </tr>
         </table>
@@ -151,22 +134,22 @@
                 url: ctxPath + "user/" + userId,
                 type: 'get',
             }).then(function (res) {
+                console.log(res)
                 var data = res.data
                 $('#userId').val(data.userId);
                 $('#username').val(data.username);
                 $('#name').val(data.name);
-                $("#deptId").setValue(data.deptId);
                 $("#phone").val(data.phone);
+                var deptStr = "";
+                for (var j = 0; j < data.deptList.length; j++) {
+                    deptStr += (j<data.deptList.length-1)?(data.deptList[j].deptId + ","):(data.deptList[j].deptId);
+                }
+                $("#deptId").setValue(deptStr);
                 var roleStr = "";
                 for (var i = 0; i < data.roleList.length; i++) {
-                    roleStr += data.roleList[i].roleId + ",";
+                    roleStr += (i<data.roleList.length-1)?(data.roleList[i].roleId + ","):(data.roleList[i].roleId);
                 }
                 $("#roleId").setValue(roleStr);
-
-                $("#builtIn").setValue(data.builtIn);
-
-
-                // $('#lockFlag').setValue(data.lockFlag);
             })
         }
     });
@@ -179,14 +162,14 @@
             user.userId = $('#userId').val();
             user.username = $('#username').val();
             user.name = $('#name').val();
-            user.deptId = $("#deptId").attr("relValue");
+            user.depts = $("#deptId").attr("relValue").split(',');
             user.phone = $("#phone").val();
             user.role = $("#roleId").attr("relValue").split(',');
             // user.lockFlag = $('#lockFlag').attr("relValue");
             user.lockFlag = "0";
             user.delFlag = "0";
             user.tenantId = "1";
-            user.builtIn = $('#builtIn').val();
+            console.log(user)
             $.jsonAjax({
                 url: ctxPath + "user",
                 type: 'put',
