@@ -4,6 +4,7 @@
 
 package com.tjaide.nursery.barrier.web.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -14,6 +15,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tjaide.nursery.barrier.common.core.constant.CommonConstants;
 import com.tjaide.nursery.barrier.common.core.entity.ShiroUser;
+import com.tjaide.nursery.barrier.common.core.exception.CheckedException;
 import com.tjaide.nursery.barrier.common.core.util.R;
 import com.tjaide.nursery.barrier.common.data.datascope.DataScope;
 import com.tjaide.nursery.barrier.common.shiro.util.PasswordUtil;
@@ -235,7 +237,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Override
     @Transactional(rollbackFor = Exception.class)
     public R importByExcel(List<Map<String, Object>> mapList) {
-      /*  List<String> errinfo = new ArrayList<>();
+        List<String> errinfo = new ArrayList<>();
         boolean ifError = false;
 
         for (int i = 0; i < mapList.size(); i++) {
@@ -243,17 +245,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             map.put("username", map.remove("用户名"));
             map.put("name", map.remove("姓名"));
             map.put("email", map.remove("邮箱"));
-            map.put("deptName", map.remove("部门"));
-            SysDept deptMap = sysDeptService.getOne(Wrappers.<SysDept>lambdaQuery().eq(SysDept::getDeptName, map.get("deptName")));
-            if (null == deptMap) {
-                ifError = true;
-                errinfo.add("第" + (i + 1) + "行,部门输入有误。");
-                continue;
-            } else {
-                map.put("deptId", deptMap.getDeptId());
-            }
-            //Todo 先这样加密 后续再做处理
-            Map<String, Object> passwordMap = PasswordUtil.encryptSaltPassword(userDto.getPassword());
+
+            Map<String, Object> passwordMap = PasswordUtil.encryptSaltPassword("111111");
             map.put("salt", passwordMap.get("salt").toString());
             map.put("password", passwordMap.get("password").toString());
 
@@ -268,29 +261,42 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
                 errinfo.add("第" + (i + 1) + "行,姓名不可以为空。");
                 continue;
             }
-
-
             if (null != this.getOne(Wrappers.<SysUser>lambdaQuery().eq(SysUser::getUsername, userNew.getUsername()))) {
                 ifError = true;
                 errinfo.add("第" + (i + 1) + "行,用户已经存在。");
                 continue;
             }
-            ;
-
             userNew.setDelFlag("0");
             userNew.setLockFlag("0");
-            userNew.setBuiltIn(1);
-
-
             boolean ret = this.saveOrUpdate(userNew);
             if (!ret) {
                 ifError = true;
                 errinfo.add("第" + (i + 1) + "行,导入用户异常。");
                 continue;
             }
-
+            map.put("deptName", map.remove("部门"));
+            String deptNames = ObjectUtil.isNull(map.get("deptName")) ? "" : map.get("deptName").toString();
+            SysUserDept deptNew = new SysUserDept();
+            deptNew.setUserId(userNew.getUserId());
+            for (int j = 0; j < deptNames.split(",").length; j++) {
+                String str = deptNames.split(",")[j];
+                SysDept deptMap = sysDeptService.getOne(Wrappers.<SysDept>lambdaQuery().eq(SysDept::getDeptName, str));
+                if (ObjectUtil.isNull(deptMap)) {
+                    ifError = true;
+                    errinfo.add("第" + (i + 1) + "行，第" + (j + 1) + "个,部门有误。");
+                    continue;
+                } else {
+                    deptNew.setDeptId(deptMap.getDeptId());
+                    ret = sysUserDeptService.save(deptNew);
+                    if (!ret) {
+                        ifError = true;
+                        errinfo.add("第" + (i + 1) + "行,导入用户部门关系异常。");
+                        continue;
+                    }
+                }
+            }
             map.put("roleNames", map.remove("角色"));
-            String roleNames = null == map.get("roleNames") ? "" : map.get("roleNames").toString();
+            String roleNames = ObjectUtil.isNull(map.get("roleNames")) ? "" : map.get("roleNames").toString();
             if ("" == roleNames) {
                 ifError = true;
                 errinfo.add("第" + (i + 1) + "行,角色不能为空。");
@@ -319,7 +325,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         }
         if (ifError) {
             throw new CheckedException(errinfo, "导入失败");
-        }*/
+        }
         return R.ok("导入成功");
     }
 

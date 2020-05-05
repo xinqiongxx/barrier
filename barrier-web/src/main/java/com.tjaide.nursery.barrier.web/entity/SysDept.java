@@ -32,7 +32,7 @@ public class SysDept extends Model<SysDept> {
 
     @TableId(value = "dept_id")
     @ApiModelProperty(value = "部门id")
-    private String deptId;
+    private Integer deptId;
     /**
      * 部门名称
      */
@@ -67,7 +67,7 @@ public class SysDept extends Model<SysDept> {
      * 父级部门id
      */
     @ApiModelProperty(value = "父级部门id")
-    private String parentId;
+    private Integer parentId;
     /**
      * 是否删除  1：已删除  0：正常
      */
