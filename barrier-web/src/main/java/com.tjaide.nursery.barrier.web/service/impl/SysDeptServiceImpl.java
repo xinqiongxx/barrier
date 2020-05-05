@@ -79,7 +79,7 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
     @Transactional(rollbackFor = Exception.class)
     public Boolean removeDeptById(String id) {
         //级联删除部门
-        List<String> idList = sysDeptRelationService
+        List<Integer> idList = sysDeptRelationService
                 .list(Wrappers.<SysDeptRelation>query().lambda()
                         .eq(SysDeptRelation::getAncestor, id))
                 .stream()
