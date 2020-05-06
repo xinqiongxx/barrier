@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <title>幼儿园进出管控系统</title>
-    <link rel="shortcut icon" href="static/favicon.ico" type="image/x-icon">
     <!--框架必需start-->
     <link rel="stylesheet" type="text/css" th:href="@{/libs/css/import_basic.css}" href="../../libs/css/import_basic.css"/>
     <link rel="stylesheet" type="text/css" id="theme" themeColor="blue" th:href="@{/libs/skins/blue/style.css}" href="../../libs/skins/blue/style.css"
@@ -27,7 +26,7 @@
     <script type="text/javascript" th:src="@{/libs/js/popup/notice.js}" src="../../libs/js/popup/notice.js"></script>
     <!--引入提示组件end-->
     <!-- iconfont start -->
-    <link rel="stylesheet" type="text/css" th:href="@{/static/iconfont/iconfont.css}" href="../../static/mainiconfont/iconfont.css"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/static/mainiconfont/iconfont.css}" href="../../static/mainiconfont/iconfont.css"/>
     <!-- iconfont end -->
     <script type="text/javascript" th:src="@{/libs/js/echarts/echarts.min.js}" src="../../libs/js/echarts/echarts.min.js"></script>
     <script type="text/javascript" th:inline="javascript">
@@ -57,6 +56,7 @@
             width: 95%;
             height: 100%;
             margin: auto;
+            padding: 0px 0 30px;
             background: none;
         }
 
@@ -74,10 +74,10 @@
         .main_user_box {
             position: absolute;
             right: 20px;
-            top: 15px;
+            top: 4px;
         }
         .user_information a{
-            color: #FFFFFF;
+            color: #10aae3;
         }
 
         #hideCon {
@@ -106,17 +106,18 @@
         .main_center_top_box,.main_right_top_box,.main_left_bottom_box,.main_menu_box,.main_right_bottom_box {
             width: 100%;
             height: 100%;
-            border: 1px solid #1e6ab1;
-            background: rgba(164, 164, 164, 0.2);
+            border: 2px solid rgba(110, 115, 119, 0.3);
+            box-shadow: rgba(125, 136, 171, 0.2) 0px 0px 30px 15px inset;
             border-radius: 5px;
             position: relative;
         }
 
         .main_title_box {
             padding: 5px 0px 0px 10px;
-            color: #ffffff;
-            height: 50px;
-            line-height: 50px;
+            color: #b0def2;
+            font-weight: bold;
+            height: 30px;
+            line-height: 30px;
             position: relative;
         }
         .main_title_box .iconfont {
@@ -131,36 +132,37 @@
 
         .main_image-border {
             position: absolute;
-            width: 10px;
-            height: 10px;
+            width: 20px;
+            height: 15px;
+            border-radius: 3px;
         }
 
         .main_image-border1 {
             top: -2px;
             left: -2px;
-            border-left: 1px solid #FFFFFF;
-            border-top: 1px solid #FFFFFF;
+            border-left: 2px solid #10aae3;
+            border-top: 2px solid #10aae3;
         }
 
         .main_image-border2 {
             top: -2px;
             right: -2px;
-            border-right: 1px solid #FFFFFF;
-            border-top: 1px solid #FFFFFF;
+            border-right: 2px solid #10aae3;
+            border-top: 2px solid #10aae3;
         }
 
         .main_image-border3 {
             bottom: -2px;
             left: -2px;
-            border-bottom: 1px solid #FFFFFF;
-            border-left: 1px solid #FFFFFF;
+            border-bottom: 2px solid #10aae3;
+            border-left: 2px solid #10aae3;
         }
 
         .main_image-border4 {
             bottom: -2px;
             right: -2px;
-            border-right: 1px solid #FFFFFF;
-            border-bottom: 1px solid #FFFFFF;
+            border-right: 2px solid #10aae3;
+            border-bottom: 2px solid #10aae3;
         }
 
 
@@ -168,12 +170,12 @@
         /*第一块start*/
         .main_date_box {
             position: relative;
-            border: 1px solid #1e6ab1;
-            background: rgba(164, 164, 164, 0.2);
+            border: 2px solid rgba(110, 115, 119, 0.3);
+            box-shadow: rgba(125, 136, 171, 0.2) 0px 0px 30px 15px inset;
             border-radius: 5px;
             height: 40%;
             min-height: 150px;
-            padding: 5px 0px;
+            padding: 5% 0px;
             box-sizing: border-box;
             -moz-box-sizing: border-box;
             -webkit-box-sizing: border-box;
@@ -183,8 +185,8 @@
 
         .main_statistics_box {
             position: relative;
-            border: 1px solid #1e6ab1;
-            background: rgba(164, 164, 164, 0.2);
+            border: 2px solid rgba(110, 115, 119, 0.3);
+            box-shadow: rgba(125, 136, 171, 0.2) 0px 0px 30px 15px inset;
             border-radius: 5px;
             margin-top: 10px;
             height: calc(60% - 10px);
@@ -194,18 +196,18 @@
         }
 
         .main_date_top_box {
-            margin: 2px 15px 10px;
+            margin: 0px 15px 10px;
             padding: 0px;
-            height: calc(50% - 6px);
-            background: -moz-linear-gradient(right, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0) 100%);
-            background: -webkit-linear-gradient(right, rgba(255,255,255,0.5) 0%,rgba(255,255,255,0) 100%);
-            background: -o-linear-gradient(right, rgba(255,255,255,0.5) 0%,rgba(255,255,255,0) 100%);
-            background: -ms-linear-gradient(right, rgba(255,255,255,0.5) 0%,rgba(255,255,255,0) 100%);
-            background: linear-gradient(to right, rgba(255,255,255,0.5) 0%,rgba(255,255,255,0) 100%);
+            height: 55px;
+            background: -moz-linear-gradient(right, rgba(173, 221, 253, 0.3) 0%, rgba(255,255,255,0) 100%);
+            background: -webkit-linear-gradient(right, rgba(173, 221, 253, 0.3) 0%,rgba(255,255,255,0) 100%);
+            background: -o-linear-gradient(right, rgba(173, 221, 253, 0.3) 0%,rgba(255,255,255,0) 100%);
+            background: -ms-linear-gradient(right, rgba(173, 221, 253, 0.3) 0%,rgba(255,255,255,0) 100%);
+            background: linear-gradient(to right, rgba(173, 221, 253, 0.3) 0%,rgba(255,255,255,0) 100%);
             border-left: 3px solid #2da9fa;
         }
         .main_date_top_title {
-            color: #ffffff;
+            color: #9dc8dd;
             font-weight: bold;
             padding: 3px 5px;
             height: 50%;
@@ -228,17 +230,18 @@
 
         .main_date_bottom_box {
             display: flex;
-            height: calc(50% - 6px);
+           /* height: calc(50% - 6px);*/
             position: relative;
         }
 
         .main_date_bottom_date {
-            margin: 10px 15px 0px;
+            margin: 0px 15px 0px;
             width: calc(50% - 30px);
-            background-color: rgba(224, 224, 224, 0.5);
+            height: 55px;
+            background-color: rgba(163, 190, 243, 0.2);
             padding: 0px;
-            border-radius: 1px;
-            color: #ffffff;
+            border-radius: 2px;
+            color: #9dc8dd;
             font-size: 14px;
             font-weight: bold;
             text-align: center;
@@ -266,13 +269,13 @@
             line-height: 30px;
             position: absolute;
             bottom: 5px;
-            color: #ffffff;
+            color: #9dc8dd;
             right: 0;
         }
 
         .main_date_bottom_time span {
-            background: rgba(130, 130, 130, 0.5);
-            width: 20px;
+            background: rgba(125, 154, 213, 0.12);
+            padding: 0px 3px;
             display: inline-block;
             text-align: center;
         }
@@ -289,21 +292,27 @@
         /*第一块end*/
         /*第二块start*/
         .main_select_box {
-            background-color: #575757;
+            background-color: rgba(30, 34, 42, 0.2);
             padding: 0px 5px;
             height: 30px;
             line-height: 30px;
+            position: absolute;
+            z-index: 999;
+            width: 100%;
+            top: 0;
         }
         .select_main_title {
             color: #ffffff;
             display: inline-block;
             float: left;
+            font-size: 13px;
             margin-right: 10px;
             line-height: 30px;
         }
         .main_vedio_box {
             width: 100%;
-            height: calc(100% - 30px);
+            /*height: calc(100% - 30px);*/
+            height: 100%;
             background: #000000;
         }
 
@@ -331,8 +340,9 @@
         /*第三块start*/
         .main_message_list_item {
             display: flex;
-            border: 2px solid rgb(205, 222, 255,0.2);
+            border: 1px solid rgb(205, 222, 255,0.2);
             margin: 10px;
+            border-radius: 5px;
             position: relative;
         }
 
@@ -384,8 +394,13 @@
             width: 50px;
             height: 50px;
             border-radius: 5px;
-            margin: 5px;
-            background-color: rgba(255,255,255,0.3);
+            margin: 10px 5px;
+            background-color: rgba(255, 255, 255, 0.21);
+        }
+        .user_photo_icon_box img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
         }
         .user_photo_icon_box {
             border: 1px solid #cbe6f8;
@@ -394,28 +409,27 @@
             line-height: 70px;
             border-radius: 50%;
             text-align: center;
-            background-color: rgba(255,255,255,0.5);
+            background-color: rgba(255,255,255,0.2);
         }
-
         .user_photo_icon_box .iconfont {
             font-size: 30px;
-            color: #ffffff;
+            color: #cbe6f8;
         }
 
         .user_icon_box {
-            color: #006dff;
+            color: #00affc;
             width: 30px;
-            line-height: 60px;
+            line-height: 70px;
             text-align: center;
         }
 
         .main_message_list_item_right {
-            color: #ffffff;
+            color: #90e1ff;
         }
         /*第三块end*/
         /*第四块start*/
         .main_line_box {
-            height: calc(100% - 50px);
+            height: calc(100% - 30px);
         }
 
 
@@ -445,6 +459,11 @@
             background-color: rgba(255,255,255,0.3);
             margin: 5px;
             border-radius: 10px 0px;
+        }
+
+        .user_name_box {
+            height: 35px;
+            line-height: 50px;
         }
 
         .main_weather_list_right_item .main_weather_item_title:nth-child(1) {
@@ -535,13 +554,13 @@
         .main_data_list_item {
             width: 50%;
             text-align: center;
-            color: #ffffff;
+            color: #90e1ff;
         }
 
         .main_data_list_item span {
             font-size: 16px;
             margin: 0px 3px;
-            color: #00ff24;
+            color: #bcedfc;
         }
         /*第六块end*/
         .right_toggle_content{
@@ -552,6 +571,19 @@
         }
         table {
             width: 100% !important;
+            height: 100%;
+        }
+
+        .right_toggle {
+            display: block;
+            padding: 0px 20px;
+            width: 120px !important;
+            text-align: center;
+            height: 30px !important;
+            line-height: 30px;
+            border-radius: 3px;
+            position: relative;
+            box-shadow: rgba(125, 136, 171, 0.2) 0px 0px 30px 15px inset;
         }
     </style>
 </head>
@@ -565,35 +597,26 @@
     <div id="mainFrame">
         <table width="100%" height="100%" cellpadding="0" cellspacing="0" class="table_border0">
             <tbody>
-            <tr style="height: 10%;">
+            <tr style="height: 5%;">
                 <td colspan="3" style="position: relative;">
                     <!--顶部区域start-->
-                    <div class="main_title">
-                        幼儿园进出管控系统
-                    </div>
+                    <!-- <div class="main_title">
+                         幼儿园进出管控系统
+                     </div>-->
                     <div class="main_user_box">
                         <div class="right_toggle">
-                            <div class="user_information" title="用户中心">
+                            <div class="user_information">
+                                <b id="user_info"></b><a href="javascript:;">进入后台</a>
                             </div>
-                            <shiro:authenticated>
-                                <ul class="right_toggle_content" style="display: none;">
-                                    <li class="clearfloat right_toggle_home" onclick="information()"><i></i>
-                                        <div>个人信息</div>
-                                    </li>
-                                    <li class="clearfloat right_toggle_lock_screen" onclick="changePassword()"><i></i>
-                                        <div>修改密码</div>
-                                    </li>
-                                    <li class="clearfloat right_toggle_sign_out" onclick="exitHandler()"><i></i>
-                                        <div>退出</div>
-                                    </li>
-                                </ul>
-                            </shiro:authenticated>
                         </div>
                     </div>
                     <!--顶部区域end-->
                 </td>
             </tr>
-            <tr style="height: 60%;">
+            <tr style="height: 4%;">
+                <td colspan="3" style="position: relative;"></td>
+            </tr>
+            <tr style="height: 55%;">
                 <!--第二层左侧区域start-->
                 <td class="main_left_top">
                     <div class="main_left_top_box">
@@ -648,7 +671,9 @@
                             <select class="select_main" prompt="请选择播放源" data='{"list":[{"value":"1","key":"008569"},{"value":"2","key":"00567841"}]}'></select>
                         </div>
                         <div class="main_vedio_box">
-
+                            <video style="width: 100%;height: 100%;" id="v1" controls="controls" οnmοuseοver="this.play()">
+                                <source src="rtsp://192.168.254.239:554/av0_0">
+                            </video>
                         </div>
                     </div>
                 </td>
@@ -668,10 +693,47 @@
                         <div class="main_message_list_box">
                             <div>
                                 <div class="main_message_list_item">
-                                    <div class="image-border image-border1"></div>
-                                    <div class="image-border image-border2"></div>
-                                    <div class="image-border image-border3"></div>
-                                    <div class="image-border image-border4"></div>
+                                    <div class="main_message_list_item_left">
+                                        <div class="user_photo_box">
+                                            <div class="user_photo_icon_box">
+                                               <!-- <i class="iconfont icon-wo"></i>-->
+                                                <img src="../../system/skin/user_icon01.png" alt="">
+                                            </div>
+                                        </div>
+                                        <div class="user_icon_box"><i class="iconfont icon-jiaohuan1"></i></div>
+                                        <div class="user_photo_box">
+                                            <div class="user_photo_icon_box">
+                                                <img src="../../system/skin/user_icon01.png" alt="">
+                                                <!--<i class="iconfont icon-wo"></i>-->
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="main_message_list_item_right">
+                                        <div class="user_name_box">张三</div>
+                                        <div class="user_time_box">00:00:00</div>
+                                    </div>
+                                </div>
+                                <div class="main_message_list_item">
+                                    <div class="main_message_list_item_left">
+                                        <div class="user_photo_box">
+                                            <div class="user_photo_icon_box">
+                                                <img src="../../system/skin/user_icon01.png" alt="">
+                                                <!--<i class="iconfont icon-wo"></i>-->
+                                            </div>
+                                        </div>
+                                        <div class="user_icon_box"><i class="iconfont icon-jiaohuan1"></i></div>
+                                        <div class="user_photo_box">
+                                            <div class="user_photo_icon_box">
+                                                <i class="iconfont icon-wo"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="main_message_list_item_right">
+                                        <div class="user_name_box">张三</div>
+                                        <div class="user_time_box">00:00:00</div>
+                                    </div>
+                                </div>
+                                <div class="main_message_list_item">
                                     <div class="main_message_list_item_left">
                                         <div class="user_photo_box">
                                             <div class="user_photo_icon_box">
@@ -691,56 +753,6 @@
                                     </div>
                                 </div>
                                 <div class="main_message_list_item">
-                                    <div class="image-border image-border1"></div>
-                                    <div class="image-border image-border2"></div>
-                                    <div class="image-border image-border3"></div>
-                                    <div class="image-border image-border4"></div>
-                                    <div class="main_message_list_item_left">
-                                        <div class="user_photo_box">
-                                            <div class="user_photo_icon_box">
-                                                <i class="iconfont icon-wo"></i>
-                                            </div>
-                                        </div>
-                                        <div class="user_icon_box"><i class="iconfont icon-jiaohuan1"></i></div>
-                                        <div class="user_photo_box">
-                                            <div class="user_photo_icon_box">
-                                                <i class="iconfont icon-wo"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="main_message_list_item_right">
-                                        <div class="user_name_box">张三</div>
-                                        <div class="user_time_box">00:00:00</div>
-                                    </div>
-                                </div>
-                                <div class="main_message_list_item">
-                                    <div class="image-border image-border1"></div>
-                                    <div class="image-border image-border2"></div>
-                                    <div class="image-border image-border3"></div>
-                                    <div class="image-border image-border4"></div>
-                                    <div class="main_message_list_item_left">
-                                        <div class="user_photo_box">
-                                            <div class="user_photo_icon_box">
-                                                <i class="iconfont icon-wo"></i>
-                                            </div>
-                                        </div>
-                                        <div class="user_icon_box"><i class="iconfont icon-jiaohuan1"></i></div>
-                                        <div class="user_photo_box">
-                                            <div class="user_photo_icon_box">
-                                                <i class="iconfont icon-wo"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="main_message_list_item_right">
-                                        <div class="user_name_box">张三</div>
-                                        <div class="user_time_box">00:00:00</div>
-                                    </div>
-                                </div>
-                                <div class="main_message_list_item">
-                                    <div class="image-border image-border1"></div>
-                                    <div class="image-border image-border2"></div>
-                                    <div class="image-border image-border3"></div>
-                                    <div class="image-border image-border4"></div>
                                     <div class="main_message_list_item_left">
                                         <div class="user_photo_box">
                                             <div class="user_photo_icon_box">
@@ -765,7 +777,7 @@
                 </td>
                 <!--第二层右侧区域end-->
             </tr>
-            <tr  style="height: 30%;">
+            <tr  style="height: 31%;">
                 <!--第三层左侧区域start-->
                 <td class="main_left_bottom">
                     <div class="main_left_bottom_box">
@@ -829,15 +841,14 @@
                         <div class="main_image-border main_image-border4"></div>
                         <div id="main_menu_items" class="main_menu_items">
                         </div>
-                        <!--
                         <div class="main_menu_item">
                             <div class="main_menu_item_left"></div>
-                            <div class="main_menu_item_center"><span class="iconfont icon-fl-renshi"></span><span>底库管理</span></div>
+                            <div class="main_menu_item_center"><span class="iconfont icon-fl-renshi" style="font-size: 45px !important;top: 30px;"></span><span>底库管理</span></div>
                             <div class="main_menu_item_right"></div>
                         </div>
                         <div class="main_menu_item">
                             <div class="main_menu_item_left"></div>
-                            <div class="main_menu_item_center"><span class="iconfont icon-quanxianchaxun"></span><span>权限管理</span></div>
+                            <div class="main_menu_item_center"><span class="iconfont icon-quanxianchaxun" style="font-size: 40px !important;top: 30px;"></span><span>权限管理</span></div>
                             <div class="main_menu_item_right"></div>
                         </div>
                         <div class="main_menu_item">
@@ -862,7 +873,7 @@
                         </div>
                         <div class="main_menu_item">
                             <div class="main_menu_item_left"></div>
-                            <div class="main_menu_item_center"><span class="iconfont icon-dazhongxingshuizha"></span><span>闸机管理</span></div>
+                            <div class="main_menu_item_center"><span class="iconfont icon-dazhongxingshuizha" style="font-size: 40px !important;top: 27px;"></span><span>闸机管理</span></div>
                             <div class="main_menu_item_right"></div>
                         </div>
                         <div class="main_menu_item">
@@ -879,7 +890,7 @@
                             <div class="main_menu_item_left"></div>
                             <div class="main_menu_item_center"><span class="iconfont icon-duibi1"></span><span>1:1比对</span></div>
                             <div class="main_menu_item_right"></div>
-                        </div>-->
+                        </div>
                     </div>
                 </td>
                 <!--第三层中间区域end-->
@@ -903,6 +914,9 @@
                 </td>
                 <!--第三层右侧区域end-->
             </tr>
+            <tr style="height: 5%;">
+                <td colspan="3" style="position: relative;"></td>
+            </tr>
             </tbody>
         </table>
     </div>
@@ -912,30 +926,29 @@
 <script type="text/javascript">
     var weekList= ['星期天', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
     var selDateMap= {
-            year: '',
-            date: '',
-            week: '',
-            month: '',
-            hour:'',
-            minute:'',
-            second:''
-        }
+        year: '',
+        date: '',
+        week: '',
+        month: '',
+        hour:'',
+        minute:'',
+        second:''
+    }
 
     $(function () {
-        $.get(ctxPath + "menu", {}, function (data) {
-            console.log(data)
+        /*$.get(ctxPath + "menu", {}, function (data) {
             var hidd='';
             if(data.code == 0 && data.data.length>0){
                 data.data.forEach((res,index)=>{
                     hidd+='<div class="main_menu_item" data-id="'+res.id+'" data-url="'+res.url+'" data-value="'+res.name+'">\n' +
                         '       <div class="main_menu_item_left"></div>\n' +
-                        '       <div class="main_menu_item_center"><span class="iconfont '+res.icon+'"></span><span>'+res.name+'</span></div>\n' +
+                        '       <div class="main_menu_item_center"><span class="iconfont '+res.iconclass+'"></span><span>'+res.name+'</span></div>\n' +
                         '       <div class="main_menu_item_right"></div>\n' +
                         '  </div>'
                 })
             }
             $('#main_menu_items').html(hidd)
-        });
+        });*/
         $('#main_menu_items').on('click','.main_menu_item',function(ret){
             var id=$(this).data('id')
             var url=$(this).data('url')
@@ -968,36 +981,6 @@
         });
     }
 
-    function changePassword() {
-        var diag = new top.Dialog();
-        diag.Title = "修改密码";
-        diag.URL = ctxPath + "page/index/chagepwd";
-        //自定义长度和宽度的设置
-        diag.Width = 380;
-        diag.Height = 130;
-        diag.ShowButtonRow = true;
-        diag.OkButtonText = " 保 存 ";
-        diag.OKEvent = function () {
-            var demo = diag.innerFrame.contentWindow.save();
-        };
-        diag.show();
-    }
-
-    function information() {
-        var diag = new top.Dialog();
-        diag.Title = "个人信息";
-        diag.URL = ctxPath + "page/index/information";
-        //自定义长度和宽度的设置
-        diag.Width = 650;
-        diag.Height = 198;
-        diag.ShowButtonRow = true;
-        diag.OkButtonText = " 保 存 ";
-        diag.OKEvent = function () {
-            var demo = diag.innerFrame.contentWindow.save();
-        };
-        diag.show();
-    }
-
     function getDateData(){
         var date = new Date();
         selDateMap.year = date.getFullYear()
@@ -1022,14 +1005,14 @@
 
     function eachrts1(){
         var myChart = echarts.init(document.getElementById('chart1'),'macarons');
-        var base = +new Date(2016, 9, 3);
+        var base = new Date();
         var oneDay = 24 * 3600 * 1000;
         var valueBase = Math.random() * 300;
         var data1 = [];
         var data2 = [];
         var datelist = []
-        for (var i = 1; i < 5; i++) {
-            var now = new Date(base += oneDay);
+        for (var i = 0; i < 5; i++) {
+            var now = new Date(base -= oneDay);
             var dayStr = [now.getMonth() + 1, now.getDate()].join('/');
 
             valueBase = Math.round((Math.random() - 0.5) * 20 + valueBase);
@@ -1041,7 +1024,7 @@
         }
 
         option = {
-            color:['#83bff6','#004E52'],
+            color:['#0fa9e2','#e25860','#00b5b1'],
             tooltip: {
                 trigger: 'axis',
                 axisPointer: {
@@ -1102,35 +1085,21 @@
 
 
     function eachrts2(){
-        var myChart = echarts.init(document.getElementById('chart2'),
-            'macarons');
-        var base = +new Date(2016, 9, 3);
+        var myChart = echarts.init(document.getElementById('chart2'),'macarons');
+        var base = +new Date();
         var oneDay = 24 * 3600 * 1000;
         var valueBase = Math.random() * 300;
         var data = [];
 
-        for (var i = 1; i < 10; i++) {
-            var now = new Date(base += oneDay);
-            var dayStr = [now.getMonth() + 1, now.getDate()].join('-');
-
+        for (var i = 0; i < 10; i++) {
+            var now = new Date(base -= oneDay);
+            var dayStr = [now.getFullYear(),now.getMonth() + 1, now.getDate()].join('-');
             valueBase = Math.round((Math.random() - 0.5) * 20 + valueBase);
             valueBase <= 0 && (valueBase = Math.random() * 300);
             data.push([dayStr, valueBase]);
-
         }
-
         option = {
             animation: false,
-            legend: {
-                top: 'bottom',
-                data: ['意向']
-            },
-            tooltip: {
-                triggerOn: 'none',
-                position: function (pt) {
-                    return [pt[0], 130];
-                }
-            },
             xAxis: {
                 type: 'time',
                 axisLine:{
@@ -1167,18 +1136,13 @@
                 top: 20,
                 left: 20,
                 right: 20,
-                height: 110
+                bottom:25
             },
-            dataZoom: [{
-                type: 'inside',
-                throttle: 50
-            }],
             textStyle:{
                 color:'#90e1ff'
             },
             series: [
                 {
-                    name: '模拟数据',
                     type: 'line',
                     smooth: true,
                     symbol: 'circle',
