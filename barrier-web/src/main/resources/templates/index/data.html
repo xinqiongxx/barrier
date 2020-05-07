@@ -106,8 +106,8 @@
         .main_center_top_box,.main_right_top_box,.main_left_bottom_box,.main_menu_box,.main_right_bottom_box {
             width: 100%;
             height: 100%;
-            border: 2px solid rgba(110, 115, 119, 0.3);
-            box-shadow: rgba(125, 136, 171, 0.2) 0px 0px 30px 15px inset;
+            border: 2px solid #0a3d65;
+            box-shadow:  rgba(9, 50, 102, 0.4) 0px 0px 30px 15px inset;
             border-radius: 5px;
             position: relative;
         }
@@ -170,8 +170,8 @@
         /*第一块start*/
         .main_date_box {
             position: relative;
-            border: 2px solid rgba(110, 115, 119, 0.3);
-            box-shadow: rgba(125, 136, 171, 0.2) 0px 0px 30px 15px inset;
+            border: 2px solid #0a3d65;
+            box-shadow:  rgba(9, 50, 102, 0.4) 0px 0px 30px 15px inset;
             border-radius: 5px;
             height: 40%;
             min-height: 150px;
@@ -185,8 +185,8 @@
 
         .main_statistics_box {
             position: relative;
-            border: 2px solid rgba(110, 115, 119, 0.3);
-            box-shadow: rgba(125, 136, 171, 0.2) 0px 0px 30px 15px inset;
+            border: 2px solid #0a3d65;
+            box-shadow:  rgba(9, 50, 102, 0.4) 0px 0px 30px 15px inset;
             border-radius: 5px;
             margin-top: 10px;
             height: calc(60% - 10px);
@@ -199,12 +199,12 @@
             margin: 0px 15px 10px;
             padding: 0px;
             height: 55px;
-            background: -moz-linear-gradient(right, rgba(173, 221, 253, 0.3) 0%, rgba(255,255,255,0) 100%);
+           /* background: -moz-linear-gradient(right, rgba(173, 221, 253, 0.3) 0%, rgba(255,255,255,0) 100%);
             background: -webkit-linear-gradient(right, rgba(173, 221, 253, 0.3) 0%,rgba(255,255,255,0) 100%);
             background: -o-linear-gradient(right, rgba(173, 221, 253, 0.3) 0%,rgba(255,255,255,0) 100%);
             background: -ms-linear-gradient(right, rgba(173, 221, 253, 0.3) 0%,rgba(255,255,255,0) 100%);
             background: linear-gradient(to right, rgba(173, 221, 253, 0.3) 0%,rgba(255,255,255,0) 100%);
-            border-left: 3px solid #2da9fa;
+            border-left: 3px solid #2da9fa;*/
         }
         .main_date_top_title {
             color: #9dc8dd;
@@ -221,7 +221,7 @@
             font-size: 16px;
             font-weight: bold;
             letter-spacing: 5px;
-            color: #f7ff02;
+            color: #08e1b0;
             height: 50%;
             position: relative;
             top: 25%;
@@ -340,7 +340,7 @@
         /*第三块start*/
         .main_message_list_item {
             display: flex;
-            border: 1px solid rgb(205, 222, 255,0.2);
+            border-bottom: 1px dashed rgb(202,222,225,0.2);
             margin: 10px;
             border-radius: 5px;
             position: relative;
@@ -385,9 +385,9 @@
         }
 
         .main_message_list_item_left {
-            width: 70%;
+            width:170px;
             display: flex;
-            padding: 0px 20px;
+            padding-right:10px;
         }
 
         .user_photo_box {
@@ -395,7 +395,14 @@
             height: 50px;
             border-radius: 5px;
             margin: 10px 5px;
+            text-align: center;
+            line-height: 50px;
             background-color: rgba(255, 255, 255, 0.21);
+        }
+        .user_photo_box img {
+            width: 100%;
+            height: 100%;
+            border-radius: 5px;
         }
         .user_photo_icon_box img {
             width: 100%;
@@ -415,15 +422,22 @@
             font-size: 30px;
             color: #cbe6f8;
         }
+        .user_photo_box .iconfont {
+            font-size: 30px;
+            color: #cbe6f8;
+            position: relative;
+            top: 8px;
+        }
 
         .user_icon_box {
             color: #00affc;
-            width: 30px;
+            width: 40px;
             line-height: 70px;
             text-align: center;
         }
 
         .main_message_list_item_right {
+            flex: 1;
             color: #90e1ff;
         }
         /*第三块end*/
@@ -464,6 +478,21 @@
         .user_name_box {
             height: 35px;
             line-height: 50px;
+            color: #0fa9e2;
+            width: 100%;
+            max-width: 120px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .user_name_box span {
+            font-size: 12px;
+            color: #0c73a5;
+            margin-left: 3px;
+        }
+        .user_time_box {
+            color: #0c73a5;
         }
 
         .main_weather_list_right_item .main_weather_item_title:nth-child(1) {
@@ -497,8 +526,8 @@
             margin: 0 auto;
             transform: translate(-50%,-50%);
             transform: rotate(60deg);
-            border-top: 1px solid #d4e7f3;
-            border-bottom: 1px solid #d4e7f3;
+            border-top: 1px solid rgba(16, 170, 227, 0.5);
+            border-bottom: 1px solid rgba(16, 170, 227, 0.5);
         }
         .main_menu_item_center {
             position: absolute;
@@ -506,9 +535,9 @@
             height: 86.6px;
             left: 25px;
             top: 0;
-            color: #FFFFFF;
-            border-top: 1px solid #d4e7f3;
-            border-bottom: 1px solid #d4e7f3;
+            color: #10aae3;
+            border-top: 1px solid rgba(16, 170, 227, 0.5);
+            border-bottom: 1px solid rgba(16, 170, 227, 0.5);
         }
         .main_menu_item_right {
             position: absolute;
@@ -518,8 +547,8 @@
             top: 0;
             transform: translate(-50%,-50%);
             transform: rotate(300deg);
-            border-top: 1px solid #d4e7f3;
-            border-bottom: 1px solid #d4e7f3;
+            border-top: 1px solid rgba(16, 170, 227, 0.5);
+            border-bottom: 1px solid rgba(16, 170, 227, 0.5);
         }
 
         .main_menu_item_center .iconfont {
@@ -528,7 +557,7 @@
             font-size: 35px;
             position: relative;
             height: 70%;
-            top: 25px;
+            top: 30px;
         }
 
         .main_menu_item_center span:nth-child(2) {
@@ -537,6 +566,8 @@
             width: 50px;
             overflow: hidden;
             white-space: nowrap;
+            position: relative;
+            top: -8px;
         }
 
         /*第五块end*/
@@ -548,19 +579,19 @@
         .main_data_list {
             display: flex;
             border-bottom: 1px solid rgba(144,144,144,0.2);
-            margin: 10px 0px;
+            margin: 15px 0px 25px;
         }
 
         .main_data_list_item {
             width: 50%;
             text-align: center;
-            color: #90e1ff;
+            color: #10aae3;
         }
 
         .main_data_list_item span {
             font-size: 16px;
             margin: 0px 3px;
-            color: #bcedfc;
+            color: #eff7fa;
         }
         /*第六块end*/
         .right_toggle_content{
@@ -582,8 +613,35 @@
             height: 30px !important;
             line-height: 30px;
             border-radius: 3px;
-            position: relative;
-            box-shadow: rgba(125, 136, 171, 0.2) 0px 0px 30px 15px inset;
+            border: 1px solid #0fa8e1;
+            box-shadow: rgba(9, 50, 102, 0.4) 0px 0px 30px 15px inset;
+        }
+
+        .selectbox {
+            border: none;
+            cursor: pointer;
+            cursor: hand;
+            height: 26px;
+            line-height: 26px;
+            overflow-y: hidden;
+            border: 1px solid #767778;
+            border-right: 0;
+            background-color: #767778;
+            color: #ffffff !important;
+            padding: 0 0 0 5px;
+            border-radius: 0px;
+            outline: 0;
+            box-sizing: border-box;
+            font-size: 12px !important;
+            font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+        }
+
+        .selBtn {
+            border: 1px solid #767778;
+            background-color: #767778;
+        }
+        ._hide{
+            display: none;
         }
     </style>
 </head>
@@ -666,14 +724,22 @@
                         <div class="main_image-border main_image-border2"></div>
                         <div class="main_image-border main_image-border3"></div>
                         <div class="main_image-border main_image-border4"></div>
-                        <div class="main_select_box">
-                            <div class="select_main_title">请选择播放源</div>
+                        <div class="main_select_box _hide">
+                            <div class="select_main_title">播放源：</div>
                             <select class="select_main" prompt="请选择播放源" data='{"list":[{"value":"1","key":"008569"},{"value":"2","key":"00567841"}]}'></select>
                         </div>
-                        <div class="main_vedio_box">
-                            <video style="width: 100%;height: 100%;" id="v1" controls="controls" οnmοuseοver="this.play()">
-                                <source src="rtsp://192.168.254.239:554/av0_0">
-                            </video>
+                        <div id="mainVedioBox" class="main_vedio_box">
+                            <!--<video style="width: 100%;height: 100%;" id="v1" controls="controls" οnmοuseοver="this.play()">
+                                <source src="rtsp://192.168.254.111:8554/">
+                            </video>-->
+                            <object type='application/x-vlc-plugin' id='vlc' events='True'
+                                    classid='clsid:9BE31822-FDAD-461B-AD51-BE1D1C159921' codebase="http://comic.sjtu.edu.cn/vlc/cab/axvlc.cab" width="100%" height="100%">
+                                <param name='mrl' value='rtsp://192.168.15.111:8554/' />
+                                <param name='volume' value='50' />
+                                <param name='autoplay' value='true' />
+                                <param name='loop' value='false' />
+                                <param name='fullscreen' value='false' />
+                            </object>
                         </div>
                     </div>
                 </td>
@@ -695,79 +761,64 @@
                                 <div class="main_message_list_item">
                                     <div class="main_message_list_item_left">
                                         <div class="user_photo_box">
-                                            <div class="user_photo_icon_box">
-                                               <!-- <i class="iconfont icon-wo"></i>-->
-                                                <img src="../../system/skin/user_icon01.png" alt="">
-                                            </div>
+                                                <img src="../../static/image/photo.jpg" alt="">
+                                            <!--<div class="user_photo_icon_box">
+                                            </div>-->
                                         </div>
                                         <div class="user_icon_box"><i class="iconfont icon-jiaohuan1"></i></div>
                                         <div class="user_photo_box">
-                                            <div class="user_photo_icon_box">
-                                                <img src="../../system/skin/user_icon01.png" alt="">
-                                                <!--<i class="iconfont icon-wo"></i>-->
-                                            </div>
+                                                <img src="../../static/image/photo.jpg" alt="">
+                                            <!--<div class="user_photo_icon_box">
+                                            </div>-->
                                         </div>
                                     </div>
                                     <div class="main_message_list_item_right">
-                                        <div class="user_name_box">张三</div>
+                                        <div class="user_name_box">张三 <span>幼儿园三班</span></div>
                                         <div class="user_time_box">00:00:00</div>
                                     </div>
                                 </div>
                                 <div class="main_message_list_item">
                                     <div class="main_message_list_item_left">
                                         <div class="user_photo_box">
-                                            <div class="user_photo_icon_box">
-                                                <img src="../../system/skin/user_icon01.png" alt="">
-                                                <!--<i class="iconfont icon-wo"></i>-->
-                                            </div>
+                                                <img src="../../static/image/photo.jpg" alt="">
                                         </div>
                                         <div class="user_icon_box"><i class="iconfont icon-jiaohuan1"></i></div>
                                         <div class="user_photo_box">
-                                            <div class="user_photo_icon_box">
-                                                <i class="iconfont icon-wo"></i>
-                                            </div>
+                                            <i class="iconfont icon-wo"></i>
                                         </div>
                                     </div>
                                     <div class="main_message_list_item_right">
-                                        <div class="user_name_box">张三</div>
+                                        <div class="user_name_box">张三<span>幼儿园三班</span></div>
                                         <div class="user_time_box">00:00:00</div>
                                     </div>
                                 </div>
                                 <div class="main_message_list_item">
                                     <div class="main_message_list_item_left">
                                         <div class="user_photo_box">
-                                            <div class="user_photo_icon_box">
-                                                <i class="iconfont icon-wo"></i>
-                                            </div>
+                                            <i class="iconfont icon-wo"></i>
                                         </div>
                                         <div class="user_icon_box"><i class="iconfont icon-jiaohuan1"></i></div>
                                         <div class="user_photo_box">
-                                            <div class="user_photo_icon_box">
-                                                <i class="iconfont icon-wo"></i>
-                                            </div>
+                                            <i class="iconfont icon-wo"></i>
                                         </div>
                                     </div>
                                     <div class="main_message_list_item_right">
-                                        <div class="user_name_box">张三</div>
+                                        <div class="user_name_box">张三<span>幼儿园三班</span></div>
                                         <div class="user_time_box">00:00:00</div>
                                     </div>
                                 </div>
                                 <div class="main_message_list_item">
                                     <div class="main_message_list_item_left">
                                         <div class="user_photo_box">
-                                            <div class="user_photo_icon_box">
                                                 <i class="iconfont icon-wo"></i>
-                                            </div>
                                         </div>
                                         <div class="user_icon_box"><i class="iconfont icon-jiaohuan1"></i></div>
                                         <div class="user_photo_box">
-                                            <div class="user_photo_icon_box">
                                                 <i class="iconfont icon-wo"></i>
-                                            </div>
                                         </div>
                                     </div>
                                     <div class="main_message_list_item_right">
-                                        <div class="user_name_box">张三</div>
+                                        <div class="user_name_box">张三<span>幼儿园三班</span></div>
                                         <div class="user_time_box">00:00:00</div>
                                     </div>
                                 </div>
@@ -843,22 +894,22 @@
                         </div>
                         <div class="main_menu_item">
                             <div class="main_menu_item_left"></div>
-                            <div class="main_menu_item_center"><span class="iconfont icon-fl-renshi" style="font-size: 45px !important;top: 30px;"></span><span>底库管理</span></div>
+                            <div class="main_menu_item_center"><span class="iconfont icon-fl-renshi" style="font-size: 45px !important;top: 32px;"></span><span>底库管理</span></div>
                             <div class="main_menu_item_right"></div>
                         </div>
                         <div class="main_menu_item">
                             <div class="main_menu_item_left"></div>
-                            <div class="main_menu_item_center"><span class="iconfont icon-quanxianchaxun" style="font-size: 40px !important;top: 30px;"></span><span>权限管理</span></div>
+                            <div class="main_menu_item_center"><span class="iconfont icon-quanxianchaxun" style="font-size: 40px !important;top: 28px;"></span><span>权限管理</span></div>
                             <div class="main_menu_item_right"></div>
                         </div>
                         <div class="main_menu_item">
                             <div class="main_menu_item_left"></div>
-                            <div class="main_menu_item_center"><span class="iconfont icon-rizhi"></span><span>日志管理</span></div>
+                            <div class="main_menu_item_center"><span class="iconfont icon-rizhi" style="left: 2px;"></span><span>日志管理</span></div>
                             <div class="main_menu_item_right"></div>
                         </div>
                         <div class="main_menu_item">
                             <div class="main_menu_item_left"></div>
-                            <div class="main_menu_item_center"><span class="iconfont icon-yewujiekoucanshu"></span><span>接口管理</span></div>
+                            <div class="main_menu_item_center"><span class="iconfont icon-yewujiekoucanshu" style="font-size: 33px !important;top: 27px;"></span><span>接口管理</span></div>
                             <div class="main_menu_item_right"></div>
                         </div>
                         <div class="main_menu_item">
@@ -873,7 +924,7 @@
                         </div>
                         <div class="main_menu_item">
                             <div class="main_menu_item_left"></div>
-                            <div class="main_menu_item_center"><span class="iconfont icon-dazhongxingshuizha" style="font-size: 40px !important;top: 27px;"></span><span>闸机管理</span></div>
+                            <div class="main_menu_item_center"><span class="iconfont icon-dazhongxingshuizha" style="font-size: 40px !important;top: 30px;"></span><span>闸机管理</span></div>
                             <div class="main_menu_item_right"></div>
                         </div>
                         <div class="main_menu_item">
@@ -936,6 +987,14 @@
     }
 
     $(function () {
+        $('#mainVedioBox').on({
+            mouseover : function(){
+                $('.main_select_box').show()
+            } ,
+            mouseout : function(){
+                $('.main_select_box').hide()
+            }
+        }) ;
         /*$.get(ctxPath + "menu", {}, function (data) {
             var hidd='';
             if(data.code == 0 && data.data.length>0){
@@ -1043,6 +1102,9 @@
                 bottom: '10%',
                 containLabel: true
             },
+            textStyle:{
+                color:'#b0def2'
+            },
             xAxis: {
                 type: 'value',
                 boundaryGap: [0, 0.01],
@@ -1051,7 +1113,7 @@
                 },
                 axisLine:{
                     lineStyle:{
-                        color:'#ffffff',
+                        color:'#1e2e76',
                         width:2
                     }
                 }
@@ -1061,7 +1123,7 @@
                 data: datelist,
                 axisLine:{
                     lineStyle:{
-                        color:'#ffffff',
+                        color:'#1e2e76',
                         width:2
                     }
                 }
@@ -1104,7 +1166,7 @@
                 type: 'time',
                 axisLine:{
                     lineStyle:{
-                        color:'#ffffff',
+                        color:'#1e2e76',
                         width:2
                     }
                 },
@@ -1115,11 +1177,11 @@
             yAxis: {
                 type: 'value',
                 axisTick: {
-                    inside: true
+                    inside: false
                 },
                 axisLine:{
                     lineStyle:{
-                        color:'#ffffff',
+                        color:'#1e2e76',
                         width:2
                     }
                 },
@@ -1127,19 +1189,19 @@
                     show: false
                 },
                 axisLabel: {
-                    inside: true,
+                    inside: false,
                     formatter: '{value}\n'
                 },
                 z: 10
             },
             grid: {
                 top: 20,
-                left: 20,
+                left: 40,
                 right: 20,
                 bottom:25
             },
             textStyle:{
-                color:'#90e1ff'
+                color:'#b0def2'
             },
             series: [
                 {
