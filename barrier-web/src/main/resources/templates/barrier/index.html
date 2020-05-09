@@ -71,7 +71,7 @@
                 </div>
             </div>
         </li>
-        <li>
+        <li  onclick="openAll()">
             <div class="minute">
                 <div class="minute-content">
                     <div class="minute_left">
@@ -82,12 +82,12 @@
                 </div>
             </div>
         </li>
-        <li>
+        <li class="">
             <div class="minute">
                 <div class="minute-content">
                     <div class="minute_left" style="width: 55%;">
-                        <div style="font-weight:bold;font-size: 22px;">批量关闸</div>
-                        <div style="line-height: 18px;font-size: 9px;">Batch Close</div>
+                        <!--<div style="font-weight:bold;font-size: 22px;">信息配置</div>-->
+                        <div style="line-height: 18px;font-size: 14px;">管理学校所有门闸，可通过系统进行开闸</div>
                     </div>
                     <div class="minute_right"><img src="../../system/skin/s4.png"></div>
                 </div>
@@ -139,14 +139,14 @@
                         return res
                     }},
                 {
-                    display: '描述', name: 'description', align: 'center', width: "27%"
+                    display: '描述', name: 'description', align: 'center', width: "25%"
                 },
                 {
-                    display: '操作', align: 'center', width: "20%",
+                    display: '操作', align: 'center', width: "22%",
                     render: function (rowdata, rowindex, value, column) {
                         var bar = '<div class="grid_user_container">';
-                        bar += '<div class="bg4 qTip" title="开闸" onclick="onOpen(\'' + rowdata.id + '\')">开闸</div>';
-                        bar += '<div class="bg3 qTip" title="闭闸" onclick="onClose(\'' + rowdata.id + '\')">闭闸</div>';
+                        bar += '<div class="bg4 qTip" title="进入开闸" onclick="onFlatbed(\'' + rowdata.id + '\',\'enter\')">进入开闸</div>';
+                        bar += '<div class="bg3 qTip" title="离开开闸" onclick="onFlatbed(\'' + rowdata.id + '\',\'leave\')">离开开闸</div>';
                         bar += '<div class="bg1 qTip" title="编辑" onclick="onEdit(\'' + rowdata.id + '\')">编辑</div>';
                         bar += '<div class="bg2 qTip" title="删除" onclick="onDelete(\'' + rowdata.id + '\')">删除</div>';
                         bar += '</div>';
@@ -213,11 +213,6 @@
         diag.show();
     }
 
-    //查看
-    function onClose(id) {
-
-    }
-
     //删除
     function onDelete(id) {
         $.ajax({
@@ -264,8 +259,34 @@
     }
 
     //同步
-    function onOpen(id) {
+    function onFlatbed(id,type) {
+        $.ajax({
+            url: ctxPath + "barrier/open/" + id+"/"+type,
+            type: 'post'
+        }).then(function (res) {
+            if (0 == res.code) {
+                top.Toast("showSuccessToast", '操作成功');
+            } else {
+                top.Toast("showErrorToast", res.msg);
+            }
+        }, function () {
+            top.Toast("showErrorToast", '操作异常');
+        })
+    }
 
+    function openAll(){
+        $.ajax({
+            url: ctxPath + "barrier/openAll",
+            type: 'post'
+        }).then(function (res) {
+            if (0 == res.code) {
+                top.Toast("showSuccessToast", '操作成功');
+            } else {
+                top.Toast("showErrorToast", res.msg);
+            }
+        }, function () {
+            top.Toast("showErrorToast", '操作异常');
+        })
     }
 
     //刷新

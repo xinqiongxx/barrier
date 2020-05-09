@@ -11,6 +11,7 @@
 package com.tjaide.nursery.barrier.common.shiro.realm;
 
 
+import cn.hutool.core.util.ObjectUtil;
 import com.tjaide.nursery.barrier.common.core.entity.ShiroUser;
 import com.tjaide.nursery.barrier.common.shiro.service.UserDetailsService;
 import com.tjaide.nursery.barrier.common.shiro.util.LoginException;
@@ -65,6 +66,9 @@ public class DbRealm extends AuthorizingRealm {
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
         String username = (String) authenticationToken.getPrincipal();
         ShiroUser user = userDetailsService.loadUser(username);
+        if(ObjectUtil.isEmpty(user)){
+            throw new LoginException("用户名不存在");
+        }
         if("1".equals(user.getLockFlag())){
             throw new LoginException("用户已锁定，请联系60638284");
         }

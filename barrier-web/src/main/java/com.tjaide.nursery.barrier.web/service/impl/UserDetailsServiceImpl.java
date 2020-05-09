@@ -1,6 +1,8 @@
 package com.tjaide.nursery.barrier.web.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.tjaide.nursery.barrier.common.core.entity.ShiroUser;
 import com.tjaide.nursery.barrier.common.shiro.service.UserDetailsService;
@@ -52,6 +54,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public ShiroUser loadUser(String loginname) {
         SysUser sysUser = sysUserService.getOne(Wrappers.<SysUser>lambdaQuery()
                 .eq(SysUser::getUsername, loginname));
+        if(ObjectUtil.isEmpty(sysUser)){
+            return null;
+        }
         ShiroUser user = new ShiroUser();
         BeanUtil.copyProperties(sysUser, user);
         user.setRoles(sysRoleService.findRolesByUserId(user.getUserId()).stream()

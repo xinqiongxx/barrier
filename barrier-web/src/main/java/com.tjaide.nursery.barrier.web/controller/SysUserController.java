@@ -183,11 +183,11 @@ public class SysUserController {
     @PostMapping("/downloadTemple")
     public void download(HttpServletRequest request, HttpServletResponse response) {
         try {
-            String filePath = ResourceUtils.getURL("classpath:").getPath() + "\\templates\\user\\";
+            String filePath = ResourceUtils.getURL("classpath:").getPath() + File.separator+"templates" + File.separator+"user"+ File.separator;
             String newname = "importUser.xlsx";
 
             File file = new File(filePath + newname);
-            String contenttype = "application/vnd.ms-excel";
+            String contenttype = "application/x-xls";
             if (file.exists()) {
                 FileInputStream fis = null;
                 BufferedInputStream bis = null;

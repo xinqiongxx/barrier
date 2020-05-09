@@ -72,7 +72,7 @@
                 </div>
             </div>
         </li>
-        <li>
+        <li onclick="clearAll()">
             <div class="minute">
                 <div class="minute-content">
                     <div class="minute_left">
@@ -84,7 +84,7 @@
             </div>
         </li>
 
-        <li>
+        <li onclick="syncAll()">
             <div class="minute">
                 <div class="minute-content">
                     <div class="minute_left" style="width: 55%;">
@@ -121,7 +121,25 @@
                 {display: '平板编号', name: 'number', align: 'center', width: "15%",cellClick:true},
                 {display: '平板名称', name: 'name', align: 'center', width: "15%"},
                 {display: 'IP地址', name: 'ipAddress', align: 'center', width: "20%"},
-                {display: '在线', name: 'onlineStatus', align: 'center', width: "15%"},
+                {display: '在线', name: 'onlineStatus', align: 'center', width: "7%",
+                    render: function (rowdata, rowindex, value, column) {
+                      return value == "0"?"在线":"离线"
+                    }},
+                {display: '名单数', name: 'num', align: 'center', width: "8%",
+                    render: function (rowdata, rowindex, value, column) {
+                        $.ajax({
+                            url: ctxPath + "flatbed/number/" + rowdata.id,
+                            type: 'get'
+                        }).then(function (res) {
+                            if(res.data.Result == "Fail"){
+                                $("#num_"+rowdata.id).html("离线");
+                            }else{
+                                $("#num_"+rowdata.id).html(res.data.PersonNum/2);
+                            }
+                        }, function () {
+                        })
+                        return "<span id='num_"+rowdata.id+"'></span>"
+                    }},
                 {
                     display: '类型', name: 'passType', align: 'center', width: "10%",
                     render: function (rowdata, rowindex, value, column) {
@@ -138,8 +156,8 @@
                     display: '操作', align: 'center', width: "25%",
                     render: function (rowdata, rowindex, value, column) {
                         var bar = '<div class="grid_user_container">';
-                        bar += '<div class="bg4 qTip" title="清空" onclick="onClear(\'' + rowdata.id + '\')">清空</div>';
-                        bar += '<div class="bg3 qTip" title="同步" onclick="onSync(\'' + rowdata.id + '\')">同步</div>';
+                        bar += '<div class="bg4 qTip" title="清空" onclick="onClear(\'' + rowdata.id + '\',\''+rowdata.onlineStatus+'\')">清空</div>';
+                        bar += '<div class="bg3 qTip" title="同步" onclick="onSync(\'' + rowdata.id + '\',\''+rowdata.onlineStatus+'\')">同步</div>';
                         bar += '<div class="bg1 qTip" title="编辑" onclick="onEdit(\'' + rowdata.id + '\')">编辑</div>';
                         bar += '<div class="bg2 qTip" title="删除" onclick="onDelete(\'' + rowdata.id + '\')">删除</div>';
                         bar += '</div>';
@@ -207,8 +225,24 @@
     }
 
     //查看
-    function onClear(id) {
-
+    function onClear(id,onlineStatus) {
+        if(onlineStatus != 0){
+            top.Toast("showErrorToast", '平板不在线');
+            return;
+        }
+        $.ajax({
+            url: ctxPath + "flatbed/clear/" + id,
+            type: 'delete'
+        }).then(function (res) {
+            if (0 == res.code) {
+                grid.loadData();
+                top.Toast("showSuccessToast", '清空成功');
+            } else {
+                top.Toast("showErrorToast", '清空异常');
+            }
+        }, function () {
+            top.Toast("showErrorToast", '清空异常');
+        })
     }
 
     //删除
@@ -257,10 +291,65 @@
     }
 
     //同步
-    function onSync(id) {
-
+    function onSync(id,onlineStatus) {
+        if(onlineStatus != 0){
+            top.Toast("showErrorToast", '平板不在线');
+            return;
+        }
+        top.bodyMask("正在同步中，请稍等....");
+        $.ajax({
+            url: ctxPath + "flatbed/sync/" + id,
+            type: 'post'
+        }).then(function (res) {
+            if (0 == res.code) {
+                grid.loadData();
+                top.bodyUnMask()
+                top.Toast("showSuccessToast", '同步成功');
+            } else {
+                top.bodyUnMask()
+                top.Toast("showErrorToast", res.msg);
+            }
+        }, function () {
+            top.bodyUnMask()
+            top.Toast("showErrorToast", '同步异常');
+        })
     }
 
+    function clearAll(){
+        $.ajax({
+            url: ctxPath + "flatbed/clearAll",
+            type: 'delete'
+        }).then(function (res) {
+            if (0 == res.code) {
+                grid.loadData();
+                top.Toast("showSuccessToast", '清空成功');
+            } else {
+                top.Toast("showErrorToast",  res.msg);
+            }
+        }, function () {
+            top.Toast("showErrorToast", '清空异常');
+        })
+    }
+
+    function syncAll(){
+        top.bodyMask("正在同步中，请稍等....");
+        $.ajax({
+            url: ctxPath + "flatbed/syncAll",
+            type: 'post'
+        }).then(function (res) {
+            if (0 == res.code) {
+                grid.loadData();
+                top.bodyUnMask()
+                top.Toast("showSuccessToast", '同步成功');
+            } else {
+                top.bodyUnMask()
+                top.Toast("showErrorToast",  res.msg);
+            }
+        }, function () {
+            top.bodyUnMask()
+            top.Toast("showErrorToast", '同步异常');
+        })
+    }
     //刷新
     function refresh(isUpdate) {
         if (!isUpdate) {

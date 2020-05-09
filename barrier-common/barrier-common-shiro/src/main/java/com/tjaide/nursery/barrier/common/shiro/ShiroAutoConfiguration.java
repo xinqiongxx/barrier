@@ -231,7 +231,7 @@ public class ShiroAutoConfiguration {
         sessionManager.setSessionIdCookie(sessionIdCookie());
         sessionManager.setSessionIdCookieEnabled(true);
         //全局会话超时时间（单位毫秒），默认30分钟  可以设置为10秒钟 用来测试,这里设置的是1天
-        sessionManager.setGlobalSessionTimeout(86400000);
+        sessionManager.setGlobalSessionTimeout(-1);
         //是否开启删除无效的session对象  默认为true
         sessionManager.setDeleteInvalidSessions(true);
         //是否开启定时调度器进行检测过期session 默认为true

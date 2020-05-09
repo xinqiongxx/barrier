@@ -53,7 +53,7 @@ public class SysDepotUser extends Model<SysDepotUser> {
     @ApiModelProperty(value = "证号")
     private String cardId;
     @ApiModelProperty(value = "出生日期")
-    private LocalDateTime birthday;
+    private String birthday;
     @ApiModelProperty(value = "电话")
     private String phone;
     @ApiModelProperty(value = "地址")
@@ -72,5 +72,7 @@ public class SysDepotUser extends Model<SysDepotUser> {
     @TableLogic
     @ApiModelProperty(value = "删除标记,1:已删除,0:正常")
     private String delFlag;
+    @ApiModelProperty(value = "用户所属租户id")
+    private Integer tenantId;
 
 }

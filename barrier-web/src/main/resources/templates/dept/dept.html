@@ -215,10 +215,10 @@
                 </div>
             </div>
 
-            <div class="items edit" style="display:none">
+            <div class="items edit" style="display:none" id="deptCodeItem">
                 <div class="lable"><p>*</p>部门编码</div>
                 <div class="item-c">
-                    <input id="deptCode" type="hidden" style="width:90%;" disabled="true"/>
+                    <input id="deptCode" type="text" style="width:90%;" disabled="true"/>
                 </div>
             </div>
 
@@ -305,14 +305,17 @@
         $('#u-position .-c').remove();
         var parentNode = treeNode.getParentNode();
         if (!parentNode) {
+            $("#deptCodeItem").show();
             $('#u-position').append('<div class="-c">' + treeNode.name + '</div>')
         } else if (!parentNode.getParentNode()) {
+            $("#deptCodeItem").hide();
             var pid = $('.curSelectedNode').closest('ul').closest('li').attr('id');
             var str = '<div class="-c">' + $('.curSelectedNode').closest('ul').closest('li').find('#' + pid + '_span').html() + '</div>';
             str += '<div class="-c">></div>';
             str += '<div class="-c">' + treeNode.name + '</div>';
             $('#u-position').append(str)
         } else {
+            $("#deptCodeItem").hide();
             var pid = $('.curSelectedNode').closest('ul').closest('li').attr('id');
             var str = '<div class="-c">' + $('#deptTree_1_span').html() + '</div>';
             str += '<div class="-c">></div>';

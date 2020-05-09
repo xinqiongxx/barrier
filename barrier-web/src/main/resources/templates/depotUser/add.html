@@ -22,6 +22,7 @@
     <!--表单异步提交start-->
     <script type="text/javascript" th:src="@{/libs/js/form/form.js}" src="../../libs/js/form/form.js"></script>
     <!--表单异步提交end-->
+    <script type="text/javascript" th:src="@{/libs/js/form/datePicker/WdatePicker.js}" src="../../libs/js/form/datePicker/WdatePicker.js"></script>
     <!-- 树组件start -->
     <script type="text/javascript" th:src="@{/libs/js/tree/ztree/ztree.js}" src="../../libs/js/tree/ztree/ztree.js"></script>
     <link type="text/css" rel="stylesheet" th:href="@{/libs/js/tree/ztree/ztree.css}" href="../../libs/js/tree/ztree/ztree.css"></link>
@@ -29,41 +30,119 @@
     <!-- 树形下拉框start -->
     <script type="text/javascript" th:src="@{/libs/js/form/selectTree.js}" src="../../libs/js/form/selectTree.js"></script>
     <!-- 树形下拉框end -->
+    <!--引入CSS-->
+    <link rel="stylesheet" type="text/css" th:href="@{/libs/js/webuploader/webuploader.css}" href="../../libs/js/webuploader/webuploader.css">
+
+    <!--引入JS-->
+    <script type="text/javascript" th:src="@{/libs/js/webuploader/webuploader.js}" src="../../libs/js/webuploader/webuploader.js"></script>
     <script type="text/javascript" th:inline="javascript">
         /*<![CDATA[*/
         ctxPath = /*[[@{/}]]*/ '';
         /*]]>*/
     </script>
+    <style>
+        #uploader{
+            margin:auto;
+            width: 220px;
+        }
+        #filePicker .webuploader-pick{
+            width:200px;
+        }
+
+    </style>
 </head>
 <body>
 <div class="form_content" id="formContent">
+    <!--dom结构部分-->
     <form id="formAdd" method="post">
         <table class="tableStyle" formMode="view">
             <tr>
-                <td><span class="star">*</span>门闸编码：</td>
-                <td>
+                <td width="20%"><span class="star">*</span>姓名：</td>
+                <td width="30%">
                     <input type="hidden" id="id" name="id"/>
-                    <input type="text" id="number" name="number" class="validate[required]"/>
+                    <input type="text" id="name" name="name" class="validate[required]"/>
+                </td>
+                <td width="30%" rowspan="4" colspan="2" style="text-align:left;">
+                    <div id="uploader">
+                        <!--用来存放item-->
+                        <div id="fileList" class="uploader-list" style="text-align: center;margin-bottom:20px;"></div>
+                        <div id="filePicker">选择一寸照片</div>
+                    </div>
+                    <input type="hidden" id="photo" name="photo"/>
                 </td>
             </tr>
             <tr>
-                <td><span class="star">*</span>门闸名称：</td>
-                <td><input type="text" id="name" name="name" class="validate[required]"/>
+                <td width="20%"><span class="star">*</span>性别：</td>
+                <td width="30%">
+                    <input type="radio" id="male-1" name="gender" value="0" checked/>
+                    <label for="male-1" class="hand">男</label>
+                    <input type="radio" id="male-2" name="gender" value="1"/>
+                    <label for="male-2" class="hand">女</label>
                 </td>
             </tr>
             <tr>
-                <td><span class="star">*</span>进入平板：</td>
-                <td><select id="enterFlatbed" prompt="请选择平板" class="validate[required] flatbed"></select>
+                <td width="20%"><span class="star">*</span>人员类型：</td>
+                <td width="30%">
+                    <select id="userType" data='{"list":[{"value":"1","key":"学生"},{"value":"2","key":"教职工"},{"value":"3","key":"家长"},{"value":"9","key":"未知"}]}' prompt="请选择人员类型"
+                           class="validate[required]" onchange="onchangeHandler(this)" selectedValue="1" ></select>
                 </td>
             </tr>
             <tr>
-                <td><span class="star">*</span>离开平板：</td>
-                <td><select id="leaveFlatbed" prompt="请选择平板" class="validate[required] flatbed"></select>
+                <td width="20%"><span class="star">*</span>班级/部门：</td>
+                <td width="30%">
+                    <div class="selectTree validate[required]" id="deptId" name="deptId" prompt="请选择班级/部门" keepDefaultStyle = true></div>
                 </td>
             </tr>
             <tr>
-                <td>描述：</td>
-                <td><textarea id="description" name="description" style="resize: none;"></textarea>
+                <td width="20%"><span class="star">*</span>黑白名单：</td>
+                <td width="30%">
+                    <input type="radio" id="list-1" name="depotType" value="0" checked />
+                    <label for="list-1" class="hand">白名单</label>
+                    <input type="radio" id="list-2" name="depotType" value="1"/>
+                    <label for="list-2" class="hand">黑名单</label>
+                </td>
+                <td width="20%"><span class="star">*</span>人员底库：</td>
+                <td width="30%">
+                    <select id="depotId"  name="depotId"  prompt="请选择人员底库" dataRoot="data" labelField="label"
+                            valueField="value" class="validate[required]" keepDefaultStyle = true></select>
+                </td>
+            </tr>
+            <tr>
+                <td width="20%"><span class="star">*</span>证件类型：</td>
+                <td width="30%">
+                    <select id="certificateType"  name="certificateType" th:url="@{/dict/type/certificate_type}" prompt="请选择证件类型" dataRoot="data" labelField="label"
+                            valueField="value"  class="validate[required]"></select>
+                </td>
+                <td width="20%"><span class="star">*</span>证件号：</td>
+                <td width="30%">
+                    <input type="text" id="cardId" name="cardId" class="validate[required]"/>
+                </td>
+            </tr>
+            <tr>
+                <td width="20%">出生日期：</td>
+                <td width="30%">
+                    <input type="text" id="birthday" name="birthday" class="date" dateFmt="yyyy-MM-dd"/>
+                </td>
+                <td width="20%">电话：</td>
+                <td width="30%">
+                    <input type="text" id="phone" name="phone" />
+                </td>
+            </tr>
+            <tr>
+                <td width="20%" >地址：</td>
+                <td width="30%">
+                    <input type="text" id="address" name="address"/>
+                </td>
+                <td width="20%">民族：</td>
+                <td width="30%">
+                    <select id="nation"  name="nation" th:url="@{/dict/type/nation_type}" prompt="请选择民族" dataRoot="data" labelField="label"
+                            valueField="value"></select>
+                </td>
+            </tr>
+            <tr>
+                <td width="20%" >备注：</td>
+                <td colspan="3">
+                    <textarea id="remark" name="remark" style="resize: none;width:80%;"></textarea>
                 </td>
             </tr>
         </table>
@@ -72,47 +151,105 @@
 
 <script type="text/javascript">
     var id = '[[${param.id}]]';
-    $.ajax({
-        url: ctxPath + "flatbed/list",
-        type: 'get',
-        data: {}
-    }).then(function (res) {
-        var data = res.data
-        for (var i = 0; i < data.length; i++) {
-            console.log(data[i]);
-            data[i].value = data[i].id;
-            data[i].key = data[i].name;
-        }
-        //赋给data属性
-        $(".flatbed").data("data", {"list":data});
-        //刷新树形下拉框
-        $(".flatbed").render();
 
-    }, function () {
-        top.Toast("showErrorToast", '加载平板出错');
-    })
+    function changeItem(){
+        if($("input:radio[name=depotType]:checked").val() == 1){
+            $.ajax({
+                url: ctxPath + "dict/type/black_list",
+                type: 'get'
+            }).then(function (res) {
+                $("#depotId").data("data", res)
+                $("#depotId").render();
+            })
+        }else{
+            $.ajax({
+                url: ctxPath + "dict/type/white_list",
+                type: 'get'
+            }).then(function (res) {
+                $("#depotId").data("data", res)
+                $("#depotId").render();
+            })
+        }
+    }
+    function onchangeHandler(){
+        var treeNodes = []
+        if($("#userType").val() == 2){
+            $.ajax({
+                url: ctxPath + "dept/list",
+                type: 'get'
+            }).then(function (res) {
+                res.data.forEach(function(item){
+                    var dept = {};
+                    dept.id = item.deptId
+                    dept.name = item.deptName
+                    dept.parentId = item.parentId
+                    dept.open = true
+                    treeNodes.push(dept)
+                })
+                $("#deptId").data("data",{"treeNodes":treeNodes});
+                //刷新树形下拉框
+                $("#deptId").render();
+            }, function () {
+                top.Toast("showErrorToast", '请检查部门列表');
+            })
+        }else{
+            $.ajax({
+                url: ctxPath + "dict/type/class_type",
+                type: 'get'
+            }).then(function (res) {
+                res.data.forEach(function(item){
+                    var classes = {};
+                    classes.id = item.value
+                    classes.name = item.label
+                    classes.parentId = -1
+                    treeNodes.push(classes)
+                })
+                $("#deptId").data("data",{"treeNodes":treeNodes});
+                //刷新树形下拉框
+                $("#deptId").render();
+            }, function () {
+                top.Toast("showErrorToast", '请检查自定类型class_type');
+            })
+
+        }
+    }
+    changeItem();
+    onchangeHandler();
+
     //保存
     function save() {
         var valid = $(formAdd).validationEngine({returnIsValid: true});
         if (valid == true) {
-            var barrier = {};
-            barrier.id = $('#id').val();
-            barrier.number = $('#number').val();
-            barrier.name = $('#name').val();
-            barrier.description = $('#description').val();
-            barrier.enterFlatbed = $("#enterFlatbed").attr("relValue");
-            barrier.leaveFlatbed = $("#leaveFlatbed").attr("relValue");
-            barrier.delFlag = "0";
-            barrier.tenantId = "1";
+            if(!$("#photo").val()){
+                top.Toast("showErrorToast", '请上传头像');
+            }
+            var depotUser = {};
+            depotUser.id = $('#id').val();
+            depotUser.name = $('#name').val();
+            depotUser.gender =$("input:radio[name=gender]:checked").val();
+            depotUser.depotType = $("input:radio[name=depotType]:checked").val();
+            depotUser.depotId = $("#depotId").attr("relValue");
+            depotUser.deptId = $("#deptId").attr("relValue");
+            depotUser.userType = $("#userType").attr("relValue");
+            depotUser.photo = $("#photo").val();
+            depotUser.nation =  $("#nation").attr("relValue");
+            depotUser.certificateType = $("#certificateType").attr("relValue");
+            depotUser.cardId = $('#cardId').val();
+            depotUser.birthday = $("#birthday").val();
+            depotUser.phone = $('#phone').val();
+            depotUser.address = $('#address').val();
+            depotUser.remark = $('#remark').val();
+            depotUser.delFlag = "0";
+            depotUser.tenantId = "1";
 
             var type = 'post';
             if ('' != id) {
                 type = 'put';
             }
             $.jsonAjax({
-                url: ctxPath + "barrier",
+                url: ctxPath + "depotuser",
                 type: type,
-                data: barrier,
+                data: depotUser,
             }).then(function (res) {
                 if (0 == res.code) {
                     if(top.frmright){
@@ -132,20 +269,86 @@
 
     //查询角色信息
     $(function () {
+        $('input[type=radio][name=depotType]').change(function(){
+            changeItem();
+        })
         if ('' != id) {
             $.ajax({
-                url: ctxPath + "barrier/" + id,
+                url: ctxPath + "depotuser/" + id,
                 type: 'get'
             }).then(function (res) {
                 var data = res.data
                 $("#id").val(data.id);
-                $("#number").val(data.number);
                 $("#name").val(data.name);
-                $("#description").val(data.description);
-                $("#enterFlatbed").setValue(data.enterFlatbed);
-                $("#leaveFlatbed").setValue(data.leaveFlatbed);
+                $(":radio[name='gender'][value='" + data.gender + "']").prop("checked", "checked");
+                $(":radio[name='depotType'][value='" + data.depotType + "']").prop("checked", "checked");
+                $("#depotId").setValue(data.depotId);
+                $("#deptId").setValue(data.deptId);
+                $("#userType").setValue(data.userType);
+                $("#nation").setValue(data.nation);
+                $("#certificateType").setValue(data.certificateType);
+                $("#cardId").val(data.cardId);
+                $("#birthday").val(data.birthday);
+                $("#photo").val(data.photo);
+                $("#phone").val(data.phone);
+                $("#address").val(data.address);
+                $("#remark").val(data.remark);
+
+                var $li = $(
+                    '<div class="file-item thumbnail">' +
+                    '<img src="'+data.photo+'" style="width:200px;"/>' +
+                    '</div>'
+                    );
+                $("#fileList").append( $li );
             })
         }
+
+
+        // 初始化Web Uploader
+        var uploader = WebUploader.create({
+            auto: false,
+            fileSizeLimit:1024*1024,
+            // swf文件路径
+            swf: ctxPath+ '/libs/js/webuploader/Uploader.swf',
+            pick: '#filePicker',
+            accept: {
+                title: 'Images',
+                extensions: 'gif,jpg,jpeg,bmp,png',
+                mimeTypes: 'image/*'
+            }
+        });
+        uploader.on( 'fileQueued', function( file ) {
+            $("#fileList").html("");
+            var $li = $(
+                '<div id="' + file.id + '" class="file-item thumbnail">' +
+                '<img style="width:200px;">' +
+                '</div>'
+                ),
+                $img = $li.find('img');
+
+
+            // $list为容器jQuery实例
+            $("#fileList").append( $li );
+
+            uploader.makeThumb( file, function( error, src ) {
+                if ( error ) {
+                    $img.replaceWith('<span>不能预览</span>');
+                    return;
+                }
+
+                $img.attr( 'src', src );
+                $("#photo").val(src);
+                uploader.removeFile(file)
+            }, 1, 1 );
+        });
+        uploader.on("error",function (type){
+            if(type == "F_DUPLICATE"){
+                top.Toast("showErrorToast", '系统提示,请不要重复选择文件！');
+            }else if(type == "Q_EXCEED_SIZE_LIMIT"){
+                top.Toast("showErrorToast", '所选附件总大小不可超过1M！');
+            }
+
+        });
     })
 
 </script>

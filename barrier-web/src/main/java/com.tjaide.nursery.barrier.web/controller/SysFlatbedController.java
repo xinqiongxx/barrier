@@ -4,17 +4,35 @@
 
 package com.tjaide.nursery.barrier.web.controller;
 
+import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSONUtil;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.tjaide.nursery.barrier.common.core.util.R;
 import com.tjaide.nursery.barrier.common.log.annotation.SysLog;
+import com.tjaide.nursery.barrier.web.entity.SysDepotUser;
 import com.tjaide.nursery.barrier.web.entity.SysFlatbed;
+import com.tjaide.nursery.barrier.web.service.SysDepotUserService;
 import com.tjaide.nursery.barrier.web.service.SysFlatbedService;
+import com.tjaide.nursery.barrier.web.util.FlatBedUtil;
 import io.swagger.annotations.Api;
+import io.swagger.models.auth.In;
 import lombok.AllArgsConstructor;
+import lombok.SneakyThrows;
+import org.apache.http.HttpRequest;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.ServletInputStream;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 
 /**
  * @author maxinqiong
@@ -26,6 +44,7 @@ import javax.validation.Valid;
 @Api(value = "flatbed", tags = "平板管理模块")
 public class SysFlatbedController {
     private final SysFlatbedService sysFlatbedService;
+    private final SysDepotUserService sysDepotUserService;
 
     /**
      * 通过ID查询
@@ -93,6 +112,143 @@ public class SysFlatbedController {
     @GetMapping("/list")
     public R listFlatbeds() {
         return R.ok(sysFlatbedService.list(Wrappers.emptyWrapper()));
+    }
+
+
+    /**
+     * 获取PAD人数
+     * @param id
+     * @return
+     */
+    @GetMapping("/number/{id}")
+    public R getPeopleNumber(@PathVariable Integer id) {
+        SysFlatbed sysFlatbed = sysFlatbedService.getById(id);
+        return R.ok(FlatBedUtil.SearchPersonNum(sysFlatbed.getIpAddress(),sysFlatbed.getNumber()));
+    }
+
+
+    /**
+     * 清空pad名单
+     * @param id
+     * @return
+     */
+    @DeleteMapping("/clear/{id}")
+    public R clearPad(@PathVariable Integer id) {
+        SysFlatbed sysFlatbed = sysFlatbedService.getById(id);
+        List<String> ids = new ArrayList<>();
+        sysDepotUserService.list(Wrappers.emptyWrapper()).forEach(sysDepotUser -> {
+            ids.add(sysDepotUser.getId()+"");
+            ids.add(sysDepotUser.getId()+"A");
+        });
+        return R.ok(FlatBedUtil.DeletePerson(sysFlatbed.getIpAddress(),sysFlatbed.getNumber(),ids));
+    }
+
+
+    /**
+     * 同步名单
+     * @param id
+     * @return
+     */
+    @PostMapping("/sync/{id}")
+    public R syncPad(@PathVariable Integer id) {
+        SysFlatbed sysFlatbed = sysFlatbedService.getById(id);
+        List<SysDepotUser> lists = sysDepotUserService.list(Wrappers.emptyWrapper());
+        List<SysDepotUser> errors = FlatBedUtil.AddPersons(sysFlatbed.getIpAddress(),sysFlatbed.getNumber(),lists);
+        if(errors.size() > 0){
+            return R.failed("同步失败（"+errors.size()+"）个人");
+        }
+        return R.ok();
+    }
+
+    /**
+     * 清空pad名单
+     * @return
+     */
+    @DeleteMapping("/clearAll")
+    public R clearAll(){
+        List<SysFlatbed> sysFlatbeds = sysFlatbedService.list();
+        List<String> ids = new ArrayList<>();
+        sysDepotUserService.list(Wrappers.emptyWrapper()).forEach(sysDepotUser -> {
+            ids.add(sysDepotUser.getId()+"");
+            ids.add(sysDepotUser.getId()+"A");
+        });
+        List<CompletableFuture> resList = new ArrayList<>();
+        sysFlatbeds.forEach( sysFlatbed -> {
+            resList.add(CompletableFuture.supplyAsync(() -> sysFlatbed).thenAcceptAsync(e -> {
+                if("0".equals(sysFlatbed.getOnlineStatus().toString())) {
+                    FlatBedUtil.DeletePerson(sysFlatbed.getIpAddress(), sysFlatbed.getNumber(), ids);
+                }
+            }));
+        });
+        CompletableFuture all = CompletableFuture.allOf(resList.toArray(new CompletableFuture[resList.size()]));
+        all.join();
+        return R.ok();
+    }
+
+    /**
+     * 清空pad名单
+     * @return
+     */
+    @PostMapping("/syncAll")
+    public R syncAll(){
+        List<SysFlatbed> sysFlatbeds = sysFlatbedService.list();
+        List<SysDepotUser> lists = sysDepotUserService.list(Wrappers.emptyWrapper());
+        List<SysDepotUser> errors = new ArrayList<>();
+        List<CompletableFuture> resList = new ArrayList<>();
+        sysFlatbeds.forEach( sysFlatbed -> {
+            resList.add(CompletableFuture.supplyAsync(() -> sysFlatbed).thenAcceptAsync(e -> {
+                if("0".equals(sysFlatbed.getOnlineStatus().toString())) {
+                    errors.addAll(FlatBedUtil.AddPersons(sysFlatbed.getIpAddress(), sysFlatbed.getNumber(), lists));
+                }
+            }));
+        });
+        CompletableFuture all = CompletableFuture.allOf(resList.toArray(new CompletableFuture[resList.size()]));
+        all.join();
+        if(errors.size() > 0){
+            return R.failed("同步失败（"+errors.size()+"）个人");
+        }
+        return R.ok();
+    }
+
+    @PostMapping("/contrast")
+    public R contrast(@RequestParam  String picinfo1,@RequestParam  String picinfo2){
+        List<SysFlatbed> sysFlatbeds = sysFlatbedService.list(Wrappers.<SysFlatbed>lambdaQuery().eq(SysFlatbed::getOnlineStatus,"0"));
+        if(sysFlatbeds.size() == 0){
+            return R.failed("请最少保证一个在线平板");
+        }else{
+            return R.ok(FlatBedUtil.GetPictureSimilarity(sysFlatbeds.get(0).getIpAddress(),picinfo1,picinfo2));
+        }
+    }
+
+    @PostMapping("/search")
+    public R search(@RequestParam  String picinfo,@RequestParam  float MaxSimilarity,@RequestParam int MaxNum){
+        List<SysFlatbed> sysFlatbeds = sysFlatbedService.list(Wrappers.<SysFlatbed>lambdaQuery().eq(SysFlatbed::getOnlineStatus,"0"));
+        if(sysFlatbeds.size() == 0){
+            return R.failed("请最少保证一个在线平板");
+        }else{
+            return R.ok(FlatBedUtil.GetPictureSearch(sysFlatbeds.get(0).getIpAddress(),picinfo,MaxSimilarity,MaxNum));
+        }
+    }
+
+    @PostMapping("/people/{id}")
+    public R people(@PathVariable String id){
+        List<SysDepotUser> lists = sysDepotUserService.list(Wrappers.<SysDepotUser>lambdaQuery().eq(SysDepotUser::getId,id));
+        List<SysFlatbed> sysFlatbeds = sysFlatbedService.list();
+        List<SysDepotUser> errors = new ArrayList<>();
+        List<CompletableFuture> resList = new ArrayList<>();
+        sysFlatbeds.forEach( sysFlatbed -> {
+            resList.add(CompletableFuture.supplyAsync(() -> sysFlatbed).thenAcceptAsync(e -> {
+                if("0".equals(sysFlatbed.getOnlineStatus().toString())) {
+                    errors.addAll(FlatBedUtil.AddPersons(sysFlatbed.getIpAddress(), sysFlatbed.getNumber(), lists));
+                }
+            }));
+        });
+        CompletableFuture all = CompletableFuture.allOf(resList.toArray(new CompletableFuture[resList.size()]));
+        all.join();
+        if(errors.size() > 0){
+            return R.failed("同步失败（"+errors.size()+"）个人");
+        }
+        return R.ok();
     }
 
 }

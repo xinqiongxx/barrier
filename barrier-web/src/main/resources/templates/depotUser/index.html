@@ -40,9 +40,9 @@
             margin: auto;
         }
         .user-img img{
-            width:100%;
+            width: 80%;
             height: 100%;
-            border-radius: 50%;
+            border-radius: 2px;
         }
     </style>
 </head>
@@ -73,12 +73,12 @@
                 </div>
             </div>
         </li>
-        <li>
+        <li onclick="importUser()">
             <div class="minute">
                 <div class="minute-content">
                     <div class="minute_left">
-                        <div style="font-weight:bold;font-size: 22px;">批量删除</div>
-                        <div style="line-height: 18px;font-size: 9px;">Batch Delete</div>
+                        <div style="font-weight:bold;font-size: 22px;">导入人员</div>
+                        <div style="line-height: 18px;font-size: 9px;">Import User</div>
                     </div>
                     <div class="minute_right"><img src="../../system/skin/s3.png"></div>
                 </div>
@@ -88,8 +88,8 @@
             <div class="minute">
                 <div class="minute-content">
                     <div class="minute_left" style="width: 55%;">
-                        <div style="font-weight:bold;font-size: 22px;">批量导入</div>
-                        <div style="line-height: 18px;font-size: 9px;">Batch Import</div>
+                        <div style="font-weight:bold;font-size: 22px;">导入照片</div>
+                        <div style="line-height: 18px;font-size: 9px;">Import Photo</div>
                     </div>
                     <div class="minute_right"><img src="../../system/skin/s4.png"></div>
                 </div>
@@ -110,13 +110,110 @@
 </div>
 <!--end-->
 <div class="page_content">
-    <div class="titleContent" style="margin:3px 5px">
+    <div class="titleContent" style="float:left;margin:3px 5px;">
         校园进出人员管理
+    </div>
+    <div class="searchContent">
+        <form action="###" id="queryForm" method="post">
+            <table style="float: right;">
+                <tr>
+                    <td>
+                        <input type="text" placeholder="姓名" id="name"/>
+                    </td>
+                    <td>
+                        <select id="depotId"  name="depotId"  prompt="请选择人员底库" dataRoot="data" labelField="label"
+                                valueField="value" keepDefaultStyle = true></select>
+                    </td>
+                    <td>
+                        <select id="userType" data='{"list":[{"value":"1","key":"学生"},{"value":"2","key":"教职工"},{"value":"3","key":"家长"},{"value":"9","key":"未知"}]}'
+                                prompt="请选择人员类型"></select>
+                    </td>
+                    <td>
+                        <select id="deptId" name="deptId"  th:url="@{/dict/type/class_type}" prompt="请选择班级" dataRoot="data" labelField="label"
+                                valueField="value"></select>
+                    </td>
+                    <td>
+                        <button type="button" id="search" class="primary" onclick="searchHandler()">
+                            <span class="icon_find">查询</span>
+                        </button>
+                    </td>
+                    <td>
+                        <button type="button" onclick="resetSearch()">
+                            <span class="icon_clear">重置</span>
+                        </button>
+                    </td>
+                </tr>
+            </table>
+        </form>
     </div>
     <div id="dataBasic"></div>
 </div>
 <script type="text/javascript">
+    var searchDepot = {data:[]};
     var grid;
+    $.ajax({
+        url: ctxPath + "dict/type/black_list",
+        type: 'get'
+    }).then(function (res1) {
+        searchDepot.data = searchDepot.data.concat(res1.data);
+        $.ajax({
+            url: ctxPath + "dict/type/white_list",
+            type: 'get'
+        }).then(function (res2) {
+            searchDepot.data = searchDepot.data.concat(res2.data);
+            $("#depotId").data("data",searchDepot);
+            $("#depotId").render();
+        })
+    })
+
+    function importUser() {
+        var diag = new top.Dialog();
+        diag.Title = "导入";
+        diag.URL = ctxPath + "page/depotUser/importUser";
+        //自定义长度和宽度的设置
+        diag.Width = 320;
+        diag.Height = 150;
+        diag.ShowButtonRow = false;
+        diag.show();
+    }
+
+    function searchHandler() {
+        var paramsx = {};
+        var name = $("#name").val();
+        if (name) {
+            paramsx.name = name;
+        }
+
+        var depotId = $("#depotId").val();
+        if (depotId) {
+            paramsx.depotId = depotId
+        }
+
+
+        var deptId = $("#deptId").val();
+        if (deptId) {
+            paramsx.deptId = deptId
+        }
+
+
+        var userType = $("#userType").val();
+        if (userType) {
+            paramsx.userType = userType
+        }
+
+        paramsx.filters = JSON.stringify(paramsx);
+
+        grid.setOptions({
+            params: paramsx
+        });
+        grid.setNewPage(1);
+        grid.loadData();
+    }
+
+    function resetSearch() {
+        $("#queryForm")[0].reset();
+        searchHandler();
+    }
     $(function () {
         var classArray = [],deptArray = [];
         $.ajax({
@@ -139,24 +236,24 @@
 
         grid = $("#dataBasic").quiGrid({
             columns: [
-                {display: '照片', name: 'photo', align: 'center', width: "10%",
+                {display: '照片', name: 'photo', align: 'center', width: "7%",
                     render: function (rowdata, rowindex, value, column) {
                         var img = '<div class="user-img">';
                         img += '<img src="'+value+'"/>';
                         img += '</div>';
                         return img;
                     }},
-                {display: '姓名', name: 'name', align: 'center', width: "10%",cellClick:true},
-                {display: '性别', name: 'gender', align: 'center', width: "10%",
+                {display: '姓名', name: 'name', align: 'center', width: "7%",cellClick:true},
+                {display: '性别', name: 'gender', align: 'center', width: "7%",
                     render: function (rowdata, rowindex, value, column) {
                         switch (value) {
-                            case 1:
+                            case 0:
                                 return "男"
-                            case 2:
+                            case 1:
                                 return "女"
                         }
                     }},
-                {display: '类型', name: 'userType', align: 'center', width: "15%",
+                {display: '类型', name: 'userType', align: 'center', width: "6%",
                     render: function (rowdata, rowindex, value, column) {
                     //1学生2教职工3家长9未知
                         switch (value) {
@@ -190,7 +287,7 @@
                             return res
                         }
                     }},
-                {display: '黑白名单', name: 'depotType', align: 'center', width: "17%",
+                {display: '黑白名单', name: 'depotType', align: 'center', width: "15%",
                     render: function (rowdata, rowindex, value, column) {
                         switch (value) {
                             case 0:
@@ -199,12 +296,22 @@
                                 return "黑名单"
                         }
                     }},
+                {display: '家长', name: 'parentName', align: 'center', width: "20%",
+                    render: function (rowdata, rowindex, value, column) {
+                        switch (value) {
+                            case 0:
+                                return "男"
+                            case 1:
+                                return "女"
+                        }
+                    }},
                 {
                     display: '操作', align: 'center', width: "20%",
                     render: function (rowdata, rowindex, value, column) {
                         var bar = '<div class="grid_user_container">';
                         bar += '<div class="bg1 qTip" title="编辑" onclick="onEdit(\'' + rowdata.id + '\')">编辑</div>';
                         bar += '<div class="bg2 qTip" title="删除" onclick="onDelete(\'' + rowdata.id + '\')">删除</div>';
+                        bar += '<div class="bg3 qTip" title="同步所有平板" onclick="openSync(\'' + rowdata.id + '\')">同步所有平板</div>';
                         bar += '</div>';
                         return bar;
                     }
@@ -253,14 +360,28 @@
         $('#allNumber').html(data['pager.totalRows'])
     }
 
+    function openSync(id){
+        $.ajax({
+            url: ctxPath + "flatbed/people/" + id,
+            type: 'post'
+        }).then(function (res) {
+            if (0 == res.code) {
+                top.Toast("showSuccessToast", '同步成功');
+            } else {
+                top.Toast("showErrorToast", res.msg);
+            }
+        }, function () {
+            top.Toast("showErrorToast", '操作异常');
+        })
+    }
     //新增
     function addUser() {
         var diag = new top.Dialog();
         diag.URL = ctxPath + "page/depotuser/add";
         diag.Title = "添加出入人员";
         //自定义宽度和长度的设置
-        diag.Width = 570;
-        diag.Height = 360;
+        diag.Width = 800;
+        diag.Height = 700;
         diag.ShowButtonRow = true;
         diag.OkButtonText = " 提 交 ";
         diag.OKEvent = function () {
@@ -293,8 +414,8 @@
         diag.Title = "编辑";
         diag.URL = ctxPath + "page/depotuser/add?id=" + id;
         //自定义长度和宽度的设置
-        diag.Width = 570;
-        diag.Height = 350;
+        diag.Width = 800;
+        diag.Height = 700;
         diag.ShowButtonRow = true;
         diag.OkButtonText = " 提 交 ";
         diag.OKEvent = function () {

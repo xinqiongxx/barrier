@@ -10,13 +10,17 @@ import com.tjaide.nursery.barrier.common.core.util.R;
 import com.tjaide.nursery.barrier.common.log.annotation.SysLog;
 import com.tjaide.nursery.barrier.web.dto.RoleDTO;
 import com.tjaide.nursery.barrier.web.entity.SysBarrier;
+import com.tjaide.nursery.barrier.web.entity.SysFlatbed;
 import com.tjaide.nursery.barrier.web.entity.SysRole;
 import com.tjaide.nursery.barrier.web.service.SysBarrierService;
+import com.tjaide.nursery.barrier.web.service.SysFlatbedService;
+import com.tjaide.nursery.barrier.web.util.FlatBedUtil;
 import io.swagger.annotations.Api;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * @author maxinqiong
@@ -28,6 +32,7 @@ import javax.validation.Valid;
 @Api(value = "barrier", tags = "道闸管理模块")
 public class SysBarrierController {
     private final SysBarrierService sysBarrierService;
+    private final SysFlatbedService sysFlatbedService;
 
     /**
      * 通过ID查询
@@ -83,7 +88,46 @@ public class SysBarrierController {
      * @return 分页对象
      */
     @GetMapping("/page")
-    public R getBBarrierPage(Page page) {
+    public R getBarrierPage(Page page) {
         return R.ok(sysBarrierService.page(page, Wrappers.emptyWrapper()));
     }
+
+
+    /**
+     * 开闸
+     *
+     * @return
+     */
+    @PostMapping("/open/{id}/{type}")
+    public R openBarrier(@PathVariable Integer id,@PathVariable String type) {
+        SysBarrier sysBarrier = sysBarrierService.getById(id);
+        SysFlatbed sysFlatbed = null;
+        if("enter".equals(type)) {
+            sysFlatbed = sysFlatbedService.getById(sysBarrier.getEnterFlatbed());
+        }else {
+            sysFlatbed = sysFlatbedService.getById(sysBarrier.getLeaveFlatbed());
+        }
+        if("1".equals(sysFlatbed.getOnlineStatus().toString())){
+            return R.failed("平板不在线");
+        }
+        return R.ok(FlatBedUtil.OpenDoor(sysFlatbed.getIpAddress(),sysFlatbed.getNumber()));
+    }
+
+
+    @PostMapping("/openAll")
+    public R openBarrierAll() {
+        List<SysBarrier> sysBarriers = sysBarrierService.list();
+        sysBarriers.forEach(sysBarrier -> {
+            SysFlatbed  sysFlatbedEnter = sysFlatbedService.getById(sysBarrier.getEnterFlatbed());
+            if("0".equals(sysFlatbedEnter.getOnlineStatus().toString())) {
+                FlatBedUtil.OpenDoor(sysFlatbedEnter.getIpAddress(), sysFlatbedEnter.getNumber());
+            }
+            SysFlatbed  sysFlatbedLeave = sysFlatbedService.getById(sysBarrier.getLeaveFlatbed());
+            if("0".equals(sysFlatbedLeave.getOnlineStatus().toString())) {
+                FlatBedUtil.OpenDoor(sysFlatbedLeave.getIpAddress(), sysFlatbedLeave.getNumber());
+            }
+        });
+        return R.ok();
+    }
+
 }

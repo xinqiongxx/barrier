@@ -270,6 +270,7 @@ $(function() {
 			backgroundColor: e
 		}), navigator.userAgent.toLowerCase().indexOf("msie") > -1 && (maskDiv.height(b.height() + parseInt(b.css("padding-top")) + parseInt(b.css("padding-bottom"))), maskDiv.width(b.width() + parseInt(b.css("padding-left")) + parseInt(b.css("padding-right")))), void 0 !== c && null != c && (h = a('<div class="loadmask-msg" style="display:none;"></div>'), d ? h.append('<div class="mask_lading">' + c + "</div>") : h.append('<div  class="normal">' + c + "</div>"), b.append(h), h[0].style.top = f + "px", h[0].style.left = g + "px", h[0].style.display = "")
 	}, a.unmaskElement = function(a) {
+		$(".masked-relative").removeClass("masked-relative");
 		void 0 !== a.data("_mask_timeout") && (clearTimeout(a.data("_mask_timeout")), a.removeData("_mask_timeout")), a.find(".loadmask-msg").remove(), a.removeClass("masked"), maskDiv.fadeOut(400)
 	}
 }(jQuery), jQuery &&
