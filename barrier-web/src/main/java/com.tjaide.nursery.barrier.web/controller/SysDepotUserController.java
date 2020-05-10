@@ -19,9 +19,11 @@ import com.tjaide.nursery.barrier.common.log.annotation.SysLog;
 import com.tjaide.nursery.barrier.web.entity.SysDepotUser;
 import com.tjaide.nursery.barrier.web.entity.SysDept;
 import com.tjaide.nursery.barrier.web.entity.SysDictItem;
+import com.tjaide.nursery.barrier.web.entity.SysUserRelation;
 import com.tjaide.nursery.barrier.web.service.SysDepotUserService;
 import com.tjaide.nursery.barrier.web.service.SysDeptService;
 import com.tjaide.nursery.barrier.web.service.SysDictItemService;
+import com.tjaide.nursery.barrier.web.service.SysUserRelationService;
 import io.swagger.annotations.Api;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
@@ -59,6 +61,8 @@ public class SysDepotUserController {
     private SysDictItemService sysDictItemService;
     @Autowired
     private SysDeptService sysDeptService;
+    @Autowired
+    private SysUserRelationService sysUserRelationService;
 
     /**
      * 通过ID查询
@@ -116,6 +120,18 @@ public class SysDepotUserController {
     @GetMapping("/page")
     public R getRolePage(Page page,SysDepotUser sysDepotUser) {
         return R.ok(sysDepotUserService.page(page, Wrappers.query(sysDepotUser)));
+    }
+
+
+    /**
+     * 添加关系表
+     *
+     * @param
+     * @return success、false
+     */
+    @PostMapping("/saverelation")
+    public R saverelation(@RequestBody SysUserRelation sysUserRelation) {
+        return R.ok(sysUserRelationService.saveOrUpdateRelation(sysUserRelation));
     }
 
     @Value("${file.path}")

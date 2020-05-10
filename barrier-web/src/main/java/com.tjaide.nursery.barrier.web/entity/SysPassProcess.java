@@ -42,6 +42,8 @@ public class SysPassProcess extends Model<SysPassProcess> {
     private String remark;
     @ApiModelProperty(value = "用户id（底库用户）")
     private Integer userId;
+    @ApiModelProperty(value = "识别id（底库用户）")
+    private Integer discernId;
     /**
      * 创建时间
      */

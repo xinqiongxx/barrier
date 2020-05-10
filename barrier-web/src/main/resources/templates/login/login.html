@@ -64,7 +64,6 @@
 </div>
 <script>
     $(function () {
-        console.log(ctxPath)
         document.getElementById("username").focus();
         $("#username").keydown(function (event) {
             if (event.keyCode == 13) {
@@ -98,7 +97,6 @@
             data.username = $('#username').val();
             data.password = $('#password').val();
             $ajax({url: ctxPath + "login/login", data: data, method: "POST",show:false}, function (ret) {
-                console.log(ret)
                 if (ret.code == 0) {
                     $(".login_info").html("登录成功，转到主页...");
                     location.href = "/";
