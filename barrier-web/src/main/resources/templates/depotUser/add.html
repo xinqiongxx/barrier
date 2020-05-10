@@ -294,12 +294,14 @@
                 $("#address").val(data.address);
                 $("#remark").val(data.remark);
 
-                var $li = $(
-                    '<div class="file-item thumbnail">' +
-                    '<img src="'+data.photo+'" style="width:200px;"/>' +
-                    '</div>'
-                    );
-                $("#fileList").append( $li );
+                if(data.photo&&data.photo.startsWith("data")){
+                    var $li = $(
+                        '<div class="file-item thumbnail">' +
+                        '<img src="'+data.photo+'" style="width:200px;"/>' +
+                        '</div>'
+                        );
+                    $("#fileList").append( $li );
+                }
             })
         }
 

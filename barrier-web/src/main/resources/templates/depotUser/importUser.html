@@ -17,7 +17,10 @@
     <script type="text/javascript" th:src="@{/libs/js/form/form.js}" src="../../libs/js/form/form.js"></script>
     <!--表单异步提交end-->
 
-
+    <!-- 表单验证start -->
+    <script type="text/javascript" th:src="@{/libs/js/form/validationRule.js}" src="../../libs/js/form/validationRule.js"></script>
+    <script type="text/javascript" th:src="@{/libs/js/form/validation.js}" src="../../libs/js/form/validation.js"></script>
+    <!-- 表单验证end -->
     <script type="text/javascript" th:inline="javascript">
         /*<![CDATA[*/
         ctxPath = /*[[@{/}]]*/ '';
@@ -27,21 +30,43 @@
 <body>
 <div class="form_content">
     <form id='uplodFileForm' th:action="${'/depotuser/readExcel'}" enctype='multipart/form-data' method='post'>
-        <div class="importUser">
-            <input type='file' id='userDataFile' name='file'/>
-            <div>说明 ：导入的excel需要遵循规定的格式</div>
-            <div>
-                <span onclick="download()" class="red underline" style="cursor: pointer;">点击这里</span>
-                下载导入的excel数据模板
-            </div>
-            <div style="">
-                <button type="submit" style="">
-                    <span class="icon_xls">导入</span>
-                </button>
-            </div>
-
-        </div>
-
+        <table class="tableStyle" formMode="view">
+            <tr>
+                <td width="30%"><span class="star">*</span>文件：</td>
+                <td>
+                    <input type='file' id='userDataFile' name='file' class="validate[required]" keepDefaultStyle="true"/>
+                </td>
+            </tr>
+            <tr>
+                <td><span class="star">*</span>黑白名单：</td>
+                <td>
+                    <input type="radio" id="list-1" name="depotType" value="0" checked />
+                    <label for="list-1" class="hand">白名单</label>
+                    <input type="radio" id="list-2" name="depotType" value="1"/>
+                    <label for="list-2" class="hand">黑名单</label>
+                </td>
+            </tr>
+            <tr>
+                <td><span class="star">*</span>需要导入人员底库：</td>
+                <td>
+                    <select id="depotId"  name="depotId"  prompt="请选择人员底库" dataRoot="data" labelField="label"
+                            valueField="value" class="validate[required]" keepDefaultStyle = true></select>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    导入的excel需要遵循规定的格式，<span onclick="download()" class="red underline" style="cursor: pointer;">点击这里</span>
+                    下载导入的excel数据模板
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" style="text-align: center">
+                    <button type="submit" style="">
+                        <span class="icon_xls">导入</span>
+                    </button>
+                </td>
+            </tr>
+        </table>
     </form>
 </div>
 
@@ -51,12 +76,34 @@
 </body>
 <script type="text/javascript">
     var msg;
+    function changeItem(){
+        if($("input:radio[name=depotType]:checked").val() == 1){
+            $.ajax({
+                url: ctxPath + "dict/type/black_list",
+                type: 'get'
+            }).then(function (res) {
+                $("#depotId").data("data", res)
+                $("#depotId").render();
+            })
+        }else{
+            $.ajax({
+                url: ctxPath + "dict/type/white_list",
+                type: 'get'
+            }).then(function (res) {
+                $("#depotId").data("data", res)
+                $("#depotId").render();
+            })
+        }
+    }
 
     function initComplete() {
+        $('input[type=radio][name=depotType]').change(function(){
+            changeItem();
+        })
+        changeItem();
         $("#uplodFileForm").submit(function (e) {
-            if ($('#userDataFile').val()) {
-                var formFile = new FormData();
-                formFile.append("file", document.getElementById("userDataFile").files[0]);
+            var valid = $(uplodFileForm).validationEngine({returnIsValid: true});
+            if (valid) {
                 var form = new FormData(document.getElementById("uplodFileForm"));
                 $.ajax({
                     type: 'post',
@@ -65,8 +112,8 @@
                     processData: false,
                     contentType: false,
                     success: function (res) {
-                        if ('导入成功' == res.data) {
-                            top.Toast("showSuccessToast", '导入成功');
+                        if (0 == res.code) {
+                            top.Toast("showSuccessToast", res.data);
                         } else {
                             msg = top.Notice('showNotice', {
                                 title: "导入失败，原因如下：",

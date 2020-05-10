@@ -83,6 +83,8 @@ mybatis-plus:
 logging:
   level:
     com.tjaide.nursery.barrier.web.mapper: info
+file:
+  path: /Users/gougou/Desktop
 # 租户表维护
 cacx:
   tenant:

@@ -7,6 +7,7 @@ package com.tjaide.nursery.barrier.web.controller;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.IoUtil;
+import cn.hutool.core.util.ZipUtil;
 import cn.hutool.poi.excel.ExcelReader;
 import cn.hutool.poi.excel.ExcelUtil;
 import cn.hutool.poi.excel.ExcelWriter;
@@ -32,16 +33,16 @@ import org.apache.poi.xssf.usermodel.XSSFDataValidation;
 import org.apache.poi.xssf.usermodel.XSSFDataValidationConstraint;
 import org.apache.poi.xssf.usermodel.XSSFDataValidationHelper;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -49,13 +50,15 @@ import java.util.stream.Collectors;
  * @date 2017/11/5
  */
 @RestController
-@AllArgsConstructor
 @RequestMapping("/depotuser")
 @Api(value = "depotuser", tags = "底库用户管理模块")
 public class SysDepotUserController {
-    private final SysDepotUserService sysDepotUserService;
-    private final SysDictItemService sysDictItemService;
-    private final SysDeptService sysDeptService;
+    @Autowired
+    private SysDepotUserService sysDepotUserService;
+    @Autowired
+    private SysDictItemService sysDictItemService;
+    @Autowired
+    private SysDeptService sysDeptService;
 
     /**
      * 通过ID查询
@@ -115,19 +118,37 @@ public class SysDepotUserController {
         return R.ok(sysDepotUserService.page(page, Wrappers.query(sysDepotUser)));
     }
 
+    @Value("${file.path}")
+    private String filePath;
     /**
-     * 导入出入人员
-     * @param file
+     * 导入用户照片
      * @return
      */
+    @SneakyThrows
+    @SysLog("导入用户照片")
+    @PostMapping("/photo")
+    public R photo(@RequestParam("file") MultipartFile file,@RequestParam("name") String name) {
+        String path = filePath+File.separator+DateUtil.format(new Date(),"yyyy-MM-dd");
+        File outFileDe = new File(path);
+        if(!outFileDe.exists()){
+            outFileDe.mkdirs();
+        }
+        String filePath =path+File.separator+DateUtil.date().getTime();
+        File zipFile = new File(filePath+".zip");
+        IoUtil.copy(file.getInputStream(),new FileOutputStream(zipFile));
+        ZipUtil.unzip(zipFile);
+        zipFile.delete();
+        return sysDepotUserService.updatePhoto(filePath);
+    }
+
     @SysLog("导入用户信息")
     @PostMapping("/readExcel")
-    public R readExcel(@RequestParam("file") MultipartFile file) {
+    public R readExcel(@RequestParam("file") MultipartFile file,@RequestParam("depotId") Integer depotId,@RequestParam("depotType") Integer depotType) {
         ExcelReader reader = null;
         try {
             reader = ExcelUtil.getReader(file.getInputStream());
             List<Map<String, Object>> readAll = reader.readAll();
-            return sysDepotUserService.importByExcel(readAll);
+            return sysDepotUserService.importByExcel(readAll,depotId,depotType);
         } catch (CheckedException e) {
             e.printStackTrace();
             return R.failed(e.getErrors());

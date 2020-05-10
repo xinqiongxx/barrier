@@ -559,6 +559,9 @@ $(function() {
                 maxCharacters: parseInt(a(this).attr("maxNum"))
             }), null != a(this).attr("watermark") && a(this).watermark("watermark", a(this).attr("watermark")))
         }, a.fn.fileRender = function() {
+            if(a(this).attr("keepDefaultStyle")){
+                return;
+            }
             var e, f, g, h, i, j, b = 200,
                 c = 60,
                 d = 0;

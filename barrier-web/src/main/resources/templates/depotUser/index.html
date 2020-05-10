@@ -27,6 +27,13 @@
     <!--数据表格start-->
     <script th:src="@{/libs/js/table/quiGrid.js}" src="../../libs/js/table/quiGrid.js" type="text/javascript"></script>
     <!--数据表格end-->
+
+    <!--引入CSS-->
+    <link rel="stylesheet" type="text/css" th:href="@{/libs/js/webuploader/webuploader.css}" href="../../libs/js/webuploader/webuploader.css">
+
+    <!--引入JS-->
+    <script type="text/javascript" th:src="@{/libs/js/webuploader/webuploader.js}" src="../../libs/js/webuploader/webuploader.js"></script>
+
     <script type="text/javascript" th:inline="javascript">
         /*<![CDATA[*/
         ctxPath = /*[[@{/}]]*/ '';
@@ -43,6 +50,12 @@
             width: 80%;
             height: 100%;
             border-radius: 2px;
+        }
+        .webuploader-pick{
+            width:100%;
+            padding:0px;
+            height:100%;
+            background: none;
         }
     </style>
 </head>
@@ -85,11 +98,11 @@
             </div>
         </li>
         <li>
-            <div class="minute">
+            <div class="minute" id="uploader" style="width:276px;">
                 <div class="minute-content">
-                    <div class="minute_left" style="width: 55%;">
+                    <div class="minute_left" style="width: 55%;text-align: left;">
                         <div style="font-weight:bold;font-size: 22px;">导入照片</div>
-                        <div style="line-height: 18px;font-size: 9px;">Import Photo</div>
+                        <div style="line-height: 18px;font-size: 9px;">照片以上传照片编号或者证件号命名</div>
                     </div>
                     <div class="minute_right"><img src="../../system/skin/s4.png"></div>
                 </div>
@@ -150,6 +163,38 @@
 </div>
 <script type="text/javascript">
     var searchDepot = {data:[]};
+
+    // 初始化Web Uploader
+    var uploader = WebUploader.create({
+        auto: true,
+        swf: ctxPath+ '/libs/js/webuploader/Uploader.swf',
+        server: ctxPath+ 'depotuser/photo',
+        pick: '#uploader',
+        accept: {
+            title: 'zip',
+            extensions: 'zip',
+            mimeTypes: 'application/zip'
+        }
+    });
+
+    uploader.on("error",function (type){
+        if(type == "F_DUPLICATE"){
+            top.Toast("showErrorToast", '系统提示,请不要重复选择文件！');
+        }
+        if(type == "Q_TYPE_DENIED"){
+            top.Toast("showErrorToast","请上传照片ZIP文件")
+        }
+    });
+    uploader.on("uploadSuccess",function (file,response){
+        uploader.removeFile(file)
+        if(response.code == 0){
+            top.Toast("showSuccessToast", response.data);
+            grid.setNewPage(1);
+            grid.loadData();
+        }else{
+            top.Toast("showErrorToast","更新失败")
+        }
+    });
     var grid;
     $.ajax({
         url: ctxPath + "dict/type/black_list",
@@ -171,8 +216,8 @@
         diag.Title = "导入";
         diag.URL = ctxPath + "page/depotUser/importUser";
         //自定义长度和宽度的设置
-        diag.Width = 320;
-        diag.Height = 150;
+        diag.Width = 480;
+        diag.Height = 300;
         diag.ShowButtonRow = false;
         diag.show();
     }
@@ -236,12 +281,16 @@
 
         grid = $("#dataBasic").quiGrid({
             columns: [
-                {display: '照片', name: 'photo', align: 'center', width: "7%",
+                {display: '照片', name: 'photo', align: 'center', width: "12%",
                     render: function (rowdata, rowindex, value, column) {
-                        var img = '<div class="user-img">';
-                        img += '<img src="'+value+'"/>';
-                        img += '</div>';
-                        return img;
+                        if(value.startsWith("data")){
+                            var img = '<div class="user-img">';
+                            img += '<img src="'+value+'"/>';
+                            img += '</div>';
+                            return img;
+                        }else{
+                            return "暂未关联头像"
+                        }
                     }},
                 {display: '姓名', name: 'name', align: 'center', width: "7%",cellClick:true},
                 {display: '性别', name: 'gender', align: 'center', width: "7%",
@@ -267,7 +316,7 @@
                                 return "未知"
                         }
                     }},
-                {display: '班级/部门', name: 'deptId', align: 'center', width: "15%",
+                {display: '班级/部门', name: 'deptId', align: 'center', width: "10%",
                     render: function (rowdata, rowindex, value, column) {
                         if(rowdata.userType == 2){
                             var res = "部门已失效"
