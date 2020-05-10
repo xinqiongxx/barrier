@@ -26,7 +26,7 @@
 </head>
 <body>
 <div class="form_content">
-    <form id='uplodFileForm' th:action="${'/user/readExcel'}" enctype='multipart/form-data' method='post'>
+    <form id='uplodFileForm' th:action="${'/depotuser/readExcel'}" enctype='multipart/form-data' method='post'>
         <div class="importUser">
             <input type='file' id='userDataFile' name='file'/>
             <div>说明 ：导入的excel需要遵循规定的格式</div>
@@ -60,7 +60,7 @@
                 var form = new FormData(document.getElementById("uplodFileForm"));
                 $.ajax({
                     type: 'post',
-                    url: ctxPath + "user/readExcel",
+                    url: ctxPath + "depotuser/readExcel",
                     data: form,
                     processData: false,
                     contentType: false,
@@ -82,11 +82,6 @@
                         top.Toast("showErrorToast", '导入用户异常');
                     }
                 });
-                // $(this).ajaxSubmit({
-                //     success: function(responseText, statusText, xhr, $form){
-                //
-                //     }
-                // });
             } else {
                 top.Toast("showErrorToast", '请选择要导入的文件');
             }

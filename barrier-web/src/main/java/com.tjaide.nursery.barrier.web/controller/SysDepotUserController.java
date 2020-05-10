@@ -7,10 +7,12 @@ package com.tjaide.nursery.barrier.web.controller;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.IoUtil;
+import cn.hutool.poi.excel.ExcelReader;
 import cn.hutool.poi.excel.ExcelUtil;
 import cn.hutool.poi.excel.ExcelWriter;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.tjaide.nursery.barrier.common.core.exception.CheckedException;
 import com.tjaide.nursery.barrier.common.core.util.R;
 import com.tjaide.nursery.barrier.common.log.annotation.SysLog;
 import com.tjaide.nursery.barrier.web.entity.SysDepotUser;
@@ -31,6 +33,7 @@ import org.apache.poi.xssf.usermodel.XSSFDataValidationConstraint;
 import org.apache.poi.xssf.usermodel.XSSFDataValidationHelper;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -112,6 +115,32 @@ public class SysDepotUserController {
         return R.ok(sysDepotUserService.page(page, Wrappers.query(sysDepotUser)));
     }
 
+    /**
+     * 导入出入人员
+     * @param file
+     * @return
+     */
+    @SysLog("导入用户信息")
+    @PostMapping("/readExcel")
+    public R readExcel(@RequestParam("file") MultipartFile file) {
+        ExcelReader reader = null;
+        try {
+            reader = ExcelUtil.getReader(file.getInputStream());
+            List<Map<String, Object>> readAll = reader.readAll();
+            return sysDepotUserService.importByExcel(readAll);
+        } catch (CheckedException e) {
+            e.printStackTrace();
+            return R.failed(e.getErrors());
+        } catch (IOException e) {
+            e.printStackTrace();
+            return R.failed();
+        }
+    }
+
+    /**
+     * 下载规范的模版
+     * @param response 响应
+     */
     @SneakyThrows
     @PostMapping("/download")
     public void download(HttpServletResponse response) {
@@ -170,6 +199,7 @@ public class SysDepotUserController {
         row1.put("证件号", "");
         row1.put("图片编号（导入图片名称关联）", "");
 
+        sheet.setColumnWidth(3,7000);
         sheet.setColumnWidth(5,10000);
         sheet.setColumnWidth(6,20000);
         ArrayList<Map<String, Object>> rows = CollUtil.newArrayList(row1);
