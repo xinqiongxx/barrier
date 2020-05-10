@@ -14,11 +14,14 @@ import com.tjaide.nursery.barrier.web.entity.SysDict;
 import com.tjaide.nursery.barrier.web.entity.SysDictItem;
 import com.tjaide.nursery.barrier.web.service.SysDictItemService;
 import com.tjaide.nursery.barrier.web.service.SysDictService;
+import com.tjaide.nursery.barrier.web.vo.SelectVo;
 import io.swagger.annotations.Api;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -69,6 +72,27 @@ public class SysDictController {
         return R.ok(sysDictItemService.list(Wrappers
                 .<SysDictItem>query().lambda()
                 .eq(SysDictItem::getType, type)));
+    }
+
+
+
+    /**
+     * 通过字典类型查找字典
+     *
+     * @param type 类型
+     * @return 同类型字典
+     */
+    @GetMapping("/typeforSelect/{type}")
+    public R typeforSelect(@PathVariable String type) {
+        List<SelectVo> seleceVoList=sysDictItemService.list(Wrappers
+                .<SysDictItem>query().lambda()
+                .eq(SysDictItem::getType, type)).stream().map(sysDictItem -> {
+            SelectVo vo=new SelectVo();
+            vo.setKey(sysDictItem.getLabel());
+            vo.setValue(sysDictItem.getValue());
+            return vo;
+        }).collect(Collectors.toList());
+        return R.ok(seleceVoList);
     }
 
     /**

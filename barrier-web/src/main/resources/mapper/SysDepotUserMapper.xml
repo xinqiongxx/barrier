@@ -19,7 +19,6 @@
         <result column="certificate_type" property="cardId"/>
         <result column="birthday" property="birthday"/>
         <result column="phone" property="phone"/>
-        <result column="hometown" property="hometown"/>
         <result column="address" property="address"/>
         <result column="gender" property="gender"/>
         <result column="operator_id" property="operatorId"/>

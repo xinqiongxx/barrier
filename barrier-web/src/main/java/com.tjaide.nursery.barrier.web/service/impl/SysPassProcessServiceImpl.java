@@ -8,9 +8,12 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tjaide.nursery.barrier.web.entity.SysPassProcess;
 import com.tjaide.nursery.barrier.web.mapper.SysPassProcessMapper;
 import com.tjaide.nursery.barrier.web.service.SysPassProcessService;
+import com.tjaide.nursery.barrier.web.vo.SysPassProcessVo;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * <p>
@@ -25,5 +28,7 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class SysPassProcessServiceImpl extends ServiceImpl<SysPassProcessMapper, SysPassProcess> implements SysPassProcessService {
 
-
+    public List<SysPassProcessVo> findRecentPassVoList(){
+        return baseMapper.findRecentPassVoList();
+    }
 }

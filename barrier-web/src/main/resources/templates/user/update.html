@@ -134,7 +134,6 @@
                 url: ctxPath + "user/" + userId,
                 type: 'get',
             }).then(function (res) {
-                console.log(res)
                 var data = res.data
                 $('#userId').val(data.userId);
                 $('#username').val(data.username);
