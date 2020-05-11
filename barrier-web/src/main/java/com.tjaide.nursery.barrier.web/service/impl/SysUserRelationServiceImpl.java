@@ -77,4 +77,15 @@ public class SysUserRelationServiceImpl extends ServiceImpl<SysUserRelationMappe
         return ret>0;
     }
 
+    /**
+     * 保存用户关系信息
+     *
+     * @param sysUserRelation
+     * @return success/fail
+     */
+    @Override
+    public  IPage getrelations(Page page, Integer id){
+        return baseMapper.getrelations(page,id);
+    }
+
 }

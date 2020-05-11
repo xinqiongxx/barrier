@@ -8,7 +8,9 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.codec.Base64;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.ObjectUtil;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tjaide.nursery.barrier.common.core.entity.ShiroUser;
 import com.tjaide.nursery.barrier.common.core.exception.CheckedException;
@@ -244,6 +246,12 @@ public class SysDepotUserServiceImpl extends ServiceImpl<SysDepotUserMapper, Sys
             }
         }
         return resFile;
+    }
+
+
+    @Override
+    public IPage relationPage(Page page, SysDepotUser sysDepotUser, Integer id){
+        return baseMapper.relationPage(page,sysDepotUser,id);
     }
 
 }

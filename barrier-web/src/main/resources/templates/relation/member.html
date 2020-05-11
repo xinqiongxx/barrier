@@ -84,6 +84,7 @@
     <div id="dataBasic"></div>
 </div>
 <script type="text/javascript">
+    var id = '[[${param.id}]]';
     var searchDepot = {data:[]};
     var grid;
     $.ajax({
@@ -204,7 +205,7 @@
                         }
                     }}
             ],
-            url: ctxPath + 'depotuser/page',
+            url: ctxPath + 'depotuser/relation/page/'+id,
             method: 'get',
             sortName: 'create_time',
             sortOrder: "ASC",

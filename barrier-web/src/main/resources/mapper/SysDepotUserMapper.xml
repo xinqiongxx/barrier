@@ -27,4 +27,38 @@
         <result column="del_flag" property="delFlag"/>
     </resultMap>
 
+
+
+    <select id="getUserById" resultMap="BaseResultMap">
+        SELECT
+        *
+        FROM
+        sys_depot_user
+        <where>
+            and id=#{user_id}
+        </where>
+    </select>
+
+
+
+    <select id="relationPage" resultMap="BaseResultMap">
+        SELECT
+        a.id,a.name,a.depot_id,a.depot_type,a.dept_id,a.user_type,a.phone,a.gender,a.remark,a.nation,a.certificate_type
+        ,a.card_id,a.birthday,a.phone,a.address,a.create_time,a.operator_id,a.operator_name,a.del_flag,a.tenant_id
+        FROM
+        sys_depot_user as a
+        <where>
+            and id !=#{id} and id not in (select member_id from sys_user_relation where user_id = #{id})
+            <if test="query.name != null and query.name != ''">
+                and name LIKE CONCAT('%',#{query.name},'%')
+            </if>
+            <if test="query.depotType != null and query.depotType != ''">
+                and depot_type = #{query.depotType}
+            </if>
+            <if test="query.deptId != null and query.deptId != ''">
+                and dept_id = #{query.deptId}
+            </if>
+        </where>
+    </select>
+
 </mapper>
