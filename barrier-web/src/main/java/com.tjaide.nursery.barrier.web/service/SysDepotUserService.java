@@ -30,7 +30,6 @@ public interface SysDepotUserService extends IService<SysDepotUser> {
     List<SysDepotUser> enterDepotUser();
 
     List<Integer> getGraduation();
-    R updatePhoto(String filePath);
 
     IPage relationPage(Page page, SysDepotUser sysDepotUser, Integer id);
 }
