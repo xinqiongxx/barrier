@@ -150,7 +150,18 @@ public class SysDepotUserController {
         all.join();
         return R.ok();
     }
-
+    /**
+     * 删除
+     *
+     * @param id
+     * @return
+     */
+    @SysLog("删除")
+    @DeleteMapping("/delRelation/{userId}/{memberId}")
+    public R removeById(@PathVariable Integer userId,@PathVariable Integer memberId) {
+        return R.ok(sysUserRelationService.remove(Wrappers.<SysUserRelation>lambdaQuery().eq(SysUserRelation::getUserId,userId)
+                .eq(SysUserRelation::getMemberId,memberId)));
+    }
 
     /**
      * 分页查询信息
@@ -163,6 +174,27 @@ public class SysDepotUserController {
         return R.ok(sysDepotUserService.page(page, Wrappers.query(sysDepotUser)));
     }
 
+    /**
+     * 分页查询信息
+     *
+     * @param page 分页对象
+     * @return 分页对象
+     */
+    @GetMapping("/relation/page/{id}")
+    public R getRelationPage(Page page,SysDepotUser sysDepotUser,@PathVariable Integer id) {
+        return R.ok(sysDepotUserService.relationPage(page, sysDepotUser,id));
+    }
+
+    /**
+     * 分页查询信息
+     *
+     * @param page 分页对象
+     * @return 分页对象
+     */
+    @GetMapping("/getrelations/{id}")
+    public R getrelations(Page page,@PathVariable Integer id) {
+        return R.ok(sysUserRelationService.getrelations(page, id));
+    }
 
     /**
      * 添加关系表

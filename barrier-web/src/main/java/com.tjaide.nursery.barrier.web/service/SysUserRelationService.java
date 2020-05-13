@@ -1,5 +1,7 @@
 package com.tjaide.nursery.barrier.web.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.tjaide.nursery.barrier.web.entity.SysUserRelation;
 
@@ -11,4 +13,11 @@ public interface SysUserRelationService extends IService<SysUserRelation> {
      * @return success/fail
      */
     Boolean saveOrUpdateRelation(SysUserRelation sysUserRelation);
+    /**
+     * 获取关联关系
+     *
+     * @param sysUserRelation
+     * @return success/fail
+     */
+    IPage getrelations(Page page, Integer id);
 }

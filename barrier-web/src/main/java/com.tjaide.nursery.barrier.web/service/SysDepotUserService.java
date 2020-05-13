@@ -4,6 +4,8 @@
 
 package com.tjaide.nursery.barrier.web.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.tjaide.nursery.barrier.common.core.util.R;
 import com.tjaide.nursery.barrier.web.entity.SysDepotUser;
@@ -28,4 +30,7 @@ public interface SysDepotUserService extends IService<SysDepotUser> {
     List<SysDepotUser> enterDepotUser();
 
     List<Integer> getGraduation();
+    R updatePhoto(String filePath);
+
+    IPage relationPage(Page page, SysDepotUser sysDepotUser, Integer id);
 }

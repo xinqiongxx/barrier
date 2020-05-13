@@ -57,6 +57,14 @@ public class PageController {
         model.addAttribute("id", id);
         return "dict/dictitem";
     }
+    /***
+     * @Description: 人员管理
+     */
+    @RequestMapping(value = "/relation/member/{id}")
+    public String member(@PathVariable("id") String id, Model model) {
+        model.addAttribute("id", id);
+        return "dict/dictitem";
+    }
 
     @RequestMapping(value = "/dict/edit/{id}")
     public String dictedit(@PathVariable("id") Integer id, Model model) {

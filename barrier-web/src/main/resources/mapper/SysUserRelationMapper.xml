@@ -15,4 +15,28 @@
         <result column="if_student" property="ifStudent"/>
     </resultMap>
 
+    <!-- 通用查询映射结果 -->
+    <resultMap id="voResultMap" type="com.tjaide.nursery.barrier.web.vo.SysUserRelationVO">
+        <id column="user_id" property="userId"/>
+        <result column="member_id" property="memberId"/>
+        <result column="relation_type" property="relationType"/>
+        <result column="remark" property="remark"/>
+        <result column="if_student" property="ifStudent"/>
+        <association property="user" column="user_id"
+                     select="com.tjaide.nursery.barrier.web.mapper.SysDepotUserMapper.getUserById"></association>
+        <association property="member" column="member_id"
+                     select="com.tjaide.nursery.barrier.web.mapper.SysDepotUserMapper.getUserById"></association>
+    </resultMap>
+
+
+    <select id="getrelations" resultMap="voResultMap">
+        SELECT
+        *
+        FROM
+        sys_user_relation AS suser
+        <where>
+            and user_id=#{id}
+        </where>
+    </select>
+
 </mapper>
