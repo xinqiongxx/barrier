@@ -43,7 +43,7 @@
                 <td><span class="star">*</span>门闸编码：</td>
                 <td>
                     <input type="hidden" id="id" name="id"/>
-                    <input type="text" id="number" name="number" class="validate[required]"/>
+                    <input type="text" id="number" name="number" class="validate[required,ajax[/api/validate/sys_barrier/number|* 闸机编号已存在!]"/>
                 </td>
             </tr>
             <tr>

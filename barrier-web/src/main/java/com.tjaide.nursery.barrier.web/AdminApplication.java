@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.data.mongo.MongoDataAutoConfigurat
 import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
  * 认证中心后台类启动类
@@ -16,6 +17,7 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 
  **/
 @EnableCacxSwagger2
+@EnableScheduling
 @SpringBootApplication(exclude = {MongoAutoConfiguration.class, MongoDataAutoConfiguration.class}, scanBasePackages = {"com.tjaide.nursery.barrier"})
 public class AdminApplication extends SpringBootServletInitializer {
 

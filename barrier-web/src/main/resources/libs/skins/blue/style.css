@@ -3024,7 +3024,7 @@ input.stepper-active.stepper-down, input.stepper-active.stepper-down-hover {
 .l-grid-header {
     height: 40px !important;
     line-height: 40px !important;
-    /*background-color: #fff;*/
+    background-color: #5c92fb;
     overflow: hidden;
     width: 100%;
     color: #fff;

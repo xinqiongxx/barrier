@@ -33,9 +33,13 @@ public class SysPassProcess extends Model<SysPassProcess> {
     @ApiModelProperty(value = "id")
     private Integer id;
     @ApiModelProperty(value = "进出类型1进2出")
-    private Integer enter_type;
+    private Integer enterType;
     @ApiModelProperty(value = "照片")
-    private String photo;
+    @TableField(el="sanp_pic, typeHandler=com.tjaide.nursery.barrier.common.data.handler.BlobTypeHandler")
+    private String sanpPic;
+    @ApiModelProperty(value = "照片")
+    @TableField(el="registered_pic, typeHandler=com.tjaide.nursery.barrier.common.data.handler.BlobTypeHandler")
+    private String registeredPic;
     @ApiModelProperty(value = "处理状态")
     private Integer status;
     @ApiModelProperty(value = "备注")

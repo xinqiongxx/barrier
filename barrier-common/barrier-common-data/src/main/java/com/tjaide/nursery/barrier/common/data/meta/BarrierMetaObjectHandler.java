@@ -54,19 +54,19 @@ public class BarrierMetaObjectHandler implements MetaObjectHandler {
     public void insertFill(MetaObject metaObject) {
 
         // 创建时间
-        if (StrUtil.isEmptyIfStr(getFieldValByName(CREATETIME,metaObject))) {
+        if (metaObject.hasGetter(CREATETIME)&&StrUtil.isEmptyIfStr(getFieldValByName(CREATETIME,metaObject))) {
             setFieldValByName(CREATETIME, LocalDateTime.now(),metaObject);
         }
         // 更新时间
-        if (StrUtil.isEmptyIfStr(getFieldValByName(UPDATETIME,metaObject))) {
+        if (metaObject.hasGetter(UPDATETIME)&&StrUtil.isEmptyIfStr(getFieldValByName(UPDATETIME,metaObject))) {
             setFieldValByName(UPDATETIME, LocalDateTime.now(),metaObject);
         }
         // 用户ID
-        if (StrUtil.isEmptyIfStr(getFieldValByName(OPERATORID,metaObject))) {
+        if (metaObject.hasGetter(OPERATORID)&&StrUtil.isEmptyIfStr(getFieldValByName(OPERATORID,metaObject))) {
             setFieldValByName(OPERATORID, Integer.parseInt(ShiroUtils.getUser().getUserId()),metaObject);
         }
         // 用户名
-        if (StrUtil.isEmptyIfStr(getFieldValByName(OPERATORNAME,metaObject))) {
+        if (metaObject.hasGetter(OPERATORNAME)&&StrUtil.isEmptyIfStr(getFieldValByName(OPERATORNAME,metaObject))) {
             setFieldValByName(OPERATORNAME, ShiroUtils.getUser().getName(),metaObject);
         }
     }
@@ -79,15 +79,15 @@ public class BarrierMetaObjectHandler implements MetaObjectHandler {
     @Override
     public void updateFill(MetaObject metaObject) {
         // 更新时间
-        if (StrUtil.isEmptyIfStr(getFieldValByName(UPDATETIME,metaObject))) {
+        if (metaObject.hasGetter(UPDATETIME)&&StrUtil.isEmptyIfStr(getFieldValByName(UPDATETIME,metaObject))) {
             setFieldValByName(UPDATETIME, LocalDateTime.now(),metaObject);
         }
         // 用户ID
-        if (StrUtil.isEmptyIfStr(getFieldValByName(OPERATORID,metaObject))) {
+        if (metaObject.hasGetter(OPERATORID)&&StrUtil.isEmptyIfStr(getFieldValByName(OPERATORID,metaObject))) {
             setFieldValByName(OPERATORID, Integer.parseInt(ShiroUtils.getUser().getUserId()),metaObject);
         }
         // 用户名
-        if (StrUtil.isEmptyIfStr(getFieldValByName(OPERATORNAME,metaObject))) {
+        if (metaObject.hasGetter(OPERATORNAME)&&StrUtil.isEmptyIfStr(getFieldValByName(OPERATORNAME,metaObject))) {
             setFieldValByName(OPERATORNAME, ShiroUtils.getUser().getName(),metaObject);
         }
     }

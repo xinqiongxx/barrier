@@ -7,6 +7,7 @@ package com.tjaide.nursery.barrier.web.controller;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.IoUtil;
+import cn.hutool.core.lang.UUID;
 import cn.hutool.core.util.ZipUtil;
 import cn.hutool.poi.excel.ExcelReader;
 import cn.hutool.poi.excel.ExcelUtil;
@@ -16,14 +17,9 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.tjaide.nursery.barrier.common.core.exception.CheckedException;
 import com.tjaide.nursery.barrier.common.core.util.R;
 import com.tjaide.nursery.barrier.common.log.annotation.SysLog;
-import com.tjaide.nursery.barrier.web.entity.SysDepotUser;
-import com.tjaide.nursery.barrier.web.entity.SysDept;
-import com.tjaide.nursery.barrier.web.entity.SysDictItem;
-import com.tjaide.nursery.barrier.web.entity.SysUserRelation;
-import com.tjaide.nursery.barrier.web.service.SysDepotUserService;
-import com.tjaide.nursery.barrier.web.service.SysDeptService;
-import com.tjaide.nursery.barrier.web.service.SysDictItemService;
-import com.tjaide.nursery.barrier.web.service.SysUserRelationService;
+import com.tjaide.nursery.barrier.web.entity.*;
+import com.tjaide.nursery.barrier.web.service.*;
+import com.tjaide.nursery.barrier.web.util.FlatBedUtil;
 import io.swagger.annotations.Api;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
@@ -39,12 +35,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import sun.misc.BASE64Decoder;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import javax.websocket.server.PathParam;
 import java.io.*;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 /**
@@ -63,7 +62,14 @@ public class SysDepotUserController {
     private SysDeptService sysDeptService;
     @Autowired
     private SysUserRelationService sysUserRelationService;
+    @Autowired
+    private SysFlatbedService sysFlatbedService;
 
+
+    @Value("${file.path}")
+    private String filePath;
+
+    private BASE64Decoder decoder = new BASE64Decoder();
     /**
      * 通过ID查询
      *
@@ -81,10 +87,22 @@ public class SysDepotUserController {
      * @param
      * @return success、false
      */
+    @SneakyThrows
     @SysLog("添加")
     @PostMapping
     public R save(@Valid @RequestBody SysDepotUser depotUser) {
-        return R.ok(sysDepotUserService.saveOrUpdate(depotUser));
+        // 存储头像
+        String photo = depotUser.getPhoto();
+        depotUser.setPhoto("");
+        sysDepotUserService.saveOrUpdate(depotUser);
+        byte[] b = decoder.decodeBuffer(photo.replace("data:image/jpeg;base64,",""));
+        ByteArrayInputStream bais = new ByteArrayInputStream(b);
+        String fileName = depotUser.getId().toString();
+        new File(filePath+File.separator+"reg").mkdirs();
+        IoUtil.copy(bais,new FileOutputStream(new File(filePath+File.separator+"reg"+File.separator+ fileName +".jpeg")));
+        depotUser.setPhoto("/api/image/view/reg/"+fileName);
+        sysDepotUserService.saveOrUpdate(depotUser);
+        return R.ok();
     }
 
     /**
@@ -92,9 +110,17 @@ public class SysDepotUserController {
      *
      * @return success/false
      */
+    @SneakyThrows
     @SysLog("修改")
     @PutMapping
     public R update(@Valid @RequestBody SysDepotUser depotUser) {
+        if(depotUser.getPhoto().startsWith("data")) {
+            byte[] b = decoder.decodeBuffer(depotUser.getPhoto().replace("data:image/jpeg;base64,", ""));
+            ByteArrayInputStream bais = new ByteArrayInputStream(b);
+            String fileName = depotUser.getId().toString();
+            IoUtil.copy(bais, new FileOutputStream(new File(filePath + File.separator + "reg" + File.separator + fileName + ".jpeg")));
+            depotUser.setPhoto("/api/image/view/reg/" + fileName);
+        }
         return R.ok(sysDepotUserService.saveOrUpdate(depotUser));
     }
 
@@ -107,7 +133,22 @@ public class SysDepotUserController {
     @SysLog("删除")
     @DeleteMapping("/{id}")
     public R removeById(@PathVariable Integer id) {
-        return R.ok(sysDepotUserService.removeById(id));
+        sysDepotUserService.removeById(id);
+        List<SysFlatbed> sysFlatbeds = sysFlatbedService.list();
+        List<String> ids = new ArrayList<>();
+        ids.add(id+"");
+        ids.add(id+"A");
+        List<CompletableFuture> resList = new ArrayList<>();
+        sysFlatbeds.forEach( sysFlatbed -> {
+            resList.add(CompletableFuture.supplyAsync(() -> sysFlatbed).thenAcceptAsync(e -> {
+                if("0".equals(sysFlatbed.getOnlineStatus().toString())) {
+                    FlatBedUtil.DeletePerson(sysFlatbed.getIpAddress(), sysFlatbed.getNumber(), ids);
+                }
+            }));
+        });
+        CompletableFuture all = CompletableFuture.allOf(resList.toArray(new CompletableFuture[resList.size()]));
+        all.join();
+        return R.ok();
     }
 
 
@@ -133,9 +174,6 @@ public class SysDepotUserController {
     public R saverelation(@RequestBody SysUserRelation sysUserRelation) {
         return R.ok(sysUserRelationService.saveOrUpdateRelation(sysUserRelation));
     }
-
-    @Value("${file.path}")
-    private String filePath;
     /**
      * 导入用户照片
      * @return
@@ -144,17 +182,17 @@ public class SysDepotUserController {
     @SysLog("导入用户照片")
     @PostMapping("/photo")
     public R photo(@RequestParam("file") MultipartFile file,@RequestParam("name") String name) {
-        String path = filePath+File.separator+DateUtil.format(new Date(),"yyyy-MM-dd");
+        String path = filePath+File.separator+"import"+File.separator+DateUtil.format(new Date(),"yyyy-MM-dd");
         File outFileDe = new File(path);
         if(!outFileDe.exists()){
             outFileDe.mkdirs();
         }
-        String filePath =path+File.separator+DateUtil.date().getTime();
-        File zipFile = new File(filePath+".zip");
+        String pathFile =path+File.separator+File.separator+DateUtil.date().getTime();
+        File zipFile = new File(pathFile+".zip");
         IoUtil.copy(file.getInputStream(),new FileOutputStream(zipFile));
         ZipUtil.unzip(zipFile);
         zipFile.delete();
-        return sysDepotUserService.updatePhoto(filePath);
+        return sysDepotUserService.updatePhoto(pathFile,filePath);
     }
 
     @SysLog("导入用户信息")
@@ -173,6 +211,32 @@ public class SysDepotUserController {
             return R.failed();
         }
     }
+
+    @SysLog("清除毕业人员")
+    @DeleteMapping("/clearGraduation")
+    public R clearGraduation(){
+        // 查询毕业人员
+        List<Integer> graduationIds = sysDepotUserService.getGraduation();
+        sysDepotUserService.removeByIds(graduationIds);
+        List<SysFlatbed> sysFlatbeds = sysFlatbedService.list();
+        List<String> ids = new ArrayList<>();
+        graduationIds.forEach(id -> {
+            ids.add(id+"");
+            ids.add(id+"A");
+        });
+        List<CompletableFuture> resList = new ArrayList<>();
+        sysFlatbeds.forEach( sysFlatbed -> {
+            resList.add(CompletableFuture.supplyAsync(() -> sysFlatbed).thenAcceptAsync(e -> {
+                if("0".equals(sysFlatbed.getOnlineStatus().toString())) {
+                    FlatBedUtil.DeletePerson(sysFlatbed.getIpAddress(), sysFlatbed.getNumber(), ids);
+                }
+            }));
+        });
+        CompletableFuture all = CompletableFuture.allOf(resList.toArray(new CompletableFuture[resList.size()]));
+        all.join();
+        return R.ok();
+    }
+
 
     /**
      * 下载规范的模版

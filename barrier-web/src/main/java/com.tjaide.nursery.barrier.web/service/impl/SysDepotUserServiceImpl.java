@@ -5,8 +5,8 @@
 package com.tjaide.nursery.barrier.web.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.codec.Base64;
 import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -25,6 +25,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -66,12 +69,12 @@ public class SysDepotUserServiceImpl extends ServiceImpl<SysDepotUserMapper, Sys
         List<CompletableFuture> resList = new ArrayList<>();
         ShiroUser shiroUser = ShiroUtils.getUser();
         AtomicReference<Integer> updateNum = new AtomicReference<>(0);
-        for (int i = 0; i < mapList.size(); i++) {
-            Map<String,Object> beforeMap = mapList.get(i);
+        for (int i = 1; i <= mapList.size(); i++) {
+            Map<String,Object> beforeMap = mapList.get(i-1);
             beforeMap.put("operatorId",shiroUser.getUserId());
             beforeMap.put("operatorName",shiroUser.getName());
-            oldMap.put(i,beforeMap);
-            if (i / tempInt == 0 || (i == (mapList.size() - 1) && i / tempInt != 0)) {
+            oldMap.put(i-1,beforeMap);
+            if ( i % tempInt == 0 || (i == mapList.size()  && i % tempInt != 0)) {
                 Map<Integer,Map<String,Object>>  finalOldMap = oldMap;
                 resList.add(CompletableFuture.supplyAsync(() -> finalOldMap).thenAcceptAsync(e -> {
                     for(Integer key : finalOldMap.keySet()){
@@ -100,14 +103,73 @@ public class SysDepotUserServiceImpl extends ServiceImpl<SysDepotUserMapper, Sys
                             errinfo.add("第" + (key + 1) + "行,班级部门不可以为空。");
                             continue;
                         }
-                        if (ObjectUtil.isEmpty(map.get("certificatType"))) {
-                            errinfo.add("第" + (key + 1) + "行,证件类型不可以为空。");
+                        String oldDeptId = map.get("deptId").toString();
+                        // 人员类型
+                        // {"学生", "教职工","家长","未知"}
+                        if ("学生".equals(map.get("userType").toString())) {
+                            map.put("userType", 1);
+                            if (ObjectUtil.isEmpty(map.get("certificatType"))) {
+                                errinfo.add("第" + (key + 1) + "行,证件类型不可以为空。");
+                                continue;
+                            }
+                            if (ObjectUtil.isEmpty(map.get("cardId"))) {
+                                errinfo.add("第" + (key + 1) + "行,证件号不可以为空。");
+                                continue;
+                            }
+                            deptNameList.forEach(sysDictItem -> {
+                                if (sysDictItem.getLabel().equals(map.get("deptId").toString())) {
+                                    map.put("deptId", sysDictItem.getValue());
+                                }
+                            });
+                            if (oldDeptId.equals(map.get("deptId").toString())) {
+                                errinfo.add("第" + (key + 1) + "行,班级部门不符合规范，学生/家长请选择班级");
+                                continue;
+                            }
+
+                        } else if ("教职工".equals(map.get("userType").toString())) {
+                            map.put("userType", 2);
+                            if (ObjectUtil.isEmpty(map.get("certificatType"))) {
+                                errinfo.add("第" + (key + 1) + "行,证件类型不可以为空。");
+                                continue;
+                            }
+                            if (ObjectUtil.isEmpty(map.get("cardId"))) {
+                                errinfo.add("第" + (key + 1) + "行,证件号不可以为空。");
+                                continue;
+                            }
+                            // 部门
+                            if (sysDept.getDeptName().equals(map.get("deptId").toString())) {
+                                map.put("deptId", sysDept.getDeptId());
+                            }
+                            if (oldDeptId.equals(map.get("deptId").toString())) {
+                                errinfo.add("第" + (key + 1) + "行,班级部门不符合规范，教职工/未知请选择学校部门");
+                                continue;
+                            }
+                        } else if ("家长".equals(map.get("userType").toString())) {
+                            map.put("userType", 3);
+                            deptNameList.forEach(sysDictItem -> {
+                                if (sysDictItem.getLabel().equals(map.get("deptId").toString())) {
+                                    map.put("deptId", sysDictItem.getValue());
+                                }
+                            });
+                            if (oldDeptId.equals(map.get("deptId").toString())) {
+                                errinfo.add("第" + (key + 1) + "行,班级部门不符合规范，学生/家长请选择班级");
+                                continue;
+                            }
+                        } else if ("未知".equals(map.get("userType").toString())) {
+                            map.put("userType", 9);
+                            // 部门
+                            if (sysDept.getDeptName().equals(map.get("deptId").toString())) {
+                                map.put("deptId", sysDept.getDeptId());
+                            }
+                            if (oldDeptId.equals(map.get("deptId").toString())) {
+                                errinfo.add("第" + (key + 1) + "行,班级部门不符合规范，教职工/未知请选择学校部门");
+                                continue;
+                            }
+                        } else {
+                            errinfo.add("第" + (key + 1) + "行,人员类型不符合规范。");
                             continue;
                         }
-                        if (ObjectUtil.isEmpty(map.get("cardId"))) {
-                            errinfo.add("第" + (key + 1) + "行,证件号不可以为空。");
-                            continue;
-                        }// 查询赋值
+                       // 查询赋值
                         // 性别 0男 1女
                         if ("男".equals(map.get("gender").toString())) {
                             map.put("gender", 0);
@@ -117,35 +179,8 @@ public class SysDepotUserServiceImpl extends ServiceImpl<SysDepotUserMapper, Sys
                             errinfo.add("第" + (key + 1) + "行,性别不符合规范。");
                             continue;
                         }
-                        // 人员类型
-                        // {"学生", "教职工","家长","未知"}
-                        if ("学生".equals(map.get("userType").toString())) {
-                            map.put("userType", 1);
-                        } else if ("教职工".equals(map.get("userType").toString())) {
-                            map.put("userType", 2);
-                        } else if ("家长".equals(map.get("userType").toString())) {
-                            map.put("userType", 3);
-                        } else if ("未知".equals(map.get("userType").toString())) {
-                            map.put("userType", 9);
-                        } else {
-                            errinfo.add("第" + (key + 1) + "行,人员类型不符合规范。");
-                            continue;
-                        }
-                        // 班级部门
-                        if (sysDept.getDeptName().equals(map.get("deptId").toString())) {
-                            map.put("deptId", sysDept.getDeptId());
-                        } else {
-                            String oldDeptId = map.get("deptId").toString();
-                            deptNameList.forEach(sysDictItem -> {
-                                if (sysDictItem.getLabel().equals(map.get("deptId").toString())) {
-                                    map.put("deptId", sysDictItem.getValue());
-                                }
-                            });
-                            if (oldDeptId.equals(map.get("deptId").toString())) {
-                                errinfo.add("第" + (key + 1) + "行,班级部门不符合规范。");
-                                continue;
-                            }
-                        }
+
+
                         // 证件类型
                         String oldCertificatType = map.get("certificatType").toString();
                         certificateType.forEach(sysDictItem -> {
@@ -191,16 +226,16 @@ public class SysDepotUserServiceImpl extends ServiceImpl<SysDepotUserMapper, Sys
     }
 
     @Override
-    public R updatePhoto(String filePath) {
-        File contentsFile = new File(filePath);
+    public R updatePhoto(String path,String filePath) {
+        File contentsFile = new File(path);
         List<File>  resFiles = readfile(contentsFile.listFiles());
         int tempInt = resFiles.size() / 30 + 1;
         AtomicReference<Integer> error = new AtomicReference<>(0);
         List<File> oldList = new ArrayList<>();
         List<CompletableFuture> resList = new ArrayList<>();
-        for (int i = 0; i < resFiles.size(); i++) {
-            oldList.add(resFiles.get(i));
-            if (i / tempInt == 0 || (i == (resFiles.size() - 1) && i / tempInt != 0)) {
+        for (int i = 1; i <= resFiles.size(); i++) {
+            oldList.add(resFiles.get(i-1));
+            if ( i % tempInt == 0 || (i == resFiles.size()  && i % tempInt != 0)) {
                 List<File> finalOldMap = oldList;
                 resList.add(CompletableFuture.supplyAsync(() -> finalOldMap).thenAcceptAsync(e -> {
                     e.forEach(file -> {
@@ -213,7 +248,14 @@ public class SysDepotUserServiceImpl extends ServiceImpl<SysDepotUserMapper, Sys
                             one = this.getOne(Wrappers.<SysDepotUser>lambdaQuery().eq(SysDepotUser::getCardId, fileName));
                         }
                         if(ObjectUtil.isNotEmpty(one)) {
-                            one.setPhoto("data:image/jpeg;base64,"+Base64.encode(file));
+                            String uuid = one.getId().toString();
+                            new File(filePath+File.separator+"reg").mkdirs();
+                            try {
+                                IoUtil.copy(new FileInputStream(file),new FileOutputStream(new File(filePath+File.separator+"reg"+File.separator+uuid+".jpeg")));
+                            } catch (FileNotFoundException ex) {
+                                ex.printStackTrace();
+                            }
+                            one.setPhoto("/api/image/view/reg/"+uuid);
                             boolean ret = this.updateById(one);
                         }else{
                             error.getAndSet(error.get() + 1);
@@ -226,6 +268,16 @@ public class SysDepotUserServiceImpl extends ServiceImpl<SysDepotUserMapper, Sys
         CompletableFuture all = CompletableFuture.allOf(resList.toArray(new CompletableFuture[resList.size()]));
         all.join();
         return R.ok("更新照片，成功更新"+(resFiles.size() - error.get())+",未匹配照片数"+error.get());
+    }
+
+    @Override
+    public List<SysDepotUser> enterDepotUser() {
+        return baseMapper.enterDepotUser();
+    }
+
+    @Override
+    public List<Integer> getGraduation() {
+        return baseMapper.getGraduation();
     }
 
     private static List<File> readfile(File[] files) {
