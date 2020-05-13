@@ -134,6 +134,10 @@
                 </div>
             </td>
         </tr>
+        <tr>
+            <td width="20%" >最近一张识别照片：</td>
+            <td width="80%" rowspan="5" colspan="3"><img id="photolast" src="" style="width: 40%; margin: 0px 10%;"/></td>
+        </tr>
     </table>
 </div>
 <script type="text/javascript">
@@ -177,6 +181,7 @@
             }
             $("#name").html(data.name);
             $("#photo").attr("src",data.photo);
+            $("#photolast").attr("src",data.photo+"A");
             $("#gender").html(data.gender);
             $("#userType").html(data.userType == 1?"学生":data.userType ==2?"教职工":data.userType == 3 ? "家长":"未知");
             if(data.depotType == 0){

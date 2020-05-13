@@ -43,7 +43,7 @@
                 <td><span class="star">*</span>门闸编码：</td>
                 <td>
                     <input type="hidden" id="id" name="id"/>
-                    <input type="text" id="number" name="number" class="validate[required,ajax[/api/validate/sys_barrier/number|* 闸机编号已存在!]"/>
+                    <input type="text" id="number" name="number" class="validate[required,ajax[/api/validate/sys_barrier/number/aide|* 平板编号已存在!]"/>
                 </td>
             </tr>
             <tr>
@@ -144,6 +144,13 @@
                 $("#description").val(data.description);
                 $("#enterFlatbed").setValue(data.enterFlatbed);
                 $("#leaveFlatbed").setValue(data.leaveFlatbed);
+                if(data.number){
+                    $("#number").attr("class","validate[required,ajax[/api/validate/sys_barrier/number/"+data.number+"|* 闸机编号已存在!]");
+                }else{
+                    $("#number").attr("class","validate[required,ajax[/api/validate/sys_barrier/number/aide|* 平板编号已存在!]");
+                }
+                $("#number").render();
+
             })
         }
     })

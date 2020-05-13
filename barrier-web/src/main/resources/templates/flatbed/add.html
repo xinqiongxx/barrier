@@ -43,7 +43,7 @@
                 <td><span class="star">*</span>平板编码：</td>
                 <td>
                     <input type="hidden" id="id" name="id"/>
-                    <input type="text" id="number" name="number" class="validate[required,ajax[/api/validate/sys_flatbed/number|* 平板编号已存在!]"/>
+                    <input type="text" id="number" name="number" class="validate[required,ajax[/api/validate/sys_flatbed/number/|* 平板编号已存在!]"/>
                 </td>
             </tr>
             <tr>
@@ -127,6 +127,12 @@
                 $("#ipAddress").val(data.ipAddress);
                 $("#passType").setValue(data.passType);
                 $("#rtspAddress").val(data.rtspAddress);
+                if(data.number){
+                    $("#number").attr("class","validate[required,ajax[/api/validate/sys_flatbed/number/"+data.number+"|* 平板编号已存在!]");
+                }else{
+                    $("#number").attr("class","validate[required,ajax[/api/validate/sys_flatbed/number/|* 平板编号已存在!]");
+                }
+                $("#number").render();
             })
         }
     })

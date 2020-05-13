@@ -6,18 +6,9 @@ import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.tjaide.nursery.barrier.web.entity.SysDepotUser;
+import com.tjaide.nursery.barrier.web.entity.SysFlatbed;
+import com.tjaide.nursery.barrier.web.service.SysFlatbedService;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.http.Header;
-import org.apache.http.HttpEntity;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.util.EntityUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -136,20 +127,26 @@ public class FlatBedUtil {
         return error.get();
     }
 
-    public static List<SysDepotUser> AddPersons(String url, String deviceId,List<SysDepotUser> lists,String filePath){
-
+    public static List<SysDepotUser> AddPersons(SysFlatbed sysFlatbed, List<SysDepotUser> lists, String filePath, SysFlatbedService sysFlatbedService){
+        sysFlatbed.setProcess("开始同步");
+        sysFlatbedService.updateById(sysFlatbed);
+        String url = sysFlatbed.getIpAddress();
+        String deviceId = sysFlatbed.getNumber();
         List<String> ids = new ArrayList<>();
         lists.forEach(sysDepotUser -> {
             ids.add(sysDepotUser.getId()+"");
             ids.add(sysDepotUser.getId()+"A");
         });
-        DeletePerson(url,deviceId,ids);
+        sysFlatbed.setProcess("完成：0%");
+        sysFlatbedService.updateById(sysFlatbed);
+        DeletePerson(url, deviceId, ids);
         // 多线程处理
         int tempInt = lists.size() / 30 + 1;
         //int tempInt = lists.size();
         List<SysDepotUser> error = new ArrayList<>();
         List<SysDepotUser> oldList = new ArrayList<>();
         List<CompletableFuture> resList = new ArrayList<>();
+        AtomicInteger completeInt = new AtomicInteger(0);
         for (int i = 1; i <= lists.size(); i++) {
             oldList.add(lists.get(i-1));
             if ( i % tempInt == 0 || (i == lists.size()  && i % tempInt != 0)) {
@@ -198,7 +195,9 @@ public class FlatBedUtil {
                     if (code != 200) {
                         error.addAll(sysDepotUsers);
                     }
-
+                    completeInt.set(completeInt.get()+e.size());
+                    sysFlatbed.setProcess("完成："+(double)Math.round( completeInt.get()/(double)lists.size()*1000)/10+"%");
+                    sysFlatbedService.updateById(sysFlatbed);
                 }));
                 oldList = new ArrayList<>();
             }
@@ -206,6 +205,8 @@ public class FlatBedUtil {
         long end =System.currentTimeMillis();
         CompletableFuture all = CompletableFuture.allOf(resList.toArray(new CompletableFuture[resList.size()]));
         all.join();
+        sysFlatbed.setProcess("同步完成");
+        sysFlatbedService.updateById(sysFlatbed);
         return error;
     }
 

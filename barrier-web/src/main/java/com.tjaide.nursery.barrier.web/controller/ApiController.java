@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
@@ -63,10 +64,17 @@ public class ApiController {
     @ResponseBody
     @GetMapping("/validate/{table}/{name}")
     public Map<String,Object> validate(@PathVariable("table") String table,@PathVariable("name") String name,@RequestParam("validateValue") String validateValue){
+        return validateValue("",table,name,validateValue);
+    }
+
+    @SneakyThrows
+    @ResponseBody
+    @GetMapping("/validate/{table}/{name}/{value}")
+    public Map<String,Object> validateValue(@PathVariable("value")String value,@PathVariable("table") String table,@PathVariable("name") String name,@RequestParam("validateValue") String validateValue){
         Map<String,Object> result = new HashMap<>();
         Map<String,Object> message = new HashMap<>();
         DruidPooledConnection druidPooledConnection = dataSource.getConnection();
-        String sql = "select * from "+table + " where "+ name +" = "+ validateValue;
+        String sql = "select * from "+table + " where "+ name +" = "+ validateValue +" and "+ name + " <> '"+value+"'";
         ResultSet resultSet = druidPooledConnection.prepareStatement(sql).executeQuery();
         if(resultSet.next()){
             message.put("message","");
@@ -84,6 +92,11 @@ public class ApiController {
     @ResponseBody
     public void imageView(@PathVariable String type, @PathVariable String id, HttpServletResponse response){
         File imageFile = new File(filePath+File.separator+type+File.separator + id+".jpeg");
+        if(!imageFile.exists()){
+            String filePath = ResourceUtils.getURL("classpath:").getPath() + "static"+ File.separator+"image"+File.separator;
+            String newname = "noData.png";
+            imageFile = new File(filePath + newname);
+        }
         response.setContentType("image/jpeg");
         IoUtil.copy(new FileInputStream(imageFile), response.getOutputStream());
     }

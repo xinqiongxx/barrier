@@ -55,5 +55,7 @@ public class SysFlatbed extends Model<SysFlatbed> {
     private String delFlag;
     @ApiModelProperty(value = "用户所属租户id")
     private Integer tenantId;
+    @ApiModelProperty(value = "进度")
+    private String process;
 
 }
