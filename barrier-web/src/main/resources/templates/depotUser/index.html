@@ -34,6 +34,8 @@
     <!--引入JS-->
     <script type="text/javascript" th:src="@{/libs/js/webuploader/webuploader.js}" src="../../libs/js/webuploader/webuploader.js"></script>
 
+    <script th:src="@{/libs/js/graphical/raphael.js}" src="../../libs/js/graphical/raphael.js" type="text/javascript"></script>
+    <script  th:src="@{/libs/js/graphical/progress.js}" src="../../libs/js/graphical/progress.js" type="text/javascript"></script>
     <script type="text/javascript" th:inline="javascript">
         /*<![CDATA[*/
         ctxPath = /*[[@{/}]]*/ '';
@@ -86,7 +88,7 @@
                 </div>
             </div>
         </li>
-        <li onclick="importUser()">
+        <li onclick="importUser()" id="test">
             <div class="minute">
                 <div class="minute-content">
                     <div class="minute_left">
@@ -98,7 +100,8 @@
             </div>
         </li>
         <li>
-            <div class="minute" id="uploader" style="width:276px;">
+            <div class="minute" id="uploader">
+                <div id="process" style="width:100px;height:100px;position:relative;z-index:900;display: none;"><span style="position: absolute;left: 22px;top: 36px;">导入中...</span></div>
                 <div class="minute-content">
                     <div class="minute_left" style="width: 55%;text-align: left;">
                         <div style="font-weight:bold;font-size: 22px;">导入照片</div>
@@ -155,6 +158,11 @@
                             <span class="icon_clear">重置</span>
                         </button>
                     </td>
+                    <td>
+                        <button type="button" class="error" onclick="clearGraduation()">
+                            <span class="icon_clear">删除已毕业</span>
+                        </button>
+                    </td>
                 </tr>
             </table>
         </form>
@@ -162,6 +170,21 @@
     <div id="dataBasic"></div>
 </div>
 <script type="text/javascript">
+    $("#uploader").width($("#test").width())
+
+    var radius = 35,ring;
+
+    var paramBg = {stroke: "#ebf1f7", "stroke-width": 10};
+    var paramBlue = {stroke: "#00aaef", "stroke-width": 10,"stroke-linecap":"round"};
+    $(function(){
+
+        var paper =initPaper("process", 100, 100);
+        //paper,current,min,max,cx,cy,radius,param,paramBg
+        ring = drawRingProgress(paper,50,0,100,50,50,radius,paramBlue,paramBg);
+
+
+
+    })
     var searchDepot = {data:[]};
 
     // 初始化Web Uploader
@@ -186,7 +209,6 @@
         }
     });
     uploader.on("uploadSuccess",function (file,response){
-        uploader.removeFile(file)
         if(response.code == 0){
             top.Toast("showSuccessToast", response.data);
             grid.setNewPage(1);
@@ -195,6 +217,22 @@
             top.Toast("showErrorToast","更新失败")
         }
     });
+
+
+    uploader.on("uploadComplete",function(file){
+        uploader.removeFile(file)
+    })
+
+    uploader.on("uploadProgress",function(file,percentage){
+        if(percentage*100 == 100){
+            $("#process").hide();
+            $("#uploader .minute_left").show()
+        }else{
+            $("#process").show();
+            $("#uploader .minute_left").hide()
+        }
+        ring.animate({arc: [percentage*100, 100,50,50,radius]}, 500, "<");
+    })
     var grid;
     $.ajax({
         url: ctxPath + "dict/type/black_list",
@@ -254,6 +292,25 @@
         grid.setNewPage(1);
         grid.loadData();
     }
+    function clearGraduation(){
+        top.Dialog.confirm("确认清除已毕业人员信息吗？确保所有相关平板在线。",function(){
+            $.ajax({
+                url: ctxPath + "depotuser/clearGraduation",
+                type: 'delete'
+            }).then(function (res) {
+                if (0 == res.code) {
+                    grid.loadData();
+                    top.Toast("showSuccessToast", '清除成功');
+                } else {
+                    top.Toast("showErrorToast", '清除异常');
+                }
+            }, function () {
+                top.Toast("showErrorToast", '清除异常');
+            })
+        },function(){
+
+        });
+    }
 
     function resetSearch() {
         $("#queryForm")[0].reset();
@@ -283,7 +340,7 @@
             columns: [
                 {display: '照片', name: 'photo', align: 'center', width: "12%",
                     render: function (rowdata, rowindex, value, column) {
-                        if(value.startsWith("data")){
+                        if(value.startsWith("/")){
                             var img = '<div class="user-img">';
                             img += '<img src="'+value+'"/>';
                             img += '</div>';
@@ -327,7 +384,7 @@
                             })
                             return res
                         }else{
-                            var res = "班级已失效"
+                            var res = "班级已毕业"
                             classArray.forEach(function(item){
                                 if( value == item.value ){
                                     res = item.label
@@ -345,7 +402,7 @@
                                 return "黑名单"
                         }
                     }},
-                {display: '家长', name: 'parentName', align: 'center', width: "20%",
+                {display: '家长', name: 'parentName', align: 'center', width: "18%",
                     render: function (rowdata, rowindex, value, column) {
                         switch (value) {
                             case 0:
@@ -355,11 +412,10 @@
                         }
                     }},
                 {
-                    display: '操作', align: 'center', width: "20%",
+                    display: '操作', align: 'center', width: "22%",
                     render: function (rowdata, rowindex, value, column) {
                         var bar = '<div class="grid_user_container">';
-                        bar += '<div class="bg1 qTip" title="编辑" onclick="onEdit(\'' + rowdata.id + '\')">编辑</div>';
-                        bar += '<div class="bg2 qTip" title="删除" onclick="onDelete(\'' + rowdata.id + '\')">删除</div>';
+                        bar += '<div class="bg1 qTip" title="删除" onclick="onDelete(\'' + rowdata.id + '\')">删除</div>';
                         bar += '<div class="bg2 qTip" title="关联人员" onclick="onRelation(\'' + rowdata.id + '\')">关联人员</div>';
                         bar += '<div class="bg3 qTip" title="同步所有平板" onclick="openSync(\'' + rowdata.id + '\')">同步所有平板</div>';
                         bar += '</div>';
@@ -442,19 +498,21 @@
 
     //删除
     function onDelete(id) {
-        $.ajax({
-            url: ctxPath + "depotuser/" + id,
-            type: 'delete'
-        }).then(function (res) {
-            if (0 == res.code) {
-                grid.loadData();
-                top.Toast("showSuccessToast", '操作成功');
-            } else {
+        top.Dialog.confirm("确认删除人员信息吗？确保所有相关平板在线！",function() {
+            $.ajax({
+                url: ctxPath + "depotuser/" + id,
+                type: 'delete'
+            }).then(function (res) {
+                if (0 == res.code) {
+                    grid.loadData();
+                    top.Toast("showSuccessToast", '操作成功');
+                } else {
+                    top.Toast("showErrorToast", '操作异常');
+                }
+            }, function () {
                 top.Toast("showErrorToast", '操作异常');
-            }
-        }, function () {
-            top.Toast("showErrorToast", '操作异常');
-        })
+            })
+        });
 
     }
 

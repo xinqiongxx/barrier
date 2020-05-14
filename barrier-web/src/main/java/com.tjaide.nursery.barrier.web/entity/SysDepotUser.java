@@ -4,6 +4,7 @@
 
 package com.tjaide.nursery.barrier.web.entity;
 
+import cn.hutool.core.codec.Base64;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableLogic;
@@ -12,7 +13,11 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.SneakyThrows;
 
+import javax.sql.rowset.serial.SerialBlob;
+import java.io.File;
+import java.sql.Blob;
 import java.time.LocalDateTime;
 
 /**
@@ -43,6 +48,7 @@ public class SysDepotUser extends Model<SysDepotUser> {
     @ApiModelProperty(value = "人员类型（1学生2教职工3家长9未知）")
     private Integer userType;
     @ApiModelProperty(value = "照片")
+    //@TableField(el="photo, typeHandler=com.tjaide.nursery.barrier.common.data.handler.BlobTypeHandler")
     private String photo;
     @ApiModelProperty(value = "备注")
     private String remark;
@@ -74,5 +80,16 @@ public class SysDepotUser extends Model<SysDepotUser> {
     private String delFlag;
     @ApiModelProperty(value = "用户所属租户id")
     private Integer tenantId;
+
+    // /api/image/view/{type}/{name}
+    public String getPhotoBase64(String filePath){
+        if(this.photo.startsWith("/")) {
+            String[] names = this.photo.split("/");
+            String type = names[names.length - 2];
+            String name = names[names.length - 1];
+            setPhoto("data:image/jpeg;base64,"+Base64.encode(new File(filePath+File.separator+type+File.separator+name+".jpeg")));
+        }
+        return this.photo;
+    }
 
 }

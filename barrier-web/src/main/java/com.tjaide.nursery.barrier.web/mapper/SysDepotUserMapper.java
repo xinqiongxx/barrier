@@ -9,6 +9,11 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.tjaide.nursery.barrier.web.entity.SysBarrier;
 import com.tjaide.nursery.barrier.web.entity.SysDepotUser;
+import io.swagger.models.auth.In;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
+import java.util.Map;
 import com.tjaide.nursery.barrier.web.vo.SysUserRelationVO;
 import org.apache.ibatis.annotations.Param;
 
@@ -23,6 +28,9 @@ import java.util.List;
  * @since 2018-01-20
  */
 public interface SysDepotUserMapper extends BaseMapper<SysDepotUser> {
+    List<SysDepotUser> enterDepotUser();
+
+    List<Integer> getGraduation();
 
     SysDepotUser getUserById(@Param("user_id") Integer user_id);
 

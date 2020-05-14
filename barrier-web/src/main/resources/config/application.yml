@@ -16,6 +16,10 @@ jasypt:
   encryptor:
     password: password
 spring:
+  servlet:
+    multipart:
+      max-file-size: -1
+      max-request-size: -1
   resources:
     static-locations: classpath:/
     chain:
@@ -61,6 +65,7 @@ shiro:
   success-url: /index
   unauthorized-url: /loginemptyKq
   anon:
+    - /api/statistics/**
     - /login/login
     - /static/**
     - /libs/**
@@ -73,6 +78,7 @@ shiro:
   user:
 # Mybatis
 mybatis-plus:
+  type-handlers-package:
   tenant-enable: ture
   mapper-locations: classpath:/mapper/*Mapper.xml
   global-config:

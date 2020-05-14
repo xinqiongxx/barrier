@@ -9,7 +9,6 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.tjaide.nursery.barrier.common.core.util.R;
 import com.tjaide.nursery.barrier.web.entity.SysDepotUser;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -26,7 +25,11 @@ public interface SysDepotUserService extends IService<SysDepotUser> {
 
     R importByExcel(List<Map<String, Object>> mapList, Integer depotId, Integer depotType);
 
-    R updatePhoto(String filePath);
+    R updatePhoto(String path,String filePath);
+
+    List<SysDepotUser> enterDepotUser();
+
+    List<Integer> getGraduation();
 
     IPage relationPage(Page page, SysDepotUser sysDepotUser, Integer id);
 }

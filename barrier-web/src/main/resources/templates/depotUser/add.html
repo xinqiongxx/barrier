@@ -115,7 +115,7 @@
                 </td>
                 <td width="20%"><span class="star">*</span>证件号：</td>
                 <td width="30%">
-                    <input type="text" id="cardId" name="cardId" class="validate[required]"/>
+                    <input type="text" id="cardId" name="cardId" class="validate[required,ajax[/api/validate/sys_depot_user/card_id/aide|* 身份证号已存在!]]"/>
                 </td>
             </tr>
             <tr>
@@ -293,8 +293,13 @@
                 $("#phone").val(data.phone);
                 $("#address").val(data.address);
                 $("#remark").val(data.remark);
-
-                if(data.photo&&data.photo.startsWith("data")){
+                if(data.cardId){
+                    $("#cardId").attr("class","validate[required,ajax[/api/validate/sys_depot_user/card_id/"+data.cardId+"|* 身份证号已存在!]]");
+                }else{
+                    $("#cardId").attr("class","validate[required,ajax[/api/validate/sys_depot_user/card_id/aide|* 身份证号已存在!]]");
+                }
+                $("#cardId").render();
+                if(data.photo && data.photo.startsWith("/")){
                     var $li = $(
                         '<div class="file-item thumbnail">' +
                         '<img src="'+data.photo+'" style="width:200px;"/>' +

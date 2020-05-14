@@ -75,16 +75,16 @@
         <li onclick="clearAll()">
             <div class="minute">
                 <div class="minute-content">
-                    <div class="minute_left">
+                    <div class="minute_left" style="width:55%;">
                         <div style="font-weight:bold;font-size: 22px;">全部清空</div>
-                        <div style="line-height: 18px;font-size: 9px;">All Clear</div>
+                        <div style="line-height: 18px;font-size: 9px;">清空在线PAD，PAD将会重启请稍作等待</div>
                     </div>
                     <div class="minute_right"><img src="../../system/skin/s3.png"></div>
                 </div>
             </div>
         </li>
 
-        <li onclick="syncAll()">
+        <li onclick="syncAll()" id="sync">
             <div class="minute">
                 <div class="minute-content">
                     <div class="minute_left" style="width: 55%;">
@@ -119,11 +119,11 @@
         grid = $("#dataBasic").quiGrid({
             columns: [
                 {display: '平板编号', name: 'number', align: 'center', width: "15%",cellClick:true},
-                {display: '平板名称', name: 'name', align: 'center', width: "15%"},
+                {display: '平板名称', name: 'name', align: 'center', width: "7%"},
                 {display: 'IP地址', name: 'ipAddress', align: 'center', width: "20%"},
                 {display: '在线', name: 'onlineStatus', align: 'center', width: "7%",
                     render: function (rowdata, rowindex, value, column) {
-                      return value == "0"?"在线":"离线"
+                        return "<span id='status_"+rowdata.id+"'>"+(value == '0'?'在线':'离线')+"</span>"
                     }},
                 {display: '名单数', name: 'num', align: 'center', width: "8%",
                     render: function (rowdata, rowindex, value, column) {
@@ -150,6 +150,11 @@
                            }
                         })
                         return res
+                    }
+                },
+                {display: '状态', name: 'process', align: 'center', width: "8%",
+                    render: function (rowdata, rowindex, value, column) {
+                        return "<span id='process_"+rowdata.id+"'>"+value+"</span>"
                     }
                 },
                 {
@@ -296,21 +301,21 @@
             top.Toast("showErrorToast", '平板不在线');
             return;
         }
-        top.bodyMask("正在同步中，请稍等....");
+        //top.bodyMask("正在同步中，请稍等....");
         $.ajax({
             url: ctxPath + "flatbed/sync/" + id,
             type: 'post'
         }).then(function (res) {
             if (0 == res.code) {
                 grid.loadData();
-                top.bodyUnMask()
+               // top.bodyUnMask()
                 top.Toast("showSuccessToast", '同步成功');
             } else {
-                top.bodyUnMask()
+                //top.bodyUnMask()
                 top.Toast("showErrorToast", res.msg);
             }
         }, function () {
-            top.bodyUnMask()
+            //top.bodyUnMask()
             top.Toast("showErrorToast", '同步异常');
         })
     }
@@ -322,7 +327,7 @@
         }).then(function (res) {
             if (0 == res.code) {
                 grid.loadData();
-                top.Toast("showSuccessToast", '清空成功');
+                top.Toast("showSuccessToast", '全部清空完成，PAD正在重新启动，请稍等！');
             } else {
                 top.Toast("showErrorToast",  res.msg);
             }
@@ -331,24 +336,35 @@
         })
     }
 
+    var isSync = false;
     function syncAll(){
-        top.bodyMask("正在同步中，请稍等....");
-        $.ajax({
-            url: ctxPath + "flatbed/syncAll",
-            type: 'post'
-        }).then(function (res) {
-            if (0 == res.code) {
-                grid.loadData();
-                top.bodyUnMask()
-                top.Toast("showSuccessToast", '同步成功');
-            } else {
-                top.bodyUnMask()
-                top.Toast("showErrorToast",  res.msg);
-            }
-        }, function () {
-            top.bodyUnMask()
-            top.Toast("showErrorToast", '同步异常');
-        })
+        if(!isSync){
+            isSync = true;
+            //top.bodyMask("正在同步中，请稍等....");
+            $("#sync").mask("正在同步中，请稍等....");
+            $.ajax({
+                url: ctxPath + "flatbed/syncAll",
+                type: 'post'
+            }).then(function (res) {
+                if (0 == res.code) {
+                    grid.loadData();
+                    $("#sync").unmask();
+                    isSync = false;
+                    //top.bodyUnMask()
+                    top.Toast("showSuccessToast", '同步成功');
+                } else {
+                    $("#sync").unmask();
+                    isSync = false;
+                    //top.bodyUnMask()
+                    top.Toast("showErrorToast",  res.msg);
+                }
+            }, function () {
+                $("#sync").unmask();
+                isSync = false;
+                //top.bodyUnMask()
+                top.Toast("showErrorToast", '同步异常');
+            })
+        }
     }
     //刷新
     function refresh(isUpdate) {
@@ -357,6 +373,22 @@
         }
         grid.loadData();
     }
+
+    setInterval(process,2000);
+    function process(){
+        $.ajax({
+            url: ctxPath + "flatbed/list",
+            type: 'get'
+        }).then(function (res) {
+            res.data.forEach(function(item){
+                $("#status_"+item.id).html(item.onlineStatus == '0'?'在线':'离线');
+                $("#process_"+item.id).html(item.process);
+            })
+        }, function () {
+            console.log('异常');
+        })
+    }
+    process();
 </script>
 <style>
     .page_content {

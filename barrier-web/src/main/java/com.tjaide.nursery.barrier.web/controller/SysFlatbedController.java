@@ -21,6 +21,8 @@ import io.swagger.models.auth.In;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import org.apache.http.HttpRequest;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletInputStream;
@@ -39,12 +41,16 @@ import java.util.stream.Collectors;
  * @date 2017/11/5
  */
 @RestController
-@AllArgsConstructor
 @RequestMapping("/flatbed")
 @Api(value = "flatbed", tags = "平板管理模块")
 public class SysFlatbedController {
-    private final SysFlatbedService sysFlatbedService;
-    private final SysDepotUserService sysDepotUserService;
+    @Autowired
+    private SysFlatbedService sysFlatbedService;
+    @Autowired
+    private SysDepotUserService sysDepotUserService;
+
+    @Value("${file.path}")
+    private String filePath;
 
     /**
      * 通过ID查询
@@ -66,6 +72,7 @@ public class SysFlatbedController {
     @SysLog("添加")
     @PostMapping
     public R save(@Valid @RequestBody SysFlatbed flatbed) {
+        flatbed.setProcess("暂未同步");
         return R.ok(sysFlatbedService.saveOrUpdate(flatbed));
     }
 
@@ -135,12 +142,17 @@ public class SysFlatbedController {
     @DeleteMapping("/clear/{id}")
     public R clearPad(@PathVariable Integer id) {
         SysFlatbed sysFlatbed = sysFlatbedService.getById(id);
+        sysFlatbed.setProcess("正准备清空");
+        sysFlatbedService.updateById(sysFlatbed);
         List<String> ids = new ArrayList<>();
         sysDepotUserService.list(Wrappers.emptyWrapper()).forEach(sysDepotUser -> {
             ids.add(sysDepotUser.getId()+"");
             ids.add(sysDepotUser.getId()+"A");
         });
-        return R.ok(FlatBedUtil.DeletePerson(sysFlatbed.getIpAddress(),sysFlatbed.getNumber(),ids));
+        sysFlatbedService.update(Wrappers.<SysFlatbed>lambdaUpdate().set(SysFlatbed::getProcess,"清空中").eq(SysFlatbed::getId,id));
+        Map<String,Object> res = FlatBedUtil.DeletePerson(sysFlatbed.getIpAddress(),sysFlatbed.getNumber(),ids);
+        sysFlatbedService.update(Wrappers.<SysFlatbed>lambdaUpdate().set(SysFlatbed::getProcess,"完成清空").eq(SysFlatbed::getId,id));
+        return R.ok(res);
     }
 
 
@@ -153,7 +165,7 @@ public class SysFlatbedController {
     public R syncPad(@PathVariable Integer id) {
         SysFlatbed sysFlatbed = sysFlatbedService.getById(id);
         List<SysDepotUser> lists = sysDepotUserService.list(Wrappers.emptyWrapper());
-        List<SysDepotUser> errors = FlatBedUtil.AddPersons(sysFlatbed.getIpAddress(),sysFlatbed.getNumber(),lists);
+        List<SysDepotUser> errors = FlatBedUtil.AddPersons(sysFlatbed,lists,filePath,sysFlatbedService);
         if(errors.size() > 0){
             return R.failed("同步失败（"+errors.size()+"）个人");
         }
@@ -176,7 +188,8 @@ public class SysFlatbedController {
         sysFlatbeds.forEach( sysFlatbed -> {
             resList.add(CompletableFuture.supplyAsync(() -> sysFlatbed).thenAcceptAsync(e -> {
                 if("0".equals(sysFlatbed.getOnlineStatus().toString())) {
-                    FlatBedUtil.DeletePerson(sysFlatbed.getIpAddress(), sysFlatbed.getNumber(), ids);
+                    // FlatBedUtil.DeletePerson(sysFlatbed.getIpAddress(), sysFlatbed.getNumber(), ids);
+                    FlatBedUtil.DeleteAllPerson(sysFlatbed.getIpAddress());
                 }
             }));
         });
@@ -198,7 +211,7 @@ public class SysFlatbedController {
         sysFlatbeds.forEach( sysFlatbed -> {
             resList.add(CompletableFuture.supplyAsync(() -> sysFlatbed).thenAcceptAsync(e -> {
                 if("0".equals(sysFlatbed.getOnlineStatus().toString())) {
-                    errors.addAll(FlatBedUtil.AddPersons(sysFlatbed.getIpAddress(), sysFlatbed.getNumber(), lists));
+                    errors.addAll(FlatBedUtil.AddPersons(sysFlatbed, lists,filePath,sysFlatbedService));
                 }
             }));
         });
@@ -239,7 +252,7 @@ public class SysFlatbedController {
         sysFlatbeds.forEach( sysFlatbed -> {
             resList.add(CompletableFuture.supplyAsync(() -> sysFlatbed).thenAcceptAsync(e -> {
                 if("0".equals(sysFlatbed.getOnlineStatus().toString())) {
-                    errors.addAll(FlatBedUtil.AddPersons(sysFlatbed.getIpAddress(), sysFlatbed.getNumber(), lists));
+                    errors.addAll(FlatBedUtil.AddPersons(sysFlatbed, lists,filePath,sysFlatbedService));
                 }
             }));
         });
