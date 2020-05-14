@@ -136,7 +136,6 @@
             position: absolute;
             width: 20px;
             height: 15px;
-            border-radius: 3px;
         }
 
         .main_image-border1 {
@@ -144,6 +143,7 @@
             left: -2px;
             border-left: 2px solid #10aae3;
             border-top: 2px solid #10aae3;
+            border-radius: 5px 0px 0px 0px;
         }
 
         .main_image-border2 {
@@ -151,6 +151,7 @@
             right: -2px;
             border-right: 2px solid #10aae3;
             border-top: 2px solid #10aae3;
+            border-radius: 0px 5px 0px 0px;
         }
 
         .main_image-border3 {
@@ -158,6 +159,7 @@
             left: -2px;
             border-bottom: 2px solid #10aae3;
             border-left: 2px solid #10aae3;
+            border-radius: 0px 0px 0px 5px;
         }
 
         .main_image-border4 {
@@ -165,6 +167,7 @@
             right: -2px;
             border-right: 2px solid #10aae3;
             border-bottom: 2px solid #10aae3;
+            border-radius: 0px 0px 5px 0px;
         }
 
 
@@ -200,7 +203,7 @@
         .main_date_top_box {
             margin: 0px 15px 10px;
             padding: 0px;
-            height: 55px;
+            height: 50%;
            /* background: -moz-linear-gradient(right, rgba(173, 221, 253, 0.3) 0%, rgba(255,255,255,0) 100%);
             background: -webkit-linear-gradient(right, rgba(173, 221, 253, 0.3) 0%,rgba(255,255,255,0) 100%);
             background: -o-linear-gradient(right, rgba(173, 221, 253, 0.3) 0%,rgba(255,255,255,0) 100%);
@@ -342,6 +345,7 @@
         /*第三块start*/
         .main_message_list_item {
             display: flex;
+            height: 70px;
             border-bottom: 1px dashed rgb(202,222,225,0.2);
             margin: 10px;
             border-radius: 5px;
@@ -359,6 +363,7 @@
             left: -3px;
             border-left: 2px solid #FFFFFF;
             border-top: 2px solid #FFFFFF;
+            border-radius: 5px 0px 0px 0px;
         }
 
         .image-border2 {
@@ -366,6 +371,7 @@
             right: -3px;
             border-right: 2px solid #FFFFFF;
             border-top: 2px solid #FFFFFF;
+            border-radius: 0px 5px 0px 0px;
         }
 
         .image-border3 {
@@ -373,6 +379,7 @@
             left: -3px;
             border-bottom: 2px solid #FFFFFF;
             border-left: 2px solid #FFFFFF;
+            border-radius: 0px 0px 5px 0px;
         }
 
         .image-border4 {
@@ -380,14 +387,15 @@
             right: -3px;
             border-right: 2px solid #FFFFFF;
             border-bottom: 2px solid #FFFFFF;
+            border-radius: 0px 0px 0px 5px;
         }
 
         .main_message_list_box {
-            height: calc(100% - 50px);
+            height: calc(55vh - 50px);
         }
 
         .main_message_list_item_left {
-            width:170px;
+            width:50%;
             display: flex;
             padding-right:10px;
         }
@@ -407,7 +415,7 @@
             border-radius: 5px;
         }
         .user_photo_icon_box img {
-            width: 100%;
+            width: 20%;
             height: 100%;
             border-radius: 50%;
         }
@@ -650,6 +658,25 @@
             width: 100% !important;
             height: 100% !important;
         }
+
+
+        /*定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸*/
+        ::-webkit-scrollbar {
+            width: 3px; /*滚动条宽度*/
+        }
+
+        /*定义滚动条轨道 内阴影+圆角*/
+        ::-webkit-scrollbar-track {
+            border-radius: 10px; /*滚动条的背景区域的圆角*/
+            background-color: #214270;
+        }
+
+        /*定义滑块 内阴影+圆角*/
+        ::-webkit-scrollbar-thumb {
+            border-radius: 10px; /*滚动条的圆角*/
+            -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+            background-color: #132e70; /*滚动条的背景颜色*/
+        }
     </style>
 </head>
 <body>
@@ -765,19 +792,19 @@
                             <i class="iconfont icon-gengduomore10"></i>
                         </div>
                         <div class="main_message_list_box">
-                            <div>
-                                <div class="main_message_list_item">
+                            <div id="passList" style="overflow: auto;height: 100%;">
+                                <!--<div class="main_message_list_item">
                                     <div class="main_message_list_item_left">
                                         <div class="user_photo_box">
                                                 <img src="../../static/image/photo.jpg" alt="">
-                                            <!--<div class="user_photo_icon_box">
-                                            </div>-->
+                                            &lt;!&ndash;<div class="user_photo_icon_box">
+                                            </div>&ndash;&gt;
                                         </div>
                                         <div class="user_icon_box"><i class="iconfont icon-jiaohuan1"></i></div>
                                         <div class="user_photo_box">
                                                 <img src="../../static/image/photo.jpg" alt="">
-                                            <!--<div class="user_photo_icon_box">
-                                            </div>-->
+                                            &lt;!&ndash;<div class="user_photo_icon_box">
+                                            </div>&ndash;&gt;
                                         </div>
                                     </div>
                                     <div class="main_message_list_item_right">
@@ -829,7 +856,7 @@
                                         <div class="user_name_box">张三<span>幼儿园三班</span></div>
                                         <div class="user_time_box">00:00:00</div>
                                     </div>
-                                </div>
+                                </div>-->
                             </div>
                         </div>
                     </div>
@@ -848,8 +875,8 @@
                             <i class="iconfont icon-tongjifenxi"></i>
                             基础数据
                         </div>
-                        <div class="main_data_list_box">
-                            <div class="main_data_list">
+                        <div class="main_data_list_box" id="baseDataList">
+                            <!--<div class="main_data_list">
                                 <div class="main_data_list_item">学生总人数 <span>2</span> 个</div>
                                 <div class="main_data_list_item">家长总人数 <span>2</span> 个</div>
                             </div>
@@ -860,7 +887,7 @@
                             <div class="main_data_list">
                                 <div class="main_data_list_item">考勤平板数 <span>2</span> 个</div>
                                 <div class="main_data_list_item">闸机通道数 <span>2</span> 个</div>
-                            </div>
+                            </div>-->
                         </div>
                         <!--<div class="main_weather_list_box">
                             <div class="main_weather_list_left">
@@ -995,11 +1022,11 @@
     }
 
     $(function () {
-        $('#mainVedioBox').on('mouseover',function(e){
+        $('.main_center_top_box').on('mouseover',function(e){
             e.stopPropagation()
             $('.main_select_box').show()
         })
-        $('#mainVedioBox').on('mouseout',function(e){
+        $('.main_center_top_box').on('mouseout',function(e){
             e.stopPropagation()
             $('.main_select_box').hide()
 
@@ -1021,6 +1048,12 @@
         $('#user_info').on('click',function(e){
             location.href= ctxPath
         })
+
+
+        //获取baseDataList数据
+        getBaseDatas()
+        //获取最新进出记录
+        getLastPassProcess()
 
 
         /*$.get(ctxPath + "menu", {}, function (data) {
@@ -1062,11 +1095,6 @@
     })
 
 
-    function exitHandler() {
-        top.Dialog.confirm("确定要退出系统吗", function () {
-            window.location = ctxPath + "login/logout";
-        });
-    }
 
     function getDateData(){
         var date = new Date();
@@ -1090,179 +1118,230 @@
             '        </div>')
     }
 
+
+    function getBaseDatas(){
+        $.ajax({
+            url: ctxPath + "dataData/getBaseDatas",
+            type: 'get',
+            data: {},
+        }).then(function (res) {
+            var datas=res.data
+            $('#baseDataList').html('<div class="main_data_list">\n' +
+                '             <div class="main_data_list_item">学生总人数 <span>'+datas.data1+'</span> 个</div>\n' +
+                '             <div class="main_data_list_item">家长总人数 <span>'+datas.data2+'</span> 个</div>\n' +
+                '             </div>\n' +
+                '             <div class="main_data_list">\n' +
+                '             <div class="main_data_list_item">教职工总人数 <span>'+datas.data3+'</span> 个</div>\n' +
+                '             <div class="main_data_list_item">底库总数 <span>'+datas.data4+'</span> 个</div>\n' +
+                '             </div>\n' +
+                '             <div class="main_data_list">\n' +
+                '             <div class="main_data_list_item">考勤平板数 <span>'+datas.data5+'</span> 个</div>\n' +
+                '             <div class="main_data_list_item">闸机通道数 <span>'+datas.data6+'</span> 个</div>\n' +
+                '             </div>\n' +
+                '             </div>')
+        })
+    }
+
+    function getLastPassProcess(){
+        $.ajax({
+            url: ctxPath + "dataData/getLastPassProcess",
+            type: 'get',
+            data: {},
+        }).then(function (res) {
+            var datas=res.data
+            var hidd=''
+            datas.forEach((ret,index)=>{
+                hidd+='<div class="main_message_list_item">\n' +
+                '        <div class="main_message_list_item_left">\n' +
+                '            <div class="user_photo_box">\n' +
+                '              <img src="'+ret.sanpPic+'" alt="">\n' +
+                '                <!--<div class="user_photo_icon_box">\n' +
+                '                 </div>-->\n' +
+                '            </div>\n' +
+                '            <div class="user_icon_box"><i class="iconfont icon-jiaohuan1"></i></div>\n' +
+                '            <div class="user_photo_box">\n' +
+                '            <img src="'+ret.registeredPic+'" alt="">\n' +
+                '             <!--<div class="user_photo_icon_box">\n' +
+                '             </div>-->\n' +
+                '           </div>\n' +
+                '         </div>\n' +
+                '         <div class="main_message_list_item_right">\n' ;
+                if(ret.user!=null){
+                    hidd+=' <div class="user_name_box">'+ret.user.name;
+                }else{
+                    hidd+=' <div class="user_name_box">'+ret.discernUser.name;
+
+                }
+                if(ret.userId!=ret.discernId){
+                    hidd+=' <span>('+ret.discernUser.name+')</span>';
+                }
+                hidd += '</div>\n' +
+                '             <div class="user_time_box">'+ret.createTime.substr(11,19)+'</div>\n' +
+                '         </div>\n' +
+                '   </div>\n' ;
+            })
+            $('#passList').html(hidd)
+        })
+    }
+
+
     function eachrts1(){
         var myChart = echarts.init(document.getElementById('chart1'),'macarons');
-        var base = new Date();
-        var oneDay = 24 * 3600 * 1000;
-        var valueBase = Math.random() * 300;
-        var data1 = [];
-        var data2 = [];
-        var datelist = []
-        for (var i = 0; i < 5; i++) {
-            var now = new Date(base -= oneDay);
-            var dayStr = [now.getMonth() + 1, now.getDate()].join('/');
-
-            valueBase = Math.round((Math.random() - 0.5) * 20 + valueBase);
-            valueBase <= 0 && (valueBase = Math.random() * 300);
-            datelist.push(dayStr);
-            data1.push(valueBase);
-            data2.push(valueBase);
-
-        }
-
-        option = {
-            color:['#0fa9e2','#e25860','#00b5b1'],
-            tooltip: {
-                trigger: 'axis',
-                axisPointer: {
-                    type: 'shadow'
-                }
-            },
-            legend: {
-                textStyle: { //图例文字的样式
-                    color: '#fff'
-                },
-                data: ['进入人数', '离开人数']
-            },
-            grid: {
-                left: '3%',
-                right: '4%',
-                bottom: '10%',
-                containLabel: true
-            },
-            textStyle:{
-                color:'#b0def2'
-            },
-            xAxis: {
-                type: 'value',
-                boundaryGap: [0, 0.01],
-                splitLine:{
-                    show: false
-                },
-                axisLine:{
-                    lineStyle:{
-                        color:'#1e2e76',
-                        width:2
+        $.ajax({
+            url: ctxPath + "dataData/getDateNum",
+            type: 'get',
+            data: {},
+        }).then(function (res) {
+            var datas = res.data
+            var option = {
+                color:['#0fa9e2','#e25860','#00b5b1'],
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'shadow'
                     }
-                }
-            },
-            yAxis: {
-                type: 'category',
-                data: datelist,
-                axisLine:{
-                    lineStyle:{
-                        color:'#1e2e76',
-                        width:2
-                    }
-                }
-            },
-            series: [
-                {
-                    name: '进入人数',
-                    type: 'bar',
-                    data: data1
                 },
-                {
-                    name: '离开人数',
-                    type: 'bar',
-                    data: data2
-                }
-            ]
-        };
-        myChart.hideLoading();
-        myChart.setOption(option);
+                legend: {
+                    textStyle: { //图例文字的样式
+                        color: '#fff'
+                    },
+                    data: ['进入人数', '离开人数']
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                textStyle:{
+                    color:'#b0def2'
+                },
+                xAxis: {
+                    type: 'value',
+                    boundaryGap: [0, 0.01],
+                    splitLine:{
+                        show: false
+                    },
+                    axisLine:{
+                        lineStyle:{
+                            color:'#1e2e76',
+                            width:2
+                        }
+                    }
+                },
+                yAxis: {
+                    type: 'category',
+                    data: datas.datelist,
+                    axisLine:{
+                        lineStyle:{
+                            color:'#1e2e76',
+                            width:2
+                        }
+                    }
+                },
+                series: [
+                    {
+                        name: '进入人数',
+                        type: 'bar',
+                        data: datas.data1
+                    },
+                    {
+                        name: '离开人数',
+                        type: 'bar',
+                        data: datas.data2
+                    }
+                ]
+            };
+            myChart.hideLoading();
+            myChart.setOption(option);
+        });
+
+
     }
 
 
     function eachrts2(){
         var myChart = echarts.init(document.getElementById('chart2'),'macarons');
-        var base = +new Date();
-        var oneDay = 24 * 3600 * 1000;
-        var valueBase = Math.random() * 300;
-        var data = [];
-
-        for (var i = 0; i < 10; i++) {
-            var now = new Date(base -= oneDay);
-            var dayStr = [now.getFullYear(),now.getMonth() + 1, now.getDate()].join('-');
-            valueBase = Math.round((Math.random() - 0.5) * 20 + valueBase);
-            valueBase <= 0 && (valueBase = Math.random() * 300);
-            data.push([dayStr, valueBase]);
-        }
-        option = {
-            animation: false,
-            xAxis: {
-                type: 'time',
-                axisLine:{
-                    lineStyle:{
-                        color:'#1e2e76',
-                        width:2
-                    }
-                },
-                splitLine: {
-                    show: false
-                }
-            },
-            yAxis: {
-                type: 'value',
-                axisTick: {
-                    inside: false
-                },
-                axisLine:{
-                    lineStyle:{
-                        color:'#1e2e76',
-                        width:2
-                    }
-                },
-                splitLine: {
-                    show: false
-                },
-                axisLabel: {
-                    inside: false,
-                    formatter: '{value}\n'
-                },
-                z: 10
-            },
-            grid: {
-                top: 20,
-                left: 40,
-                right: 20,
-                bottom:25
-            },
-            textStyle:{
-                color:'#b0def2'
-            },
-            series: [
-                {
-                    type: 'line',
-                    smooth: true,
-                    symbol: 'circle',
-                    symbolSize: 5,
-                    sampling: 'average',
-                    itemStyle: {
-                        normal: {   //颜色渐变函数 前四个参数分别表示四个位置依次为左、下、右、上
-                            color: new echarts.graphic.LinearGradient(0, 0, 0, 1,[{
-                                    offset: 0, color: '#09baff59' // 100% 处的颜色
-                                }, {
-                                    offset: 0.8, color: '#a3d9ff1c' // 100% 处的颜色
-                                }]
-                            ),  //背景渐变色
-                            lineStyle: {        // 系列级个性化折线样式
-                                width: 3,
-                                type: 'solid',
-                                color: "#008bb547"
-                            }
+        $.ajax({
+            url: ctxPath + "dataData/getflow",
+            type: 'get',
+            data: {},
+        }).then(function (res) {
+            var datas = res.data
+            var option = {
+                animation: false,
+                xAxis: {
+                    type: 'category',
+                    boundaryGap: false,
+                    data: datas.data1,
+                    axisLine:{
+                        lineStyle:{
+                            color:'#1e2e76',
+                            width:2
                         }
-                    },//线条样式
-                    symbolSize:3, //折线点的大小
-                    areaStyle: {normal: {}},
-                    stack: 'a',
-                    data: data
-                }
+                    },
+                    splitLine: {
+                        show: false
+                    }
+                },
+                yAxis: {
+                    type: 'value',
+                    axisLine:{
+                        lineStyle:{
+                            color:'#1e2e76',
+                            width:2
+                        }
+                    },
+                    splitLine: {
+                        show: false
+                    },
+                    axisLabel: {
+                        inside: false,
+                        formatter: '{value}\n'
+                    },
+                    z: 10
+                },
+                grid: {
+                    top: 20,
+                    left: 40,
+                    right: 20,
+                    bottom:25
+                },
+                textStyle:{
+                    color:'#b0def2'
+                },
+                series: [
+                    {
+                        type: 'line',
+                        smooth: true,
+                        symbol: 'circle',
+                        symbolSize: 3,
+                        sampling: 'average',
+                        itemStyle: {
+                            normal: {   //颜色渐变函数 前四个参数分别表示四个位置依次为左、下、右、上
+                                color: new echarts.graphic.LinearGradient(0, 0, 0, 1,[{
+                                        offset: 0, color: '#09baff59' // 100% 处的颜色
+                                    }, {
+                                        offset: 0.8, color: '#a3d9ff1c' // 100% 处的颜色
+                                    }]
+                                ),  //背景渐变色
+                                lineStyle: {        // 系列级个性化折线样式
+                                    width: 3,
+                                    type: 'solid',
+                                    color: "#008bb547"
+                                }
+                            }
+                        },//线条样式
+                        areaStyle: {normal: {}},
+                        stack: 'a',
+                        data: datas.data2
+                    }
 
-            ]
-        };
-        myChart.hideLoading();
-        myChart.setOption(option);
+                ]
+            };
+            myChart.hideLoading();
+            myChart.setOption(option);
+        });
     }
 
 

@@ -9,6 +9,7 @@ import com.tjaide.nursery.barrier.web.entity.SysPassProcess;
 import com.tjaide.nursery.barrier.web.vo.SysPassProcessVo;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -21,5 +22,8 @@ import java.util.List;
 public interface SysPassProcessService extends IService<SysPassProcess> {
 
  List<SysPassProcessVo> findRecentPassVoList();
+ Map<String,Object> getBaseDatas();
+ Map<String,Object> getDateNum();
+ Map<String,Object> getflow();
 
 }

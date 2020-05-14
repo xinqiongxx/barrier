@@ -24,5 +24,10 @@ public class SysPassProcessVo extends SysPassProcess {
      */
    private SysDepotUser user;
 
+    /**
+     * 识别用户信息
+     */
+    private SysDepotUser discernUser;
+
 
 }

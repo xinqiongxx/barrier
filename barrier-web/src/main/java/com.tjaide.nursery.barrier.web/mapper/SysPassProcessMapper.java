@@ -7,7 +7,9 @@ package com.tjaide.nursery.barrier.web.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.tjaide.nursery.barrier.web.entity.SysPassProcess;
 import com.tjaide.nursery.barrier.web.vo.SysPassProcessVo;
+import org.apache.ibatis.annotations.Param;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -21,4 +23,6 @@ import java.util.List;
 public interface SysPassProcessMapper extends BaseMapper<SysPassProcess> {
 
     List<SysPassProcessVo> findRecentPassVoList();
+    Integer getCountByCreateDate(@Param("type") Integer type, @Param("start_time") String start_time,@Param("end_time") String end_time);
+    Integer getCountByUserTypeCreateDate(@Param("userType") Integer userType, @Param("start_time") String start_time,@Param("end_time") String end_time);
 }

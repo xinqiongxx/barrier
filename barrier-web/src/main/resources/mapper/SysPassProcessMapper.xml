@@ -9,8 +9,9 @@
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.tjaide.nursery.barrier.web.entity.SysPassProcess">
         <id column="id" property="id"/>
-        <result column="enter_type" property="enter_type"/>
-        <result column="photo" property="photo"/>
+        <result column="enter_type" property="enterType"/>
+        <result column="sanp_pic" property="sanpPic"/>
+        <result column="registered_pic" property="registeredPic"/>
         <result column="status" property="status"/>
         <result column="remark" property="remark"/>
         <result column="user_id" property="userId"/>
@@ -20,29 +21,52 @@
     <!-- 通用查询映射结果 -->
     <resultMap id="passProcessMap" type="com.tjaide.nursery.barrier.web.vo.SysPassProcessVo">
         <id column="id" property="id"/>
-        <result column="enter_type" property="enter_type"/>
-        <result column="photo" property="photo"/>
+        <result column="enter_type" property="enterType"/>
+        <result column="sanp_pic" property="sanpPic"/>
+        <result column="registered_pic" property="registeredPic"/>
         <result column="status" property="status"/>
         <result column="remark" property="remark"/>
         <result column="user_id" property="userId"/>
         <result column="discern_id" property="discernId"/>
         <result column="create_time" property="createTime"/>
-        <!--<association property="user" column="discern_id"
-                     select="com.tjaide.nursery.barrier.web.mapper.SysDepotUserMapper.selectById"></association>-->
+        <association property="user" column="user_id"
+                     select="com.tjaide.nursery.barrier.web.mapper.SysDepotUserMapper.getUserById"></association>
+        <association property="discernUser" column="discern_id"
+                     select="com.tjaide.nursery.barrier.web.mapper.SysDepotUserMapper.getUserById"></association>
     </resultMap>
-
-    <!--通过角色查询菜单信息-->
     <select id="findRecentPassVoList" resultMap="passProcessMap">
 		SELECT
-			sys_menu.*
+			`id`, `enter_type`, `sanp_pic`, `create_time`, `status`, `remark`, `user_id`, `discern_id`, `registered_pic`
 		FROM
-			sys_menu
-		LEFT JOIN sys_role_menu ON sys_menu.menu_id = sys_role_menu.menu_id
-		WHERE
-			sys_menu.del_flag = '0'
-		AND sys_role_menu.role_id = #{roleid}
+			sys_pass_process
 		ORDER BY
-			sys_menu.sort DESC
+			create_time DESC
+			 limit 0,10
+    </select>
+    <select id="getCountByCreateDate" resultType="Integer">
+		SELECT
+			count(id)
+		FROM
+			sys_pass_process
+        <where>
+            and create_time >= #{start_time} and create_time &lt;= #{end_time}
+            <if test="type != null and type != ''">
+                and enter_type= #{type}
+            </if>
+        </where>
+    </select>
+
+    <select id="getCountByUserTypeCreateDate" resultType="Integer">
+		SELECT
+          count(a.id)
+        FROM
+        sys_pass_process a join sys_depot_user b on a.discern_id=b.id
+        <where>
+            and a.create_time &gt;= #{start_time} and a.create_time &lt;= #{end_time}
+            <if test="userType != null and userType != ''">
+                and b.user_type= #{userType}
+            </if>
+        </where>
     </select>
 
 </mapper>

@@ -33,9 +33,9 @@ public class SysPassProcess extends Model<SysPassProcess> {
     @ApiModelProperty(value = "id")
     private Integer id;
     @ApiModelProperty(value = "进出类型1进2出")
-    private Integer enter_type;
+    private Integer enterType;
     @ApiModelProperty(value = "照片")
-    private String photo;
+    private String sanpPic;
     @ApiModelProperty(value = "处理状态")
     private Integer status;
     @ApiModelProperty(value = "备注")
@@ -44,6 +44,8 @@ public class SysPassProcess extends Model<SysPassProcess> {
     private Integer userId;
     @ApiModelProperty(value = "识别id（底库用户）")
     private Integer discernId;
+    @ApiModelProperty(value = "注册照片")
+    private String registeredPic;
     /**
      * 创建时间
      */

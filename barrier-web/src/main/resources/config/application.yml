@@ -66,6 +66,7 @@ shiro:
     - /libs/**
     - /system/**
     - /favicon.ico
+    - /data/*
     - /data
   authc:
     - /**
