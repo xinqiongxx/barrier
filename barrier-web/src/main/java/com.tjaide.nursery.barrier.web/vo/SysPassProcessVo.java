@@ -30,4 +30,7 @@ public class SysPassProcessVo extends SysPassProcess {
     private SysDepotUser discernUser;
 
 
+    private String parentType;
+
+
 }

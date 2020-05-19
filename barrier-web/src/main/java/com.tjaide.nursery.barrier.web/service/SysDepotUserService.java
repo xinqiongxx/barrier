@@ -32,4 +32,5 @@ public interface SysDepotUserService extends IService<SysDepotUser> {
     List<Integer> getGraduation();
 
     IPage relationPage(Page page, SysDepotUser sysDepotUser, Integer id);
+    IPage getpage(Page page, SysDepotUser sysDepotUser);
 }

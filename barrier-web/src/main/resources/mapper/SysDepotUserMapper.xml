@@ -29,6 +29,31 @@
         <result column="del_flag" property="delFlag"/>
     </resultMap>
 
+    <!-- vo查询映射结果 -->
+    <resultMap id="voResultMap" type="com.tjaide.nursery.barrier.web.vo.SysDepotUserVo">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="depot_id" property="depotId"/>
+        <result column="depot_type" property="depotType"/>
+        <result column="dept_id" property="deptId"/>
+        <result column="user_type" property="userType"/>
+        <result column="photo" property="photo"/>
+        <result column="remark" property="remark"/>
+        <result column="nation" property="nation"/>
+        <result column="certificate_type" property="certificateType"/>
+        <result column="card_id" property="cardId"/>
+        <result column="birthday" property="birthday"/>
+        <result column="phone" property="phone"/>
+        <result column="address" property="address"/>
+        <result column="gender" property="gender"/>
+        <result column="operator_id" property="operatorId"/>
+        <result column="operator_name" property="operatorName"/>
+        <result column="create_time" property="createTime"/>
+        <result column="del_flag" property="delFlag"/>
+        <collection property="parents" column="id"
+                     select="com.tjaide.nursery.barrier.web.mapper.SysDepotUserMapper.getParentsById"></collection>
+    </resultMap>
+
     <select id="enterDepotUser" resultMap="BaseResultMap">
 		SELECT
 		DISTINCT
@@ -50,6 +75,26 @@
 		sys_pass_process p
 		LEFT JOIN sys_depot_user AS u ON u.id = p.discern_id
 		WHERE u.del_flag = '0' and DATEDIFF(p.create_time,NOW())=-1
+	</select>
+
+    <select id="getParentsById" resultMap="BaseResultMap">
+		SELECT u.id,
+		u.name,
+		u.depot_id,
+		u.depot_type,
+		u.dept_id,
+		u.user_type,
+		u.remark,
+		u.nation,
+		u.certificate_type,
+		u.card_id,
+		u.birthday,
+		u.phone,
+		u.address,
+		u.gender
+		FROM
+		sys_depot_user u join sys_user_relation r on u.id=r.member_id
+		WHERE r.user_id=#{id} and   u.del_flag = '0'
 	</select>
 
     <select id="getGraduation" resultType="java.lang.Integer">
@@ -106,6 +151,28 @@
             </if>
             <if test="query.depotType != null and query.depotType != ''">
                 and depot_type = #{query.depotType}
+            </if>
+            <if test="query.deptId != null and query.deptId != ''">
+                and dept_id = #{query.deptId}
+            </if>
+        </where>
+    </select>
+
+    <select id="userPage" resultMap="voResultMap">
+        SELECT
+        a.id,a.name,a.depot_id,a.depot_type,a.dept_id,a.user_type,a.phone,a.gender,a.remark,a.nation,a.certificate_type
+        ,a.card_id,a.birthday,a.photo,a.address,a.create_time,a.operator_id,a.operator_name,a.del_flag,a.tenant_id
+        FROM
+        sys_depot_user as a
+        <where>
+            <if test="query.name != null and query.name != ''">
+                and name LIKE CONCAT('%',#{query.name},'%')
+            </if>
+            <if test="query.depotId != null and query.depotId != ''">
+                and depot_id = #{query.depotId}
+            </if>
+            <if test="query.userType != null and query.userType != ''">
+                and user_type = #{query.userType}
             </if>
             <if test="query.deptId != null and query.deptId != ''">
                 and dept_id = #{query.deptId}

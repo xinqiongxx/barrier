@@ -171,7 +171,7 @@ public class SysDepotUserController {
      */
     @GetMapping("/page")
     public R getRolePage(Page page,SysDepotUser sysDepotUser) {
-        return R.ok(sysDepotUserService.page(page, Wrappers.query(sysDepotUser)));
+        return R.ok(sysDepotUserService.getpage(page,sysDepotUser));
     }
 
     /**

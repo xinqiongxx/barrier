@@ -22,6 +22,7 @@
         <result column="relation_type" property="relationType"/>
         <result column="remark" property="remark"/>
         <result column="if_student" property="ifStudent"/>
+        <result column="relationName" property="relationName"/>
         <association property="user" column="user_id"
                      select="com.tjaide.nursery.barrier.web.mapper.SysDepotUserMapper.getUserById"></association>
         <association property="member" column="member_id"
@@ -36,6 +37,19 @@
         sys_user_relation AS suser
         <where>
             and user_id=#{id}
+        </where>
+    </select>
+
+    <select id="getRelation" resultMap="voResultMap">
+        SELECT
+        suser.*,item.label as relationName
+        FROM
+        sys_user_relation AS suser join sys_dict_item as item on suser.relation_type=item.value
+        join sys_dict as dict on item.dict_id=dict.id
+        <where>
+            and user_id=#{user_id}
+            and member_id=#{member_id}
+            and dict.type='parent_type'
         </where>
     </select>
 

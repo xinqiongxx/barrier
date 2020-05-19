@@ -24,4 +24,6 @@ public class SysUserRelationVO extends SysUserRelation {
      */
     private SysDepotUser member;
 
+    private String relationName;
+
 }

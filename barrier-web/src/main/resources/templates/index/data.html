@@ -1186,8 +1186,8 @@
                     hidd+=' <div class="user_name_box">'+ret.discernUser.name;
 
                 }
-                if(ret.userId!=ret.discernId){
-                    hidd+=' <span>('+ret.discernUser.name+')</span>';
+                if(ret.userId!=null){
+                    hidd+=' <span>('+ret.discernUser.name+'-'+ret.parentType+')</span>';
                 }
                 hidd += '</div>\n' +
                 '             <div class="user_time_box">'+ret.createTime.substr(11,19)+'</div>\n' +

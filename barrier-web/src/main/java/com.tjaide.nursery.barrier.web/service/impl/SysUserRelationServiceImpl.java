@@ -4,40 +4,19 @@
 
 package com.tjaide.nursery.barrier.web.service.impl;
 
-import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
-import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.tjaide.nursery.barrier.common.core.constant.CommonConstants;
-import com.tjaide.nursery.barrier.common.core.entity.ShiroUser;
-import com.tjaide.nursery.barrier.common.core.exception.CheckedException;
-import com.tjaide.nursery.barrier.common.core.util.R;
-import com.tjaide.nursery.barrier.common.data.datascope.DataScope;
-import com.tjaide.nursery.barrier.common.shiro.util.PasswordUtil;
-import com.tjaide.nursery.barrier.web.dto.UserDTO;
-import com.tjaide.nursery.barrier.web.dto.UserInfo;
 import com.tjaide.nursery.barrier.web.entity.*;
-import com.tjaide.nursery.barrier.web.mapper.SysUserMapper;
+import com.tjaide.nursery.barrier.web.vo.SysUserRelationVO;
 import com.tjaide.nursery.barrier.web.mapper.SysUserRelationMapper;
 import com.tjaide.nursery.barrier.web.service.*;
-import com.tjaide.nursery.barrier.web.vo.UserVO;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.shiro.SecurityUtils;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * @author maxinqiong
@@ -75,6 +54,12 @@ public class SysUserRelationServiceImpl extends ServiceImpl<SysUserRelationMappe
            ret=baseMapper.insert(sysUserRelation);
         }
         return ret>0;
+    }
+
+    @Override
+    public  SysUserRelationVO getRelation(Integer userId,Integer memberId){
+        SysUserRelationVO ret=baseMapper.getRelation(userId,memberId);
+        return ret;
     }
 
     /**

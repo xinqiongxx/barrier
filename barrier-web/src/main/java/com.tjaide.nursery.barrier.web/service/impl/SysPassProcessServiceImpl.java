@@ -4,10 +4,14 @@
 
 package com.tjaide.nursery.barrier.web.service.impl;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tjaide.nursery.barrier.web.entity.SysPassProcess;
+import com.tjaide.nursery.barrier.web.mapper.SysDeptRelationMapper;
 import com.tjaide.nursery.barrier.web.mapper.SysPassProcessMapper;
+import com.tjaide.nursery.barrier.web.service.SysDeptRelationService;
 import com.tjaide.nursery.barrier.web.service.SysPassProcessService;
+import com.tjaide.nursery.barrier.web.service.SysUserRelationService;
 import com.tjaide.nursery.barrier.web.vo.SysPassProcessVo;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,8 +34,19 @@ import java.util.*;
 @AllArgsConstructor
 public class SysPassProcessServiceImpl extends ServiceImpl<SysPassProcessMapper, SysPassProcess> implements SysPassProcessService {
 
+    private final SysUserRelationService sysUserRelationService;
+
+    @Override
     public List<SysPassProcessVo> findRecentPassVoList(){
-        return baseMapper.findRecentPassVoList();
+        List<SysPassProcessVo> list=baseMapper.findRecentPassVoList();
+        for(SysPassProcessVo process:list){
+            if(ObjectUtil.isNotNull(process.getUserId())){
+                process.setParentType(sysUserRelationService.getRelation(process.getUserId(),process.getDiscernId()).getRelationName());
+            }else{
+                process.setParentType("本人");
+            }
+        }
+        return list;
     }
 
     @Override
@@ -46,11 +61,6 @@ public class SysPassProcessServiceImpl extends ServiceImpl<SysPassProcessMapper,
         res.put("data1",data1);
         res.put("data2",data2);
         res.put("data3",data3);
-       /* res.put("data4",6);
-        res.put("data5",1);
-        res.put("data6",0);
-        res.put("data7",1);
-        res.put("data8",2);*/
         return res;
     }
 

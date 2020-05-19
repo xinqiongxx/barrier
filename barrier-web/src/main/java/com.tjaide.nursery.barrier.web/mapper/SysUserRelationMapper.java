@@ -33,4 +33,5 @@ public interface SysUserRelationMapper extends BaseMapper<SysUserRelation> {
      * @return list
      */
     IPage<List<SysUserRelationVO>> getrelations(Page page, @Param("id") Integer id);
+    SysUserRelationVO getRelation(@Param("user_id") Integer user_id,@Param("member_id") Integer member_id);
 }

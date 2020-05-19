@@ -21,6 +21,7 @@ import com.tjaide.nursery.barrier.web.mapper.SysDepotUserMapper;
 import com.tjaide.nursery.barrier.web.service.SysDepotUserService;
 import com.tjaide.nursery.barrier.web.service.SysDeptService;
 import com.tjaide.nursery.barrier.web.service.SysDictItemService;
+import com.tjaide.nursery.barrier.web.vo.SysDepotUserVo;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -304,6 +305,21 @@ public class SysDepotUserServiceImpl extends ServiceImpl<SysDepotUserMapper, Sys
     @Override
     public IPage relationPage(Page page, SysDepotUser sysDepotUser, Integer id){
         return baseMapper.relationPage(page,sysDepotUser,id);
+    }
+
+    @Override
+    public IPage getpage(Page page, SysDepotUser sysDepotUser){
+        IPage ipage=baseMapper.userPage(page,sysDepotUser);
+        List<SysDepotUserVo> list=ipage.getRecords();
+        for(SysDepotUserVo userVo:list){
+            String parentName="";
+            for(SysDepotUser user:userVo.getParents()){
+                parentName+=ObjectUtil.isNotEmpty(parentName)?","+user.getName():user.getName();
+            }
+            userVo.setParentName(parentName);
+        }
+        ipage.setRecords(list);
+        return ipage;
     }
 
 }
