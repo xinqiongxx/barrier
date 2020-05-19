@@ -126,8 +126,8 @@ public class ApiController {
         asyncService.savePhoto(jsonObject.get("SanpPic").toString(),fileName);
         sysPassProcess.setRemark("");
         sysPassProcess.setStatus(0);
-        sysPassProcess.setSanpPic("/api/view/image/match/"+fileName);
-        sysPassProcess.setRegisteredPic("/api/view/image/reg/"+PersonUUID);
+        sysPassProcess.setSanpPic("/api/image/view/match/"+fileName);
+        sysPassProcess.setRegisteredPic("/api/image/view/reg/"+PersonUUID);
         // 0 进 1 出 2 未知
         SysFlatbed sysFlatbed = sysFlatbedService.getOne(Wrappers.<SysFlatbed>lambdaQuery().eq(SysFlatbed::getNumber,infoMap.get("DeviceID")));
         SysBarrier leave = sysBarrierService.getOne(Wrappers.<SysBarrier>lambdaQuery().eq(SysBarrier::getLeaveFlatbed,sysFlatbed.getNumber()));
@@ -185,13 +185,13 @@ public class ApiController {
     public void fixTime() {
         List<SysDepotUser> lists = sysDepotUserService.enterDepotUser().stream().map(sysDepotUser -> {
             SysPassProcess sysPassProcess = sysPassProcessService.getOne(Wrappers.<SysPassProcess>lambdaQuery().eq(SysPassProcess::getDiscernId,sysDepotUser.getId()).orderByDesc(SysPassProcess::getCreateTime).last("limit 0 , 1"));
-            String inputFile = sysPassProcess.getSanpPic().replace("/api/view/image/match/","");
+            String inputFile = sysPassProcess.getSanpPic().replace("/api/image/view/match/","");
             try {
                 IoUtil.copy(new FileInputStream(new File(filePath+File.separator+"match"+File.separator+inputFile+".jpeg")),new FileOutputStream(new File(filePath+File.separator+"reg"+File.separator+sysPassProcess.getDiscernId()+"A.jpeg")));
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
-            sysDepotUser.setPhoto("/api/view/image/reg/"+sysPassProcess.getDiscernId()+"A");
+            sysDepotUser.setPhoto("/api/image/view/reg/"+sysPassProcess.getDiscernId()+"A");
             return sysDepotUser;
         }).collect(Collectors.toList());
         List<SysFlatbed> sysFlatbeds = sysFlatbedService.list(Wrappers.<SysFlatbed>lambdaQuery().eq(SysFlatbed::getOnlineStatus,"0"));

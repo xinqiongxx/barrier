@@ -416,7 +416,7 @@
                     render: function (rowdata, rowindex, value, column) {
                         var bar = '<div class="grid_user_container">';
                         bar += '<div class="bg1 qTip" title="删除" onclick="onDelete(\'' + rowdata.id + '\')">删除</div>';
-                        bar += '<div class="bg2 qTip" title="关联人员" onclick="onRelation(\'' + rowdata.id + '\')">关联人员</div>';
+                        bar += '<div class="bg2 qTip" title="关联家长" onclick="onRelation(\'' + rowdata.id + '\')">关联家长</div>';
                         bar += '<div class="bg3 qTip" title="同步所有平板" onclick="openSync(\'' + rowdata.id + '\')">同步所有平板</div>';
                         bar += '</div>';
                         return bar;
@@ -531,15 +531,15 @@
         };
         diag.show();
     }
-    //关联人员
+    //关联家长
     function onRelation(id) {
         var diag = new top.Dialog();
-        diag.Title = "关联人员";
+        diag.Title = "关联家长";
         diag.ID="a1";
         diag.URL = ctxPath + "page/relation/add?id=" + id;
         //自定义长度和宽度的设置
         diag.Width = 850;
-        diag.Height = 550;
+        diag.Height = 400;
         diag.ShowButtonRow = false;
         /*diag.OkButtonText = " 提 交 ";
         diag.OKEvent = function () {

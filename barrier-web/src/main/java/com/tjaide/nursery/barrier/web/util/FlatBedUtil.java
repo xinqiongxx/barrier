@@ -5,9 +5,11 @@ import cn.hutool.http.HttpResponse;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
+import com.tjaide.nursery.barrier.common.core.util.ShiroUtils;
 import com.tjaide.nursery.barrier.web.entity.SysDepotUser;
 import com.tjaide.nursery.barrier.web.entity.SysFlatbed;
 import com.tjaide.nursery.barrier.web.service.SysFlatbedService;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
@@ -127,8 +129,10 @@ public class FlatBedUtil {
         return error.get();
     }
 
+    @SneakyThrows
     public static List<SysDepotUser> AddPersons(SysFlatbed sysFlatbed, List<SysDepotUser> lists, String filePath, SysFlatbedService sysFlatbedService){
         sysFlatbed.setProcess("开始同步");
+        WebSocketServer.sendInfo("开始同步", ShiroUtils.getUser().getUserId().toString());
         sysFlatbedService.updateById(sysFlatbed);
         String url = sysFlatbed.getIpAddress();
         String deviceId = sysFlatbed.getNumber();

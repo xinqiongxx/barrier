@@ -31,6 +31,7 @@
     <script type="text/javascript" th:src="@{/libs/js/echarts/echarts.min.js}" src="../../libs/js/echarts/echarts.min.js"></script>
     <link th:href="@{/static/js/video/video-js.css}" href="../../static/js/video/video-js.css" rel="stylesheet">
     <script th:src="@{/static/js/video/video.min.js}" src="../../static/js/video/video.min.js"></script>
+    <link rel="shortcut icon" href="/static/favicon.ico" type="image/x-icon">
     <script type="text/javascript" th:inline="javascript">
         /*<![CDATA[*/
         ctxPath = /*[[@{/}]]*/ '';
@@ -110,7 +111,7 @@
             height: 100%;
             border: 2px solid #0a3d65;
             box-shadow:  rgba(9, 50, 102, 0.4) 0px 0px 30px 15px inset;
-            border-radius: 5px;
+            border-radius: 3px;
             position: relative;
         }
 
@@ -177,7 +178,7 @@
             position: relative;
             border: 2px solid #0a3d65;
             box-shadow:  rgba(9, 50, 102, 0.4) 0px 0px 30px 15px inset;
-            border-radius: 5px;
+            border-radius: 3px;
             height: 40%;
             min-height: 150px;
             padding: 5% 0px;
@@ -192,7 +193,7 @@
             position: relative;
             border: 2px solid #0a3d65;
             box-shadow:  rgba(9, 50, 102, 0.4) 0px 0px 30px 15px inset;
-            border-radius: 5px;
+            border-radius: 3px;
             margin-top: 10px;
             height: calc(60% - 10px);
             box-sizing: border-box;
@@ -214,6 +215,7 @@
         .main_date_top_title {
             color: #9dc8dd;
             font-weight: bold;
+            font-size:20px;
             padding: 3px 5px;
             height: 50%;
             position: relative;
@@ -348,7 +350,7 @@
             height: 70px;
             border-bottom: 1px dashed rgb(202,222,225,0.2);
             margin: 10px;
-            border-radius: 5px;
+            border-radius: 3px;
             position: relative;
         }
 
@@ -391,7 +393,7 @@
         }
 
         .main_message_list_box {
-            height: calc(55vh - 50px);
+            height: calc(58vh);
         }
 
         .main_message_list_item_left {
@@ -403,7 +405,7 @@
         .user_photo_box {
             width: 50px;
             height: 50px;
-            border-radius: 5px;
+            border-radius: 3px;
             margin: 10px 5px;
             text-align: center;
             line-height: 50px;
@@ -412,7 +414,7 @@
         .user_photo_box img {
             width: 100%;
             height: 100%;
-            border-radius: 5px;
+            border-radius: 3px;
         }
         .user_photo_icon_box img {
             width: 20%;
@@ -567,7 +569,7 @@
             font-size: 35px;
             position: relative;
             height: 70%;
-            top: 30px;
+            top: 20px;
         }
 
         .main_menu_item_center span:nth-child(2) {
@@ -676,6 +678,13 @@
             border-radius: 10px; /*滚动条的圆角*/
             -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
             background-color: #132e70; /*滚动条的背景颜色*/
+        }
+
+        .dialog_main{
+            border-radius: 0px !important;
+        }
+        .dialog_ct{
+            background: rgb(3,13,60);
         }
     </style>
 </head>
@@ -926,56 +935,56 @@
                         <div class="main_image-border main_image-border3"></div>
                         <div class="main_image-border main_image-border4"></div>
                         <div id="main_menu_items" class="main_menu_items">
-                        </div>
-                        <div class="main_menu_item">
-                            <div class="main_menu_item_left"></div>
-                            <div class="main_menu_item_center"><span class="iconfont icon-fl-renshi" style="font-size: 45px !important;top: 32px;"></span><span>底库管理</span></div>
-                            <div class="main_menu_item_right"></div>
-                        </div>
-                        <div class="main_menu_item">
-                            <div class="main_menu_item_left"></div>
-                            <div class="main_menu_item_center"><span class="iconfont icon-quanxianchaxun" style="font-size: 40px !important;top: 28px;"></span><span>权限管理</span></div>
-                            <div class="main_menu_item_right"></div>
-                        </div>
-                        <div class="main_menu_item">
-                            <div class="main_menu_item_left"></div>
-                            <div class="main_menu_item_center"><span class="iconfont icon-rizhi" style="left: 2px;"></span><span>日志管理</span></div>
-                            <div class="main_menu_item_right"></div>
-                        </div>
-                        <div class="main_menu_item">
-                            <div class="main_menu_item_left"></div>
-                            <div class="main_menu_item_center"><span class="iconfont icon-yewujiekoucanshu" style="font-size: 33px !important;top: 27px;"></span><span>接口管理</span></div>
-                            <div class="main_menu_item_right"></div>
-                        </div>
-                        <div class="main_menu_item">
-                            <div class="main_menu_item_left"></div>
-                            <div class="main_menu_item_center"><span class="iconfont icon-dv_pingban"></span><span>平板管理</span></div>
-                            <div class="main_menu_item_right"></div>
-                        </div>
-                        <div class="main_menu_item">
-                            <div class="main_menu_item_left"></div>
-                            <div class="main_menu_item_center"><span class="iconfont icon-anquan1"></span><span>安全管理</span></div>
-                            <div class="main_menu_item_right"></div>
-                        </div>
-                        <div class="main_menu_item">
-                            <div class="main_menu_item_left"></div>
-                            <div class="main_menu_item_center"><span class="iconfont icon-dazhongxingshuizha" style="font-size: 40px !important;top: 30px;"></span><span>闸机管理</span></div>
-                            <div class="main_menu_item_right"></div>
-                        </div>
-                        <div class="main_menu_item">
-                            <div class="main_menu_item_left"></div>
-                            <div class="main_menu_item_center"><span class="iconfont icon-xitong"></span><span>系统管理</span></div>
-                            <div class="main_menu_item_right"></div>
-                        </div>
-                        <div class="main_menu_item">
-                            <div class="main_menu_item_left"></div>
-                            <div class="main_menu_item_center"><span class="iconfont icon-_renlianshibie"></span><span>1:N比对</span></div>
-                            <div class="main_menu_item_right"></div>
-                        </div>
-                        <div class="main_menu_item">
-                            <div class="main_menu_item_left"></div>
-                            <div class="main_menu_item_center"><span class="iconfont icon-duibi1"></span><span>1:1比对</span></div>
-                            <div class="main_menu_item_right"></div>
+                            <div class="main_menu_item"  data-url="page/dict/dict" data-value="底库管理">
+                                <div class="main_menu_item_left"></div>
+                                <div class="main_menu_item_center"><span class="iconfont icon-fl-renshi" style="font-size: 45px !important;top: 22px;"></span><span>底库管理</span></div>
+                                <div class="main_menu_item_right"></div>
+                            </div>
+                            <div class="main_menu_item" data-url="page/role/index" data-value="权限管理">
+                                <div class="main_menu_item_left"></div>
+                                <div class="main_menu_item_center"><span class="iconfont icon-quanxianchaxun" style="font-size: 40px !important;top: 20px;"></span><span>权限管理</span></div>
+                                <div class="main_menu_item_right"></div>
+                            </div>
+                            <div class="main_menu_item">
+                                <div class="main_menu_item_left"></div>
+                                <div class="main_menu_item_center"><span class="iconfont icon-rizhi" style="left: 2px;top: 22px;"></span><span>日志管理</span></div>
+                                <div class="main_menu_item_right"></div>
+                            </div>
+                            <div class="main_menu_item">
+                                <div class="main_menu_item_left"></div>
+                                <div class="main_menu_item_center"><span class="iconfont icon-yewujiekoucanshu" style="font-size: 33px !important;top: 19px;"></span><span>接口管理</span></div>
+                                <div class="main_menu_item_right"></div>
+                            </div>
+                            <div class="main_menu_item" data-url="page/flatbed/index" data-value="平板管理">
+                                <div class="main_menu_item_left"></div>
+                                <div class="main_menu_item_center"><span class="iconfont icon-dv_pingban" style="font-size: 33px !important;top: 19px;"></span><span>平板管理</span></div>
+                                <div class="main_menu_item_right"></div>
+                            </div>
+                            <div class="main_menu_item">
+                                <div class="main_menu_item_left"></div>
+                                <div class="main_menu_item_center"><span class="iconfont icon-anquan1"></span><span>安全管理</span></div>
+                                <div class="main_menu_item_right"></div>
+                            </div>
+                            <div class="main_menu_item" data-url="page/flatbed/index" data-value="闸机管理">
+                                <div class="main_menu_item_left"></div>
+                                <div class="main_menu_item_center"><span class="iconfont icon-dazhongxingshuizha" style="font-size: 40px !important;"></span><span>闸机管理</span></div>
+                                <div class="main_menu_item_right"></div>
+                            </div>
+                            <div class="main_menu_item" data-url="page/user/index" data-value="用户管理">
+                                <div class="main_menu_item_left"></div>
+                                <div class="main_menu_item_center"><span class="iconfont icon-xitong"></span><span>用户管理</span></div>
+                                <div class="main_menu_item_right"></div>
+                            </div>
+                            <div class="main_menu_item" data-url="page/contrast/indexn" data-value="1:N比对">
+                                <div class="main_menu_item_left"></div>
+                                <div class="main_menu_item_center"><span class="iconfont icon-_renlianshibie"></span><span>1:N比对</span></div>
+                                <div class="main_menu_item_right"></div>
+                            </div>
+                            <div class="main_menu_item" data-url="page/contrast/index" data-value="1:1比对">
+                                <div class="main_menu_item_left"></div>
+                                <div class="main_menu_item_center"><span class="iconfont icon-duibi1"></span><span>1:1比对</span></div>
+                                <div class="main_menu_item_right"></div>
+                            </div>
                         </div>
                     </div>
                 </td>
@@ -1070,17 +1079,22 @@
             $('#main_menu_items').html(hidd)
         });*/
         $('#main_menu_items').on('click','.main_menu_item',function(ret){
-            var id=$(this).data('id')
             var url=$(this).data('url')
             var name=$(this).data('value')
+            if(!url){
+                top.Toast("showErrorToast", '系统尚未对接！！');
+                return;
+            }
             var diag = new top.Dialog();
             diag.Title = name;
             diag.URL = ctxPath + url;
             //自定义长度和宽度的设置
+            diag.ShowMaxButton=true;
             diag.Width = 960;
             diag.Height = 650;
             diag.ShowButtonRow = false;
             diag.show();
+            diag.max();
         })
         //右侧头部js
         $(".right_toggle").hover(function (event) {

@@ -69,11 +69,11 @@
 
         .indexnodata {
             position: relative;
-            width: calc(100% - 110px);
+            width: calc(100% - 130px);
             top: 50%;
             left:0px;
-            margin-top: -150px;
-            margin-left: 0px;
+            margin-top: -80px;
+            margin-left: 20px;
             padding: 30px 0px 20px 100px;
             color: #666;
             line-height: 30px;
@@ -85,7 +85,6 @@
 <body>
 <div class="main_box">
     <div class="main_left">
-        <input type="button" class="primary" value="新增" style="margin-bottom: 10px;" onclick="onadd();"/>
         <div id="dataBasic"></div>
     </div>
     <div class="form_content" id="formContent">
@@ -93,7 +92,7 @@
         <form id="formAdd" method="post">
             <table class="tableStyle" formMode="view">
                 <tr>
-                    <td width="20%"><span class="star">*</span>关联人员：</td>
+                    <td width="20%"><span class="star">*</span>关联家长：</td>
                     <td width="60%">
                         <input type="hidden" id="memberId" name="memberId"/>
                         <input type="hidden" id="id" name="id"/>
@@ -110,17 +109,18 @@
                 <tr>
                     <td width="20%" >备注：</td>
                     <td >
-                        <textarea id="remark" name="remark" style="resize: none;width:80%;"  disabled="disabled"></textarea>
+                        <textarea id="remark" name="remark" style="resize: none;width:200px;"  disabled="disabled"></textarea>
                     </td>
                 </tr>
                 <tr>
                     <td colspan="2">
                         <input id="cancel_btn" type="button" class=" _hide" value="取消" style="margin-bottom: 10px;" onclick="ondisable();"/>
-                        <input id="submit_btn" type="button" class="primary _hide" value="提交" style="margin-bottom: 10px;" onclick="save();"/>
+                        <input id="submit_btn" type="button" class="warning _hide" value="提交" style="margin-bottom: 10px;" onclick="save();"/>
                     </td>
                 </tr>
             </table>
         </form>
+        <input type="button" class="primary" value="新增" style="margin:0px 10% 0px;width:80%;" onclick="onadd();"/>
     </div>
 </div>
 
@@ -131,7 +131,7 @@
 
     function chooseUser(){
         var diag = new top.Dialog();
-        diag.Title = "关联人员";
+        diag.Title = "关联家长";
         diag.ID="a2"
         diag.URL = ctxPath + "page/relation/member?id="+id;
         //自定义长度和宽度的设置
