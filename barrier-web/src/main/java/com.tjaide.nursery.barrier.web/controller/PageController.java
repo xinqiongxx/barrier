@@ -2,6 +2,7 @@ package com.tjaide.nursery.barrier.web.controller;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.tjaide.nursery.barrier.common.core.entity.ShiroUser;
+import com.tjaide.nursery.barrier.common.core.util.ShiroUtils;
 import com.tjaide.nursery.barrier.web.entity.SysDict;
 import com.tjaide.nursery.barrier.web.entity.SysDictItem;
 import com.tjaide.nursery.barrier.web.entity.SysRole;
@@ -46,6 +47,7 @@ public class PageController {
      */
     @RequestMapping(value = "/{content}/{file}")
     public String forward(@PathVariable("content") String content, @PathVariable("file") String file, Model model) {
+        model.addAttribute("user",ShiroUtils.getUser());
         return content + "/" + file;
     }
 

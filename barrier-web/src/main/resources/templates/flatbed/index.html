@@ -105,7 +105,7 @@
     </div>
     <div id="dataBasic"></div>
 </div>
-<input type = "hidden" id="userId" value = "<shiro:principal property='id'/>"/>
+<input type="hidden" id="userId" th:value="${user.getUserId()}"/>
 <script type="text/javascript">
     var grid;
     $(function () {
@@ -304,6 +304,8 @@
             return;
         }
         //top.bodyMask("正在同步中，请稍等....");
+
+        top.Toast("showSuccessToast", '开始同步...');
         $.ajax({
             url: ctxPath + "flatbed/sync/" + id,
             type: 'post'
@@ -402,24 +404,24 @@
                 socket.close();
                 socket=null;
             }
-            socket = new WebSocket(ctxPath+"/imserver/"+$("#userId").val());
+            socket = new WebSocket("ws://"+window.location.host+"/imserver/"+$("#userId").val());
             //打开事件
             socket.onopen = function() {
-                console.log("websocket已打开");
-                //socket.send("这是来自客户端的消息" + location.href + new Date());
             };
             //获得消息事件
             socket.onmessage = function(msg) {
-                console.log(msg.data);
+                if(msg.data){
+                    var res = JSON.parse(msg.data)
+                    $("#process_"+res.id).html(res.process)
+                    $("#status_"+res.id).html(res.onlineStatus?'在线':'离线')
+                }
                 //发现消息进入    开始处理前端触发逻辑
             };
             //关闭事件
             socket.onclose = function() {
-                console.log("websocket已关闭");
             };
             //发生了错误事件
             socket.onerror = function() {
-                console.log("websocket发生了错误");
             }
         }
     }
@@ -428,8 +430,6 @@
             console.log("您的浏览器不支持WebSocket");
         }else {
             console.log("您的浏览器支持WebSocket");
-            console.log('{"toUserId":"'+$("#userId").val()+'","contentText":"'+$("#contentText").val()+'"}');
-            socket.send('{"toUserId":"'+$("#userId").val()+'","contentText":"'+$("#contentText").val()+'"}');
         }
     }
     openSocket()

@@ -14,6 +14,7 @@ import com.tjaide.nursery.barrier.web.entity.*;
 import com.tjaide.nursery.barrier.web.service.*;
 import com.tjaide.nursery.barrier.web.service.impl.AsyncServiceImpl;
 import com.tjaide.nursery.barrier.web.util.FlatBedUtil;
+import com.tjaide.nursery.barrier.web.util.WebSocketServer;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;

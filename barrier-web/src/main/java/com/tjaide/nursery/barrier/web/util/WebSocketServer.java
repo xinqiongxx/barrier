@@ -3,6 +3,7 @@ package com.tjaide.nursery.barrier.web.util;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -115,7 +116,8 @@ public class WebSocketServer {
     /**
      * 发送自定义消息
      * */
-    public static void sendInfo(String message,@PathParam("userId") String userId) throws IOException {
+    @SneakyThrows
+    public static void sendInfo(String message, @PathParam("userId") String userId) {
         log.info("发送消息到:"+userId+"，报文:"+message);
         if(StrUtil.isNotBlank(userId)&&webSocketMap.containsKey(userId)){
             webSocketMap.get(userId).sendMessage(message);

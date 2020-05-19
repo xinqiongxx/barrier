@@ -131,8 +131,9 @@ public class FlatBedUtil {
 
     @SneakyThrows
     public static List<SysDepotUser> AddPersons(SysFlatbed sysFlatbed, List<SysDepotUser> lists, String filePath, SysFlatbedService sysFlatbedService){
+        String userid = ShiroUtils.getUser().getUserId();
         sysFlatbed.setProcess("开始同步");
-        WebSocketServer.sendInfo("开始同步", ShiroUtils.getUser().getUserId().toString());
+        WebSocketServer.sendInfo(JSONUtil.toJsonStr(sysFlatbed), userid);
         sysFlatbedService.updateById(sysFlatbed);
         String url = sysFlatbed.getIpAddress();
         String deviceId = sysFlatbed.getNumber();
@@ -142,6 +143,7 @@ public class FlatBedUtil {
             ids.add(sysDepotUser.getId()+"A");
         });
         sysFlatbed.setProcess("完成：0%");
+        WebSocketServer.sendInfo(JSONUtil.toJsonStr(sysFlatbed), userid);
         sysFlatbedService.updateById(sysFlatbed);
         DeletePerson(url, deviceId, ids);
         // 多线程处理
@@ -201,6 +203,7 @@ public class FlatBedUtil {
                     }
                     completeInt.set(completeInt.get()+e.size());
                     sysFlatbed.setProcess("完成："+(double)Math.round( completeInt.get()/(double)lists.size()*1000)/10+"%");
+                    WebSocketServer.sendInfo(JSONUtil.toJsonStr(sysFlatbed), userid);
                     sysFlatbedService.updateById(sysFlatbed);
                 }));
                 oldList = new ArrayList<>();
