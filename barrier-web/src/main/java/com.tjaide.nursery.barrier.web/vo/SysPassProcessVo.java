@@ -36,5 +36,7 @@ public class SysPassProcessVo extends SysPassProcess {
 
     private String discernName;
 
+    private String deptName;
+
 
 }

@@ -322,4 +322,26 @@ public class SysDepotUserServiceImpl extends ServiceImpl<SysDepotUserMapper, Sys
         return ipage;
     }
 
+
+
+    @Override
+    public String getDept(Integer user_id){
+        SysDepotUser user=baseMapper.getUserById(user_id);
+        //人员类型（1学生2教职工3家长9未知）
+        String deptName="";
+        if(user.getUserType()==1){
+            SysDictItem dictName= sysDictItemService.getOne(Wrappers
+                    .<SysDictItem>query().lambda()
+                    .eq(SysDictItem::getType, "class_type")
+            .eq(SysDictItem::getValue,user.getDeptId()));
+            deptName=dictName.getLabel();
+        }else if(user.getUserType()==2){
+            SysDept dept=sysDeptService.getOne(Wrappers
+                    .<SysDept>query().lambda()
+                    .eq(SysDept::getDeptId,user.getDeptId()));
+            deptName=dept.getDeptName();
+        }
+        return deptName;
+    }
+
 }

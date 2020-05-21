@@ -11,6 +11,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tjaide.nursery.barrier.web.dto.SysPassProcessDTO;
 import com.tjaide.nursery.barrier.web.entity.SysPassProcess;
 import com.tjaide.nursery.barrier.web.mapper.SysPassProcessMapper;
+import com.tjaide.nursery.barrier.web.service.SysDepotUserService;
 import com.tjaide.nursery.barrier.web.service.SysPassProcessService;
 import com.tjaide.nursery.barrier.web.service.SysUserRelationService;
 import com.tjaide.nursery.barrier.web.vo.SysPassProcessVo;
@@ -37,14 +38,18 @@ public class SysPassProcessServiceImpl extends ServiceImpl<SysPassProcessMapper,
 
     private final SysUserRelationService sysUserRelationService;
 
+    private final SysDepotUserService sysDepotUserService;
+
     @Override
     public List<SysPassProcessVo> findRecentPassVoList(){
         List<SysPassProcessVo> list=baseMapper.findRecentPassVoList();
         for(SysPassProcessVo process:list){
             if(ObjectUtil.isNotNull(process.getUserId())){
                 process.setParentType(sysUserRelationService.getRelation(process.getUserId(),process.getDiscernId()).getRelationName());
+                process.setDeptName(sysDepotUserService.getDept(process.getUserId()));
             }else{
                 process.setParentType("本人");
+                process.setDeptName(sysDepotUserService.getDept(process.getDiscernId()));
             }
         }
         return list;
@@ -137,8 +142,10 @@ public class SysPassProcessServiceImpl extends ServiceImpl<SysPassProcessMapper,
         for(SysPassProcessVo process:list){
             if(ObjectUtil.isNotNull(process.getUserId())){
                 process.setParentType(sysUserRelationService.getRelation(process.getUserId(),process.getDiscernId()).getRelationName());
+                process.setDeptName(sysDepotUserService.getDept(process.getUserId()));
             }else{
                 process.setParentType("本人");
+                process.setDeptName(sysDepotUserService.getDept(process.getDiscernId()));
             }
         }
         ipage.setRecords(list);

@@ -1227,7 +1227,9 @@
 
                 }
                 if(ret.userId!=null){
-                    hidd+=' <span>('+ret.discernUser.name+'-'+ret.parentType+')</span>';
+                    hidd+=' <span>('+ret.discernUser.name+'-'+ret.parentType+'-'+ret.deptName+')</span>';
+                }else{
+                    hidd+=' <span>('+ret.deptName+')</span>';
                 }
                 hidd += '</div>\n' +
                 '             <div class="user_time_box">'+ret.createTime.substr(11,19)+'</div>\n' +
@@ -1320,7 +1322,6 @@
             type: 'get',
             data: {},
         }).then(function (res) {
-            console.log(res)
             var datas = res.data
             $('#todayTotal').html(datas.data4)
             var option = {
@@ -1333,18 +1334,10 @@
                     {
                         name: '进出人数',
                         type: 'pie',
-                        radius: ['40%', '50%'],
+                        radius: ['60%', '80%'],
                         avoidLabelOverlap: false,
                         label: {
-                            show: false,
-                            position: 'center'
-                        },
-                        emphasis: {
-                            label: {
-                                show: false,
-                                fontSize: '30',
-                                fontWeight: 'bold'
-                            }
+                            show: false
                         },
                         labelLine: {
                             show: false

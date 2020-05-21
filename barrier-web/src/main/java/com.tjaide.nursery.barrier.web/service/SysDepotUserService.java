@@ -9,6 +9,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.tjaide.nursery.barrier.common.core.util.R;
 import com.tjaide.nursery.barrier.web.entity.SysDepotUser;
+import com.tjaide.nursery.barrier.web.entity.SysDictItem;
 
 import java.util.List;
 import java.util.Map;
@@ -33,4 +34,6 @@ public interface SysDepotUserService extends IService<SysDepotUser> {
 
     IPage relationPage(Page page, SysDepotUser sysDepotUser, Integer id);
     IPage getpage(Page page, SysDepotUser sysDepotUser);
+
+    String getDept(Integer user_id);
 }
