@@ -90,12 +90,14 @@
         }
 
         .user_information a{
-            background: url('../../static/image/back_btn.png') no-repeat;
-            background-size: 100% 100%;
+            border: 1px solid #5c92fb;
+            border-radius: 3px;
             display: inline-block;
             margin-left: 10px;
-            width: 45px;
+            padding:0px 20px;
+            color: #fff;
             height: calc(4vh - 7px);
+            line-height: calc(4vh - 7px);
             position: relative;
             top: 3px;
         }
@@ -273,7 +275,7 @@
             color: #b8d4fc;
             height: 50%;
             position: relative;
-            top: 25%;
+            top: 45%;
             transform: translateY(-50%);
         }
 
@@ -355,6 +357,7 @@
         .main_chart_box {
             height: calc(100% - 50px);
         }
+
         /*第一块end*/
         /*第二块start*/
         .main_select_box {
@@ -362,7 +365,7 @@
             height: 30px;
             line-height: 30px;
             position: absolute;
-            z-index: 999;
+            z-index: 100;
             top: 0;
             right: 20px;
         }
@@ -609,6 +612,8 @@
 
         .main_menu_items {
             display: flex;
+            height: 100%;
+            padding: 20px;
         }
         .main_menu_item{
             position:relative;
@@ -656,7 +661,7 @@
         ,.main_menu_items .main_menu_item:nth-child(5)
         ,.main_menu_items .main_menu_item:nth-child(6)
         ,.main_menu_items .main_menu_item:nth-child(9){
-            top: 46.4px;
+            top: 50%;
         }
         .main_menu_items .main_menu_item:nth-child(2){
             left: -10px;
@@ -690,7 +695,7 @@
             font-size: 30px;
             position: relative;
             height: 70%;
-            top: 20px;
+            top: 12px;
         }
 
         .main_menu_item_center span:nth-child(2) {
@@ -873,7 +878,7 @@
                     <div class="main_user_box">
                         <div class="right_toggle">
                             <div class="user_information" id="user_info">
-                                进入后台<a href="javascript:;"></a>
+                                <a href="javascript:;">进入后台</a>
                             </div>
                         </div>
                     </div>
@@ -1091,7 +1096,7 @@
                                     <div  class="pie_example_item"><span></span> 教职工总人数</div>
                                 </div>
                             </div>
-                            <div id="chart4" class="charts_container" style="width: 60%;height: 100%;"></div>
+                            <div id="chart4" class="charts_container" style="width: 70%;height: 100%;"></div>
                         </div>
                     </div>
                 </td>
@@ -1107,32 +1112,32 @@
                         <div id="main_menu_items" class="main_menu_items">
                             <div class="main_menu_item"  data-url="page/dict/dict" data-value="底库管理">
                                 <div class="main_menu_item_left"></div>
-                                <div class="main_menu_item_center"><span class="iconfont icon-fl-renshi" style="font-size: 35px !important;top: 20px;"></span><span>底库管理</span></div>
+                                <div class="main_menu_item_center"><span class="iconfont icon-fl-renshi" style="font-size: 35px !important;"></span><span>底库管理</span></div>
                                 <div class="main_menu_item_right"></div>
                             </div>
                             <div class="main_menu_item" data-url="page/role/index" data-value="权限管理">
                                 <div class="main_menu_item_left"></div>
-                                <div class="main_menu_item_center"><span class="iconfont icon-quanxianchaxun" style="font-size: 35px !important;top: 20px;"></span><span>权限管理</span></div>
+                                <div class="main_menu_item_center"><span class="iconfont icon-quanxianchaxun" style="font-size: 35px !important;"></span><span>权限管理</span></div>
                                 <div class="main_menu_item_right"></div>
                             </div>
                             <div class="main_menu_item">
                                 <div class="main_menu_item_left"></div>
-                                <div class="main_menu_item_center"><span class="iconfont icon-rizhi" style="left: 2px;top: 22px;"></span><span>日志管理</span></div>
+                                <div class="main_menu_item_center"><span class="iconfont icon-rizhi" style=""></span><span>日志管理</span></div>
                                 <div class="main_menu_item_right"></div>
                             </div>
                             <div class="main_menu_item">
                                 <div class="main_menu_item_left"></div>
-                                <div class="main_menu_item_center"><span class="iconfont icon-yewujiekoucanshu" style="font-size: 30px !important;top: 16px;"></span><span>接口管理</span></div>
+                                <div class="main_menu_item_center"><span class="iconfont icon-yewujiekoucanshu" style="font-size: 30px !important; color: #d36064;"></span><span>接口管理</span></div>
                                 <div class="main_menu_item_right"></div>
                             </div>
                             <div class="main_menu_item" data-url="page/flatbed/index" data-value="平板管理">
                                 <div class="main_menu_item_left"></div>
-                                <div class="main_menu_item_center"><span class="iconfont icon-dv_pingban" style="font-size: 33px !important;top: 19px;"></span><span>平板管理</span></div>
+                                <div class="main_menu_item_center"><span class="iconfont icon-dv_pingban" style="font-size: 33px !important;"></span><span>平板管理</span></div>
                                 <div class="main_menu_item_right"></div>
                             </div>
                             <div class="main_menu_item">
                                 <div class="main_menu_item_left"></div>
-                                <div class="main_menu_item_center"><span class="iconfont icon-anquan1"></span><span>安全管理</span></div>
+                                <div class="main_menu_item_center"><span class="iconfont icon-anquan1" style="color: #d36064;"></span><span>安全管理</span></div>
                                 <div class="main_menu_item_right"></div>
                             </div>
                             <div class="main_menu_item" data-url="page/flatbed/index" data-value="闸机管理">
@@ -1152,7 +1157,7 @@
                             </div>
                             <div class="main_menu_item" data-url="page/contrast/index" data-value="1:1比对">
                                 <div class="main_menu_item_left"></div>
-                                <div class="main_menu_item_center"><span class="iconfont icon-duibi1"></span><span>1:1比对</span></div>
+                                <div class="main_menu_item_center"><span class="iconfont icon-duibi1"  style="color: #d36064;"></span><span>1:1比对</span></div>
                                 <div class="main_menu_item_right"></div>
                             </div>
                         </div>
@@ -1394,7 +1399,7 @@
                         },
                         emphasis: {
                             label: {
-                                show: false,
+                                show: true,
                                 fontSize: '30',
                                 fontWeight: 'bold'
                             }
@@ -1576,6 +1581,44 @@
         });
     }
 
+    var socket;
+    function openSocket() {
+        if(typeof(WebSocket) == "undefined") {
+            console.log("您的浏览器不支持WebSocket");
+        }else{
+            console.log("您的浏览器支持WebSocket");
+            if(socket!=null){
+                socket.close();
+                socket=null;
+            }
+            socket = new WebSocket("ws://"+window.location.host+"/imserver/page");
+            //打开事件
+            socket.onopen = function() {
+            };
+            //获得消息事件
+            socket.onmessage = function(msg) {
+                getLastPassProcess();
+                eachrts1()
+                eachrts2()
+                eachrts4()
+                //发现消息进入    开始处理前端触发逻辑
+            };
+            //关闭事件
+            socket.onclose = function() {
+            };
+            //发生了错误事件
+            socket.onerror = function() {
+            }
+        }
+    }
+    function sendMessage() {
+        if(typeof(WebSocket) == "undefined") {
+            console.log("您的浏览器不支持WebSocket");
+        }else {
+            console.log("您的浏览器支持WebSocket");
+        }
+    }
+    openSocket()
 
 </script>
 </body>
