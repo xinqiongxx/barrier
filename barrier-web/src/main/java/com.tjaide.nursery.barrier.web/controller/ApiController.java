@@ -1,25 +1,19 @@
 package com.tjaide.nursery.barrier.web.controller;
 
-import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.druid.pool.DruidPooledConnection;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.tjaide.nursery.barrier.common.core.util.R;
 import com.tjaide.nursery.barrier.web.entity.*;
 import com.tjaide.nursery.barrier.web.service.*;
 import com.tjaide.nursery.barrier.web.service.impl.AsyncServiceImpl;
 import com.tjaide.nursery.barrier.web.util.FlatBedUtil;
-import com.tjaide.nursery.barrier.web.util.WebSocketServer;
-import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.ResourceUtils;
@@ -28,8 +22,6 @@ import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.sql.DataSource;
-import javax.websocket.server.PathParam;
 import java.io.*;
 import java.sql.ResultSet;
 import java.util.*;
@@ -141,7 +133,7 @@ public class ApiController {
             sysPassProcess.setEnterType(2);
         }
         // ----
-        WebSocketServer.sendInfo(JSONUtil.toJsonStr(sysFlatbed), "page");
+        //WebSocketServer.sendInfo(JSONUtil.toJsonStr(sysFlatbed), "page");
         sysPassProcessService.save(sysPassProcess);
         List<SysUserRelation> lists = sysUserRelationService.list(Wrappers.<SysUserRelation>lambdaQuery().eq(SysUserRelation::getMemberId,sysPassProcess.getDiscernId()));
         lists.forEach(sysUserRelation -> {

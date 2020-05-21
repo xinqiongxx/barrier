@@ -362,7 +362,7 @@
             height: 30px;
             line-height: 30px;
             position: absolute;
-            z-index: 999;
+            z-index: 9;
             top: 0;
             right: 20px;
         }
@@ -936,10 +936,6 @@
                                 <select class="select_main" prompt="请选择播放源" data='{"list":[{"value":"1","key":"008569"},{"value":"2","key":"00567841"}]}'></select>
                             </div>
                         </div>
-                        <!--<div class="main_select_box _hide">
-                            <div class="select_main_title">播放源：</div>
-                            <select class="select_main" prompt="请选择播放源" data='{"list":[{"value":"1","key":"008569"},{"value":"2","key":"00567841"}]}'></select>
-                        </div>-->
                         <div id="mainVedioBox" class="main_vedio_box">
                             <video id="example_video_1" class="video-js vjs-default-skin" controls preload="none" width="100%" height="100%"
                                    poster="http://vjs.zencdn.net/v/oceans.png">
@@ -968,73 +964,11 @@
                             <div class="main_title_box">
                                 <i class="iconfont icon-shuxiantubiao"></i>
                                 进出人员
+                                <i class="iconfont icon-gengduomore10" id="processMore"></i>
                             </div>
                             <div class="main_message_list_box">
                                 <div id="passList" style="overflow: auto;height: 100%;width: calc(20vw - 48px);box-sizing: border-box;padding: 0px 20px;">
-                                    <!--<div class="main_message_list_item">
-                                        <div class="main_message_list_item_left">
-                                            <div class="user_photo_box">
-                                                    <img src="../../static/image/photo.jpg" alt="">
-                                                &lt;!&ndash;<div class="user_photo_icon_box">
-                                                </div>&ndash;&gt;
-                                            </div>
-                                            <div class="user_icon_box"><i class="iconfont icon-jiaohuan1"></i></div>
-                                            <div class="user_photo_box">
-                                                    <img src="../../static/image/photo.jpg" alt="">
-                                                &lt;!&ndash;<div class="user_photo_icon_box">
-                                                </div>&ndash;&gt;
-                                            </div>
-                                        </div>
-                                        <div class="main_message_list_item_right">
-                                            <div class="user_name_box">张三 <span>幼儿园三班</span></div>
-                                            <div class="user_time_box">00:00:00</div>
-                                        </div>
-                                    </div>
-                                    <div class="main_message_list_item">
-                                        <div class="main_message_list_item_left">
-                                            <div class="user_photo_box">
-                                                    <img src="../../static/image/photo.jpg" alt="">
-                                            </div>
-                                            <div class="user_icon_box"><i class="iconfont icon-jiaohuan1"></i></div>
-                                            <div class="user_photo_box">
-                                                <i class="iconfont icon-wo"></i>
-                                            </div>
-                                        </div>
-                                        <div class="main_message_list_item_right">
-                                            <div class="user_name_box">张三<span>幼儿园三班</span></div>
-                                            <div class="user_time_box">00:00:00</div>
-                                        </div>
-                                    </div>
-                                    <div class="main_message_list_item">
-                                        <div class="main_message_list_item_left">
-                                            <div class="user_photo_box">
-                                                <i class="iconfont icon-wo"></i>
-                                            </div>
-                                            <div class="user_icon_box"><i class="iconfont icon-jiaohuan1"></i></div>
-                                            <div class="user_photo_box">
-                                                <i class="iconfont icon-wo"></i>
-                                            </div>
-                                        </div>
-                                        <div class="main_message_list_item_right">
-                                            <div class="user_name_box">张三<span>幼儿园三班</span></div>
-                                            <div class="user_time_box">00:00:00</div>
-                                        </div>
-                                    </div>
-                                    <div class="main_message_list_item">
-                                        <div class="main_message_list_item_left">
-                                            <div class="user_photo_box">
-                                                    <i class="iconfont icon-wo"></i>
-                                            </div>
-                                            <div class="user_icon_box"><i class="iconfont icon-jiaohuan1"></i></div>
-                                            <div class="user_photo_box">
-                                                    <i class="iconfont icon-wo"></i>
-                                            </div>
-                                        </div>
-                                        <div class="main_message_list_item_right">
-                                            <div class="user_name_box">张三<span>幼儿园三班</span></div>
-                                            <div class="user_time_box">00:00:00</div>
-                                        </div>
-                                    </div>-->
+
                                 </div>
                             </div>
                         </div>
@@ -1061,7 +995,7 @@
                                 <div id="chart3" style="width: 100%;height: calc(100% - 20px);">
 
                                 </div>
-                                <div class="line_title">今日进入人数 <span id="line_leave_title" th:text="${leavecount}"></span>人</div>
+                                <div class="line_title">今日离开人数 <span id="line_leave_title" th:text="${leavecount}"></span>人</div>
                             </div>
                         </div>
                         <!--第三层右侧区域end-->
@@ -1199,6 +1133,19 @@
 
         $('#user_info').on('click',function(e){
             location.href= ctxPath
+        })
+
+        $('#processMore').on('click',function(e){
+            var diag = new top.Dialog();
+            diag.Title = name;
+            diag.URL = ctxPath + 'page/passProcess/index';
+            //自定义长度和宽度的设置
+            diag.ShowMaxButton=true;
+            diag.Width = 960;
+            diag.Height = 650;
+            diag.ShowButtonRow = false;
+            diag.show();
+            diag.max();
         })
 
         //获取最新进出记录

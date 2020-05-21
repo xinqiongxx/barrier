@@ -5,6 +5,9 @@
 package com.tjaide.nursery.barrier.web.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.tjaide.nursery.barrier.web.dto.SysPassProcessDTO;
 import com.tjaide.nursery.barrier.web.entity.SysPassProcess;
 import com.tjaide.nursery.barrier.web.vo.SysPassProcessVo;
 import org.apache.ibatis.annotations.Param;
@@ -23,6 +26,7 @@ import java.util.List;
 public interface SysPassProcessMapper extends BaseMapper<SysPassProcess> {
 
     List<SysPassProcessVo> findRecentPassVoList();
-    Integer getCountByCreateDate(@Param("type") Integer type, @Param("start_time") String start_time,@Param("end_time") String end_time);
-    Integer getCountByUserTypeCreateDate(@Param("userType") Integer userType, @Param("start_time") String start_time,@Param("end_time") String end_time);
+    Integer getCountByCreateDate(@Param("type") Integer type, @Param("start_time") String start_time, @Param("end_time") String end_time);
+    Integer getCountByUserTypeCreateDate(@Param("userType") Integer userType, @Param("start_time") String start_time, @Param("end_time") String end_time);
+    IPage<SysPassProcessVo> getPage(Page page, @Param("query") SysPassProcessDTO sysPassProcessDTO);
 }

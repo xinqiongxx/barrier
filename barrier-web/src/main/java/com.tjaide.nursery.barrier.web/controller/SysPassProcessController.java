@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.tjaide.nursery.barrier.common.core.util.R;
 import com.tjaide.nursery.barrier.common.log.annotation.SysLog;
+import com.tjaide.nursery.barrier.web.dto.SysPassProcessDTO;
 import com.tjaide.nursery.barrier.web.entity.SysFlatbed;
 import com.tjaide.nursery.barrier.web.entity.SysPassProcess;
 import com.tjaide.nursery.barrier.web.service.SysFlatbedService;
@@ -83,7 +84,7 @@ public class SysPassProcessController {
      * @return 分页对象
      */
     @GetMapping("/page")
-    public R getRolePage(Page page) {
-        return R.ok(sysPassProcessService.page(page, Wrappers.emptyWrapper()));
+    public R getRolePage(Page page, SysPassProcessDTO sysPassProcessDTO) {
+        return R.ok(sysPassProcessService.getPage(page, sysPassProcessDTO));
     }
 }
