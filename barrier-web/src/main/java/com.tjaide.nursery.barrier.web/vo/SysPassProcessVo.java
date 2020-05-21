@@ -32,5 +32,11 @@ public class SysPassProcessVo extends SysPassProcess {
 
     private String parentType;
 
+    private String userName;
+
+    private String discernName;
+
+    private String deptName;
+
 
 }

@@ -365,7 +365,7 @@
             height: 30px;
             line-height: 30px;
             position: absolute;
-            z-index: 100;
+            z-index: 999;
             top: 0;
             right: 20px;
         }
@@ -612,8 +612,6 @@
 
         .main_menu_items {
             display: flex;
-            height: 100%;
-            padding: 20px;
         }
         .main_menu_item{
             position:relative;
@@ -661,7 +659,7 @@
         ,.main_menu_items .main_menu_item:nth-child(5)
         ,.main_menu_items .main_menu_item:nth-child(6)
         ,.main_menu_items .main_menu_item:nth-child(9){
-            top: 50%;
+            top: 46.4px;
         }
         .main_menu_items .main_menu_item:nth-child(2){
             left: -10px;
@@ -973,73 +971,11 @@
                             <div class="main_title_box">
                                 <i class="iconfont icon-shuxiantubiao"></i>
                                 进出人员
+                                <i class="iconfont icon-gengduomore10" id="processMore"></i>
                             </div>
                             <div class="main_message_list_box">
                                 <div id="passList" style="overflow: auto;height: 100%;width: calc(20vw - 48px);box-sizing: border-box;padding: 0px 20px;">
-                                    <!--<div class="main_message_list_item">
-                                        <div class="main_message_list_item_left">
-                                            <div class="user_photo_box">
-                                                    <img src="../../static/image/photo.jpg" alt="">
-                                                &lt;!&ndash;<div class="user_photo_icon_box">
-                                                </div>&ndash;&gt;
-                                            </div>
-                                            <div class="user_icon_box"><i class="iconfont icon-jiaohuan1"></i></div>
-                                            <div class="user_photo_box">
-                                                    <img src="../../static/image/photo.jpg" alt="">
-                                                &lt;!&ndash;<div class="user_photo_icon_box">
-                                                </div>&ndash;&gt;
-                                            </div>
-                                        </div>
-                                        <div class="main_message_list_item_right">
-                                            <div class="user_name_box">张三 <span>幼儿园三班</span></div>
-                                            <div class="user_time_box">00:00:00</div>
-                                        </div>
-                                    </div>
-                                    <div class="main_message_list_item">
-                                        <div class="main_message_list_item_left">
-                                            <div class="user_photo_box">
-                                                    <img src="../../static/image/photo.jpg" alt="">
-                                            </div>
-                                            <div class="user_icon_box"><i class="iconfont icon-jiaohuan1"></i></div>
-                                            <div class="user_photo_box">
-                                                <i class="iconfont icon-wo"></i>
-                                            </div>
-                                        </div>
-                                        <div class="main_message_list_item_right">
-                                            <div class="user_name_box">张三<span>幼儿园三班</span></div>
-                                            <div class="user_time_box">00:00:00</div>
-                                        </div>
-                                    </div>
-                                    <div class="main_message_list_item">
-                                        <div class="main_message_list_item_left">
-                                            <div class="user_photo_box">
-                                                <i class="iconfont icon-wo"></i>
-                                            </div>
-                                            <div class="user_icon_box"><i class="iconfont icon-jiaohuan1"></i></div>
-                                            <div class="user_photo_box">
-                                                <i class="iconfont icon-wo"></i>
-                                            </div>
-                                        </div>
-                                        <div class="main_message_list_item_right">
-                                            <div class="user_name_box">张三<span>幼儿园三班</span></div>
-                                            <div class="user_time_box">00:00:00</div>
-                                        </div>
-                                    </div>
-                                    <div class="main_message_list_item">
-                                        <div class="main_message_list_item_left">
-                                            <div class="user_photo_box">
-                                                    <i class="iconfont icon-wo"></i>
-                                            </div>
-                                            <div class="user_icon_box"><i class="iconfont icon-jiaohuan1"></i></div>
-                                            <div class="user_photo_box">
-                                                    <i class="iconfont icon-wo"></i>
-                                            </div>
-                                        </div>
-                                        <div class="main_message_list_item_right">
-                                            <div class="user_name_box">张三<span>幼儿园三班</span></div>
-                                            <div class="user_time_box">00:00:00</div>
-                                        </div>
-                                    </div>-->
+
                                 </div>
                             </div>
                         </div>
@@ -1206,6 +1142,19 @@
             location.href= ctxPath
         })
 
+        $('#processMore').on('click',function(e){
+            var diag = new top.Dialog();
+            diag.Title = name;
+            diag.URL = ctxPath + 'page/passProcess/index';
+            //自定义长度和宽度的设置
+            diag.ShowMaxButton=true;
+            diag.Width = 960;
+            diag.Height = 650;
+            diag.ShowButtonRow = false;
+            diag.show();
+            diag.max();
+        })
+
         //获取最新进出记录
         getLastPassProcess()
 
@@ -1285,7 +1234,9 @@
 
                 }
                 if(ret.userId!=null){
-                    hidd+=' <span>('+ret.discernUser.name+'-'+ret.parentType+')</span>';
+                    hidd+=' <span>('+ret.discernUser.name+'-'+ret.parentType+'-'+ret.deptName+')</span>';
+                }else{
+                    hidd+=' <span>('+ret.deptName+')</span>';
                 }
                 hidd += '</div>\n' +
                 '             <div class="user_time_box">'+ret.createTime.substr(11,19)+'</div>\n' +
@@ -1378,7 +1329,6 @@
             type: 'get',
             data: {},
         }).then(function (res) {
-            console.log(res)
             var datas = res.data
             $('#todayTotal').html(datas.data4)
             var option = {
@@ -1391,18 +1341,10 @@
                     {
                         name: '进出人数',
                         type: 'pie',
-                        radius: ['40%', '50%'],
+                        radius: ['60%', '80%'],
                         avoidLabelOverlap: false,
                         label: {
-                            show: false,
-                            position: 'center'
-                        },
-                        emphasis: {
-                            label: {
-                                show: true,
-                                fontSize: '30',
-                                fontWeight: 'bold'
-                            }
+                            show: false
                         },
                         labelLine: {
                             show: false

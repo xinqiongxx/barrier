@@ -5,11 +5,13 @@
 package com.tjaide.nursery.barrier.web.service.impl;
 
 import cn.hutool.core.util.ObjectUtil;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.tjaide.nursery.barrier.web.dto.SysPassProcessDTO;
 import com.tjaide.nursery.barrier.web.entity.SysPassProcess;
-import com.tjaide.nursery.barrier.web.mapper.SysDeptRelationMapper;
 import com.tjaide.nursery.barrier.web.mapper.SysPassProcessMapper;
-import com.tjaide.nursery.barrier.web.service.SysDeptRelationService;
+import com.tjaide.nursery.barrier.web.service.SysDepotUserService;
 import com.tjaide.nursery.barrier.web.service.SysPassProcessService;
 import com.tjaide.nursery.barrier.web.service.SysUserRelationService;
 import com.tjaide.nursery.barrier.web.vo.SysPassProcessVo;
@@ -17,8 +19,8 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 /**
@@ -36,14 +38,18 @@ public class SysPassProcessServiceImpl extends ServiceImpl<SysPassProcessMapper,
 
     private final SysUserRelationService sysUserRelationService;
 
+    private final SysDepotUserService sysDepotUserService;
+
     @Override
     public List<SysPassProcessVo> findRecentPassVoList(){
         List<SysPassProcessVo> list=baseMapper.findRecentPassVoList();
         for(SysPassProcessVo process:list){
             if(ObjectUtil.isNotNull(process.getUserId())){
                 process.setParentType(sysUserRelationService.getRelation(process.getUserId(),process.getDiscernId()).getRelationName());
+                process.setDeptName(sysDepotUserService.getDept(process.getUserId()));
             }else{
                 process.setParentType("本人");
+                process.setDeptName(sysDepotUserService.getDept(process.getDiscernId()));
             }
         }
         return list;
@@ -123,4 +129,28 @@ public class SysPassProcessServiceImpl extends ServiceImpl<SysPassProcessMapper,
         res.put("data3",data3);
         return res;
     }
+
+    @Override
+    public IPage getPage(Page page, SysPassProcessDTO sysPassProcessdto) {
+        if(ObjectUtil.isNotNull(sysPassProcessdto.getStartTime())){
+            String localTime = sysPassProcessdto.getStartTime();
+            sysPassProcessdto.setStartTime(localTime+" 00:00:00");
+            sysPassProcessdto.setEndTime(localTime+" 23:59:59");
+        }
+        IPage<SysPassProcessVo> ipage=baseMapper.getPage(page, sysPassProcessdto);
+        List<SysPassProcessVo> list =  ipage.getRecords();
+        for(SysPassProcessVo process:list){
+            if(ObjectUtil.isNotNull(process.getUserId())){
+                process.setParentType(sysUserRelationService.getRelation(process.getUserId(),process.getDiscernId()).getRelationName());
+                process.setDeptName(sysDepotUserService.getDept(process.getUserId()));
+            }else{
+                process.setParentType("本人");
+                process.setDeptName(sysDepotUserService.getDept(process.getDiscernId()));
+            }
+        }
+        ipage.setRecords(list);
+        return ipage;
+    }
+
+
 }

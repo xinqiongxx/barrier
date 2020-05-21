@@ -29,6 +29,8 @@
         <result column="user_id" property="userId"/>
         <result column="discern_id" property="discernId"/>
         <result column="create_time" property="createTime"/>
+        <result column="user_name" property="userName"/>
+        <result column="discern_name" property="discernName"/>
         <association property="user" column="user_id"
                      select="com.tjaide.nursery.barrier.web.mapper.SysDepotUserMapper.getUserById"></association>
         <association property="discernUser" column="discern_id"
@@ -67,6 +69,32 @@
                 and b.user_type= #{userType}
             </if>
         </where>
+    </select>
+
+
+    <select id="getPage" resultMap="passProcessMap">
+        SELECT
+        a.`id`, a.`enter_type`, a.`sanp_pic`, a.`create_time`, a.`status`, a.`remark`, a.`user_id`, a.`discern_id`, a.`registered_pic`,b.name as user_name,c.name as discern_name
+        FROM
+        sys_pass_process as a left join sys_depot_user as b on a.user_id = b.id
+        left join sys_depot_user as c on a.discern_id = c.id
+        <where>
+            <if test="query.name != null and query.name != ''">
+                and c.name LIKE CONCAT('%',#{query.name},'%')
+            </if>
+            <if test="query.enterType != null and query.enterType != ''">
+                and enter_type = #{query.enterType}
+            </if>
+            <if test="query.userType != null and query.userType != ''">
+                and c.user_type = #{query.userType}
+            </if>
+            <if test="query.startTime != null and query.startTime != ''">
+                and a.create_time &gt;= #{query.startTime}
+                and a.create_time &lt;= #{query.endTime}
+            </if>
+
+        </where>
+        ORDER BY a.create_time DESC
     </select>
 
 </mapper>
