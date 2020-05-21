@@ -58,9 +58,11 @@ public class SysPassProcessServiceImpl extends ServiceImpl<SysPassProcessMapper,
         Integer data1=baseMapper.getCountByUserTypeCreateDate(1,start_time,end_time);
         Integer data2=baseMapper.getCountByUserTypeCreateDate(3,start_time,end_time);
         Integer data3=baseMapper.getCountByUserTypeCreateDate(2,start_time,end_time);
+        Integer data4=baseMapper.getCountByUserTypeCreateDate(null,start_time,end_time);
         res.put("data1",data1);
         res.put("data2",data2);
         res.put("data3",data3);
+        res.put("data4",data4);
         return res;
     }
 
@@ -102,19 +104,23 @@ public class SysPassProcessServiceImpl extends ServiceImpl<SysPassProcessMapper,
         //获取最近五天数据
         List<String> data1=new ArrayList<>();
         List<Integer> data2=new ArrayList<>();
+        List<Integer> data3=new ArrayList<>();
         for(int i=0;i<12;i++){
             int h=i*2;
             String hour1=i>9?(i+""):("0"+i);
             String hour2=h>9?(h+""):("0"+h);
             String start_time=date1+" "+hour1+":00:00";
             String end_time=date1+" "+hour2+":59:59";
-            Integer flow = baseMapper.getCountByCreateDate(null,start_time,end_time);
+            Integer flow = baseMapper.getCountByCreateDate(1,start_time,end_time);
+            Integer flow1 = baseMapper.getCountByCreateDate(2,start_time,end_time);
             String datestr=hour1+":00";
             data1.add(datestr);
             data2.add(flow);
+            data3.add(flow1);
         }
         res.put("data1",data1);
         res.put("data2",data2);
+        res.put("data3",data3);
         return res;
     }
 }

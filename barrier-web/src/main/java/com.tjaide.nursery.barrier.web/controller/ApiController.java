@@ -140,6 +140,8 @@ public class ApiController {
         }else{
             sysPassProcess.setEnterType(2);
         }
+        // ----
+        WebSocketServer.sendInfo(JSONUtil.toJsonStr(sysFlatbed), "page");
         sysPassProcessService.save(sysPassProcess);
         List<SysUserRelation> lists = sysUserRelationService.list(Wrappers.<SysUserRelation>lambdaQuery().eq(SysUserRelation::getMemberId,sysPassProcess.getDiscernId()));
         lists.forEach(sysUserRelation -> {

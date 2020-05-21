@@ -47,9 +47,9 @@ public class DataController {
     @GetMapping("/getBaseDatas")
     public R getBaseDatas() {
         Map<String,Object> res=passProcessService.getBaseDatas();
-        res.put("data4",sysDictItemService.count(Wrappers.<SysDictItem>lambdaQuery().eq(SysDictItem::getType,"white_list")));
+        /*res.put("data4",sysDictItemService.count(Wrappers.<SysDictItem>lambdaQuery().eq(SysDictItem::getType,"white_list")));
         res.put("data5",flatbedService.count());
-        res.put("data6",barrierService.count());
+        res.put("data6",barrierService.count());*/
         return R.ok(res);
     }
 

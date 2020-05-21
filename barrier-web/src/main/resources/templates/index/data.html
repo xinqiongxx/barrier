@@ -59,7 +59,7 @@
             width: 95%;
             height: 100%;
             margin: auto;
-            padding: 0px 0 30px;
+            padding: 0px;
             background: none;
         }
 
@@ -78,9 +78,26 @@
             position: absolute;
             right: 20px;
             top: 4px;
+            text-align: right;
         }
-        .user_information a{
+        /*.user_information a{
             color: #10aae3;
+        }*/
+
+        .user_information {
+            color: #10aae3;
+            line-height: 27px;
+        }
+
+        .user_information a{
+            background: url('../../static/image/back_btn.png') no-repeat;
+            background-size: 100% 100%;
+            display: inline-block;
+            margin-left: 10px;
+            width: 45px;
+            height: calc(4vh - 7px);
+            position: relative;
+            top: 3px;
         }
 
         #hideCon {
@@ -89,37 +106,64 @@
         }
 
         .main_left_top {
-            width: 25%;
+            width: 20%;
+            padding: 0px 5px 5px 0px;
         }
         .main_center_top {
-            width: 50%;
+            height:65vh;
+            width: 60%;
+            padding: 0px 5px 5px 5px;
         }
 
         .main_right_top {
-            width: 25%;
+            width: 20%;
+            height: 65vh;
+            padding: 0px 0px 0px 5px;
         }
-        .main_left_top,.main_center_top,.main_right_top,.main_left_bottom,.main_center_bottom,.main_right_bottom {
-            padding:5px;
-            height: 100%;
+        .main_left_bottom {
+            padding: 0px 5px 0px 0px;
+        }
+        .main_center_bottom {
+            padding: 0px 5px 0px 5px;
+        }
+
+        .main_left_bottom,.main_center_bottom{
+            height:100%;
+         }
+        .main_left_top,.main_center_top {
+            /*padding:5px;*/
         }
         .main_left_top_box{
             width: 100%;
             height: 100%;
         }
+        .main_center_top_box{
+            height: 65vh;
+            margin-bottom: 5px;
+        }
+        .main_right_top_box{
+            height: 100%;
+            margin-bottom: 10px;
+        }
+        .main_right_bottom_box{
+            height: 100%;
+        }
+
+        .main_left_bottom_box{
+            height: 100%;
+        }
         .main_center_top_box,.main_right_top_box,.main_left_bottom_box,.main_menu_box,.main_right_bottom_box {
             width: 100%;
-            height: 100%;
-            border: 2px solid #0a3d65;
+            border: 1.5px solid #0a3d65;
             box-shadow:  rgba(9, 50, 102, 0.4) 0px 0px 30px 15px inset;
             border-radius: 3px;
             position: relative;
         }
 
         .main_title_box {
-            padding: 5px 0px 0px 10px;
+            padding: 5px 0px 10px 20px;
             color: #b0def2;
-            font-weight: bold;
-            height: 30px;
+            height: 40px;
             line-height: 30px;
             position: relative;
         }
@@ -135,39 +179,39 @@
 
         .main_image-border {
             position: absolute;
-            width: 20px;
-            height: 15px;
+            width: 16px;
+            height: 13px;
         }
 
         .main_image-border1 {
-            top: -2px;
-            left: -2px;
-            border-left: 2px solid #10aae3;
-            border-top: 2px solid #10aae3;
+            top: -1.5px;
+            left: -1.5px;
+            border-left: 1.5px solid #0fa9e2;
+            border-top: 1.5px solid #0fa9e2;
             border-radius: 5px 0px 0px 0px;
         }
 
         .main_image-border2 {
-            top: -2px;
-            right: -2px;
-            border-right: 2px solid #10aae3;
-            border-top: 2px solid #10aae3;
+            top: -1.5px;
+            right: -1.5px;
+            border-right: 1.5px solid #0fa9e2;
+            border-top: 1.5px solid #0fa9e2;
             border-radius: 0px 5px 0px 0px;
         }
 
         .main_image-border3 {
-            bottom: -2px;
-            left: -2px;
-            border-bottom: 2px solid #10aae3;
-            border-left: 2px solid #10aae3;
+            bottom: -1.5px;
+            left: -1.5px;
+            border-bottom: 1.5px solid #0fa9e2;
+            border-left: 1.5px solid #0fa9e2;
             border-radius: 0px 0px 0px 5px;
         }
 
         .main_image-border4 {
-            bottom: -2px;
-            right: -2px;
-            border-right: 2px solid #10aae3;
-            border-bottom: 2px solid #10aae3;
+            bottom: -1.5px;
+            right: -1.5px;
+            border-right: 1.5px solid #0fa9e2;
+            border-bottom: 1.5px solid #0fa9e2;
             border-radius: 0px 0px 5px 0px;
         }
 
@@ -176,12 +220,12 @@
         /*第一块start*/
         .main_date_box {
             position: relative;
-            border: 2px solid #0a3d65;
+            /*border: 2px solid #0a3d65;
             box-shadow:  rgba(9, 50, 102, 0.4) 0px 0px 30px 15px inset;
-            border-radius: 3px;
-            height: 40%;
-            min-height: 150px;
-            padding: 5% 0px;
+            border-radius: 3px;*/
+            background: url("../../static/image/left_top_bg.png") no-repeat;
+            background-size: 100% 100%;
+            height: 35%;
             box-sizing: border-box;
             -moz-box-sizing: border-box;
             -webkit-box-sizing: border-box;
@@ -191,20 +235,20 @@
 
         .main_statistics_box {
             position: relative;
-            border: 2px solid #0a3d65;
+            border: 1.5px solid #0a3d65;
             box-shadow:  rgba(9, 50, 102, 0.4) 0px 0px 30px 15px inset;
             border-radius: 3px;
             margin-top: 10px;
-            height: calc(60% - 10px);
+            height: calc(65% - 15px);
             box-sizing: border-box;
             -moz-box-sizing: border-box;
             -webkit-box-sizing: border-box;
         }
 
         .main_date_top_box {
-            margin: 0px 15px 10px;
-            padding: 0px;
-            height: 50%;
+            height: calc(65% - 40px);
+            text-align: center;
+            padding: 5% 0px;
            /* background: -moz-linear-gradient(right, rgba(173, 221, 253, 0.3) 0%, rgba(255,255,255,0) 100%);
             background: -webkit-linear-gradient(right, rgba(173, 221, 253, 0.3) 0%,rgba(255,255,255,0) 100%);
             background: -o-linear-gradient(right, rgba(173, 221, 253, 0.3) 0%,rgba(255,255,255,0) 100%);
@@ -225,32 +269,41 @@
 
         .main_date_top_data {
             padding: 0px 10px;
-            font-size: 16px;
-            font-weight: bold;
-            letter-spacing: 5px;
-            color: #08e1b0;
+            font-size: 13px;
+            color: #b8d4fc;
             height: 50%;
             position: relative;
             top: 25%;
             transform: translateY(-50%);
         }
 
+        .main_date_top_data span {
+            display: inline-block;
+            margin: 0px 10px;
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .main_date_top_data span:nth-child(1) {
+            color: #01e195;
+        }
+        .main_date_top_data span:nth-child(3) {
+            color: #3078fb;
+        }
         .main_date_bottom_box {
-            display: flex;
-           /* height: calc(50% - 6px);*/
+            height: 35%;
             position: relative;
         }
 
         .main_date_bottom_date {
-            margin: 0px 15px 0px;
-            width: calc(50% - 30px);
-            height: 55px;
+            width: calc(100% - 40px);
+            margin: auto;
+            height: 100%;
             background-color: rgba(163, 190, 243, 0.2);
-            padding: 0px;
+            padding: 10px;
             border-radius: 2px;
             color: #9dc8dd;
             font-size: 14px;
-            font-weight: bold;
             text-align: center;
             box-sizing: border-box;
             -moz-box-sizing: border-box;
@@ -262,12 +315,18 @@
             position: relative;
             top: 25%;
             transform: translateY(-50%);
+            color: #e25860;
+            letter-spacing: 2px;
         }
         .main_date_bottom_date div:nth-child(2) {
             height: 50%;
             position: relative;
             top: 25%;
             transform: translateY(-50%);
+        }
+
+        .main_date_bottom_week {
+            margin-right: 10px;
         }
         .main_date_bottom_time {
             margin-left: 10px;
@@ -299,14 +358,13 @@
         /*第一块end*/
         /*第二块start*/
         .main_select_box {
-            background-color: rgba(30, 34, 42, 0.2);
-            padding: 0px 5px;
+            padding: 10px 0px 0px 0px;
             height: 30px;
             line-height: 30px;
             position: absolute;
             z-index: 999;
-            width: 100%;
             top: 0;
+            right: 20px;
         }
         .select_main_title {
             color: #ffffff;
@@ -317,9 +375,9 @@
             line-height: 30px;
         }
         .main_vedio_box {
-            width: 100%;
-            /*height: calc(100% - 30px);*/
-            height: 100%;
+            width: calc(100% - 40px);
+            height: calc(100% - 60px);
+            margin: auto;
             background: #000000;
         }
 
@@ -349,8 +407,8 @@
             display: flex;
             height: 70px;
             border-bottom: 1px dashed rgb(202,222,225,0.2);
-            margin: 10px;
-            border-radius: 3px;
+            width: 100%;
+            /*margin: 10px 20px;*/
             position: relative;
         }
 
@@ -393,11 +451,11 @@
         }
 
         .main_message_list_box {
-            height: calc(58vh);
+            height: calc(40vh);
         }
 
         .main_message_list_item_left {
-            width:50%;
+            /*width:170px;*/
             display: flex;
             padding-right:10px;
         }
@@ -405,7 +463,7 @@
         .user_photo_box {
             width: 50px;
             height: 50px;
-            border-radius: 3px;
+            border-radius: 50%;
             margin: 10px 5px;
             text-align: center;
             line-height: 50px;
@@ -443,22 +501,43 @@
 
         .user_icon_box {
             color: #00affc;
-            width: 40px;
+            width: 15px;
             line-height: 70px;
             text-align: center;
         }
 
         .main_message_list_item_right {
-            flex: 1;
+           /* flex: 1;*/
+            width: calc(100% - 145px);
             color: #90e1ff;
+        }
+
+        .main_right_top .main_right_top_outer:nth-child(1){
+            padding: 0px 0px 5px 0px;
+            height: 55%;
+        }
+        .main_right_top .main_right_top_outer:nth-child(2){
+            padding: 5px 0px 0px 0px;
+            height: 45%;
         }
         /*第三块end*/
         /*第四块start*/
         .main_line_box {
-            height: calc(100% - 30px);
+            height: calc((100% - 40px) / 2);
         }
 
+        .line_title {
+            height: 20px;
+            line-height: 20px;
+            text-align: center;
+            color: #b8d4fc;
+        }
 
+        .line_title span {
+            color: #e25860;
+            margin: 0px 10px;
+            font-size: 16px;
+        }
 
 
         .main_weather_list_box {
@@ -490,7 +569,8 @@
         .user_name_box {
             height: 35px;
             line-height: 50px;
-            color: #0fa9e2;
+            color: #e25860;
+            font-size: 12px;
             width: 100%;
             max-width: 120px;
             overflow: hidden;
@@ -500,7 +580,7 @@
 
         .user_name_box span {
             font-size: 12px;
-            color: #0c73a5;
+            color: #e25860;
             margin-left: 3px;
         }
         .user_time_box {
@@ -522,19 +602,28 @@
         /*第四块end*/
         /*第五块start*/
         .main_menu_box {
+            height: 100%;
             padding: 10px 30px;
             text-align: center;
         }
+
+        .main_menu_items {
+            display: flex;
+        }
         .main_menu_item{
             position:relative;
-            width:100px;
+            width:69.282px;
             display: inline-block;
             margin: 5px;
+            flex: 1;
         }
 
+
         .main_menu_item_left {
-            width: 50px;
-            height: 86.6px;
+            width: 40px;
+            height: 69.28px;
+            left: 25px;
+            position: absolute;
             margin: 0 auto;
             transform: translate(-50%,-50%);
             transform: rotate(60deg);
@@ -543,8 +632,8 @@
         }
         .main_menu_item_center {
             position: absolute;
-            width: 50px;
-            height: 86.6px;
+            width: 40px;
+            height: 69.282px;
             left: 25px;
             top: 0;
             color: #10aae3;
@@ -553,8 +642,8 @@
         }
         .main_menu_item_right {
             position: absolute;
-            width: 50px;
-            height: 86.6px;
+            width: 40px;
+            height: 69.282px;
             left: 25px;
             top: 0;
             transform: translate(-50%,-50%);
@@ -563,10 +652,42 @@
             border-bottom: 1px solid rgba(16, 170, 227, 0.5);
         }
 
+        .main_menu_items .main_menu_item:nth-child(2)
+        ,.main_menu_items .main_menu_item:nth-child(5)
+        ,.main_menu_items .main_menu_item:nth-child(6)
+        ,.main_menu_items .main_menu_item:nth-child(9){
+            top: 46.4px;
+        }
+        .main_menu_items .main_menu_item:nth-child(2){
+            left: -10px;
+        }
+        .main_menu_items .main_menu_item:nth-child(3){
+            left: -20px;
+        }
+        .main_menu_items .main_menu_item:nth-child(4){
+            left: -10px;
+        }
+        .main_menu_items .main_menu_item:nth-child(5){
+            left: -20px;
+        }
+        .main_menu_items .main_menu_item:nth-child(6){
+            right: -20px;
+        }
+        .main_menu_items .main_menu_item:nth-child(7){
+            right: -10px;
+        }
+        .main_menu_items .main_menu_item:nth-child(8){
+            right: -20px;
+        }
+
+        .main_menu_items .main_menu_item:nth-child(9){
+            right: -10px;
+        }
+
         .main_menu_item_center .iconfont {
             display: block;
             text-align: center;
-            font-size: 35px;
+            font-size: 30px;
             position: relative;
             height: 70%;
             top: 20px;
@@ -579,7 +700,8 @@
             overflow: hidden;
             white-space: nowrap;
             position: relative;
-            top: -8px;
+            top: -10px;
+            left:-5px;
         }
 
         /*第五块end*/
@@ -587,6 +709,7 @@
         .main_data_list_box {
             padding: 5px 20px;
             height: calc(100% - 50px);
+            display: flex;
         }
         .main_data_list {
             display: flex;
@@ -620,13 +743,13 @@
         .right_toggle {
             display: block;
             padding: 0px 20px;
-            width: 120px !important;
-            text-align: center;
+            width: 185px !important;
+            /*text-align: center;
             height: 30px !important;
             line-height: 30px;
             border-radius: 3px;
             border: 1px solid #0fa8e1;
-            box-shadow: rgba(9, 50, 102, 0.4) 0px 0px 30px 15px inset;
+            box-shadow: rgba(9, 50, 102, 0.4) 0px 0px 30px 15px inset;*/
         }
 
         .selectbox {
@@ -636,9 +759,9 @@
             height: 26px;
             line-height: 26px;
             overflow-y: hidden;
-            border: 1px solid #767778;
+            border: 1px solid #032963;
             border-right: 0;
-            background-color: #767778;
+            background-color: #032963;
             color: #ffffff !important;
             padding: 0 0 0 5px;
             border-radius: 0px;
@@ -649,11 +772,15 @@
         }
 
         .selBtn {
-            border: 1px solid #767778;
-            background-color: #767778;
+            border: 1px solid #032963;
+            background-color: #032963;
         }
         ._hide{
             display: none;
+        }
+
+        .selectbox-wrapper {
+            color: #032963 !important;
         }
 
         .video-js {
@@ -686,6 +813,45 @@
         .dialog_ct{
             background: rgb(3,13,60);
         }
+
+
+        .pie_total {
+            position: absolute;
+            top: 35px;
+            color: #97b6e1;
+            font-size: 12px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .pie_example {
+            position: relative;
+            top: 20px;
+            font-size: 12px;
+        }
+        .pie_example_item{
+            color: #97b6e1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .pie_example .pie_example_item span {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            margin-right: 3px;
+        }
+        .pie_example .pie_example_item:nth-child(1) span {
+            background-color: #07afee;
+        }
+        .pie_example .pie_example_item:nth-child(2) span {
+            background-color: #e25860;
+        }
+        .pie_example .pie_example_item:nth-child(3) span {
+            background-color: #e6e017;
+        }
     </style>
 </head>
 <body>
@@ -698,7 +864,7 @@
     <div id="mainFrame">
         <table width="100%" height="100%" cellpadding="0" cellspacing="0" class="table_border0">
             <tbody>
-            <tr style="height: 5%;">
+            <tr style="height: 5vh;">
                 <td colspan="3" style="position: relative;">
                     <!--顶部区域start-->
                     <!-- <div class="main_title">
@@ -707,41 +873,36 @@
                     <div class="main_user_box">
                         <div class="right_toggle">
                             <div class="user_information" id="user_info">
-                                <a href="javascript:;">进入后台</a>
+                                进入后台<a href="javascript:;"></a>
                             </div>
                         </div>
                     </div>
                     <!--顶部区域end-->
                 </td>
             </tr>
-            <tr style="height: 4%;">
+            <tr style="height: 3vh;">
                 <td colspan="3" style="position: relative;"></td>
             </tr>
-            <tr style="height: 55%;">
+            <tr style="height: 65vh;">
                 <!--第二层左侧区域start-->
                 <td class="main_left_top">
                     <div class="main_left_top_box">
                         <div class="main_date_box">
-                            <div class="main_image-border main_image-border1"></div>
-                            <div class="main_image-border main_image-border2"></div>
-                            <div class="main_image-border main_image-border3"></div>
-                            <div class="main_image-border main_image-border4"></div>
-                            <div class="main_date_top_box">
-                                <div  class="main_date_top_title">今日进出流量总数</div>
-                                <div  class="main_date_top_data">进<span th:text="${entercount}"></span>人次 / 出<span th:text="${leavecount}"></span>人次</div>
+                            <div class="main_title_box">
+                                <i class="iconfont icon-shuxiantubiao"></i>
+                                今日进园总人数
                             </div>
                             <div id="main_date_bottom_box" class="main_date_bottom_box">
                                 <div class="main_date_bottom_date">
-                                    <div></div>
-                                    <div></div>
+                                    <div class="main_date_bottom_top">2020年05月20日</div>
+                                    <div class="main_date_bottom_bottom">
+                                        <span class="main_date_bottom_week">星期三</span>
+                                        <span class="main_date_bottom_hour">12:00:36</span>
+                                    </div>
                                 </div>
-                                <div class="main_date_bottom_time">
-                                    <span></span>
-                                    <span class="time_colon">:</span>
-                                    <span></span>
-                                    <span class="time_colon">:</span>
-                                    <span></span>
-                                </div>
+                            </div>
+                             <div class="main_date_top_box">
+                                <div  class="main_date_top_data">今日进<span th:text="${entercount}"></span>人次 <span class="span_center"></span>出<span th:text="${leavecount}"></span>人次</div>
                             </div>
                         </div>
                         <div class="main_statistics_box">
@@ -750,7 +911,7 @@
                             <div class="main_image-border main_image-border3"></div>
                             <div class="main_image-border main_image-border4"></div>
                             <div class="main_title_box">
-                                <i class="iconfont icon-qunzuduoren"></i>
+                                <i class="iconfont icon-shuxiantubiao"></i>
                                 人数统计
                             </div>
                             <div class="main_chart_box">
@@ -767,10 +928,18 @@
                         <div class="main_image-border main_image-border2"></div>
                         <div class="main_image-border main_image-border3"></div>
                         <div class="main_image-border main_image-border4"></div>
-                        <div class="main_select_box _hide">
+                        <div class="main_title_box">
+                            <i class="iconfont icon-shuxiantubiao"></i>
+                            当前监控
+                            <div class="main_select_box">
+                                <div class="select_main_title">播放源：</div>
+                                <select class="select_main" prompt="请选择播放源" data='{"list":[{"value":"1","key":"008569"},{"value":"2","key":"00567841"}]}'></select>
+                            </div>
+                        </div>
+                        <!--<div class="main_select_box _hide">
                             <div class="select_main_title">播放源：</div>
                             <select class="select_main" prompt="请选择播放源" data='{"list":[{"value":"1","key":"008569"},{"value":"2","key":"00567841"}]}'></select>
-                        </div>
+                        </div>-->
                         <div id="mainVedioBox" class="main_vedio_box">
                             <video id="example_video_1" class="video-js vjs-default-skin" controls preload="none" width="100%" height="100%"
                                    poster="http://vjs.zencdn.net/v/oceans.png">
@@ -789,90 +958,119 @@
                 </td>
                 <!--第二层中间区域end-->
                 <!--第二层右侧区域start-->
-                <td class="main_right_top">
-                    <div class="main_right_top_box">
-                        <div class="main_image-border main_image-border1"></div>
-                        <div class="main_image-border main_image-border2"></div>
-                        <div class="main_image-border main_image-border3"></div>
-                        <div class="main_image-border main_image-border4"></div>
-                        <div class="main_title_box">
-                            <i class="iconfont icon-ren"></i>
-                            进出人员
-                            <i class="iconfont icon-gengduomore10"></i>
-                        </div>
-                        <div class="main_message_list_box">
-                            <div id="passList" style="overflow: auto;height: 100%;">
-                                <!--<div class="main_message_list_item">
-                                    <div class="main_message_list_item_left">
-                                        <div class="user_photo_box">
-                                                <img src="../../static/image/photo.jpg" alt="">
-                                            &lt;!&ndash;<div class="user_photo_icon_box">
-                                            </div>&ndash;&gt;
+                <td class="main_right_top" rowspan="2">
+                    <div class="main_right_top_outer">
+                        <div class="main_right_top_box">
+                            <div class="main_image-border main_image-border1"></div>
+                            <div class="main_image-border main_image-border2"></div>
+                            <div class="main_image-border main_image-border3"></div>
+                            <div class="main_image-border main_image-border4"></div>
+                            <div class="main_title_box">
+                                <i class="iconfont icon-shuxiantubiao"></i>
+                                进出人员
+                            </div>
+                            <div class="main_message_list_box">
+                                <div id="passList" style="overflow: auto;height: 100%;width: calc(20vw - 48px);box-sizing: border-box;padding: 0px 20px;">
+                                    <!--<div class="main_message_list_item">
+                                        <div class="main_message_list_item_left">
+                                            <div class="user_photo_box">
+                                                    <img src="../../static/image/photo.jpg" alt="">
+                                                &lt;!&ndash;<div class="user_photo_icon_box">
+                                                </div>&ndash;&gt;
+                                            </div>
+                                            <div class="user_icon_box"><i class="iconfont icon-jiaohuan1"></i></div>
+                                            <div class="user_photo_box">
+                                                    <img src="../../static/image/photo.jpg" alt="">
+                                                &lt;!&ndash;<div class="user_photo_icon_box">
+                                                </div>&ndash;&gt;
+                                            </div>
                                         </div>
-                                        <div class="user_icon_box"><i class="iconfont icon-jiaohuan1"></i></div>
-                                        <div class="user_photo_box">
-                                                <img src="../../static/image/photo.jpg" alt="">
-                                            &lt;!&ndash;<div class="user_photo_icon_box">
-                                            </div>&ndash;&gt;
-                                        </div>
-                                    </div>
-                                    <div class="main_message_list_item_right">
-                                        <div class="user_name_box">张三 <span>幼儿园三班</span></div>
-                                        <div class="user_time_box">00:00:00</div>
-                                    </div>
-                                </div>
-                                <div class="main_message_list_item">
-                                    <div class="main_message_list_item_left">
-                                        <div class="user_photo_box">
-                                                <img src="../../static/image/photo.jpg" alt="">
-                                        </div>
-                                        <div class="user_icon_box"><i class="iconfont icon-jiaohuan1"></i></div>
-                                        <div class="user_photo_box">
-                                            <i class="iconfont icon-wo"></i>
+                                        <div class="main_message_list_item_right">
+                                            <div class="user_name_box">张三 <span>幼儿园三班</span></div>
+                                            <div class="user_time_box">00:00:00</div>
                                         </div>
                                     </div>
-                                    <div class="main_message_list_item_right">
-                                        <div class="user_name_box">张三<span>幼儿园三班</span></div>
-                                        <div class="user_time_box">00:00:00</div>
-                                    </div>
-                                </div>
-                                <div class="main_message_list_item">
-                                    <div class="main_message_list_item_left">
-                                        <div class="user_photo_box">
-                                            <i class="iconfont icon-wo"></i>
-                                        </div>
-                                        <div class="user_icon_box"><i class="iconfont icon-jiaohuan1"></i></div>
-                                        <div class="user_photo_box">
-                                            <i class="iconfont icon-wo"></i>
-                                        </div>
-                                    </div>
-                                    <div class="main_message_list_item_right">
-                                        <div class="user_name_box">张三<span>幼儿园三班</span></div>
-                                        <div class="user_time_box">00:00:00</div>
-                                    </div>
-                                </div>
-                                <div class="main_message_list_item">
-                                    <div class="main_message_list_item_left">
-                                        <div class="user_photo_box">
+                                    <div class="main_message_list_item">
+                                        <div class="main_message_list_item_left">
+                                            <div class="user_photo_box">
+                                                    <img src="../../static/image/photo.jpg" alt="">
+                                            </div>
+                                            <div class="user_icon_box"><i class="iconfont icon-jiaohuan1"></i></div>
+                                            <div class="user_photo_box">
                                                 <i class="iconfont icon-wo"></i>
+                                            </div>
                                         </div>
-                                        <div class="user_icon_box"><i class="iconfont icon-jiaohuan1"></i></div>
-                                        <div class="user_photo_box">
+                                        <div class="main_message_list_item_right">
+                                            <div class="user_name_box">张三<span>幼儿园三班</span></div>
+                                            <div class="user_time_box">00:00:00</div>
+                                        </div>
+                                    </div>
+                                    <div class="main_message_list_item">
+                                        <div class="main_message_list_item_left">
+                                            <div class="user_photo_box">
                                                 <i class="iconfont icon-wo"></i>
+                                            </div>
+                                            <div class="user_icon_box"><i class="iconfont icon-jiaohuan1"></i></div>
+                                            <div class="user_photo_box">
+                                                <i class="iconfont icon-wo"></i>
+                                            </div>
+                                        </div>
+                                        <div class="main_message_list_item_right">
+                                            <div class="user_name_box">张三<span>幼儿园三班</span></div>
+                                            <div class="user_time_box">00:00:00</div>
                                         </div>
                                     </div>
-                                    <div class="main_message_list_item_right">
-                                        <div class="user_name_box">张三<span>幼儿园三班</span></div>
-                                        <div class="user_time_box">00:00:00</div>
-                                    </div>
-                                </div>-->
+                                    <div class="main_message_list_item">
+                                        <div class="main_message_list_item_left">
+                                            <div class="user_photo_box">
+                                                    <i class="iconfont icon-wo"></i>
+                                            </div>
+                                            <div class="user_icon_box"><i class="iconfont icon-jiaohuan1"></i></div>
+                                            <div class="user_photo_box">
+                                                    <i class="iconfont icon-wo"></i>
+                                            </div>
+                                        </div>
+                                        <div class="main_message_list_item_right">
+                                            <div class="user_name_box">张三<span>幼儿园三班</span></div>
+                                            <div class="user_time_box">00:00:00</div>
+                                        </div>
+                                    </div>-->
+                                </div>
                             </div>
                         </div>
+
                     </div>
+                    <div class="main_right_top_outer">
+                        <!--第三层右侧区域start-->
+                        <div class="main_right_bottom_box">
+                            <div class="main_image-border main_image-border1"></div>
+                            <div class="main_image-border main_image-border2"></div>
+                            <div class="main_image-border main_image-border3"></div>
+                            <div class="main_image-border main_image-border4"></div>
+                            <div class="main_title_box">
+                                <i class="iconfont icon-shuxiantubiao"></i>
+                                进出流量统计
+                            </div>
+                            <div class="main_line_box">
+                                <div id="chart2" style="width: 100%;height: calc(100% - 20px);">
+
+                                </div>
+                                <div class="line_title">今日进入人数 <span id="line_enter_title" th:text="${entercount}"></span>人</div>
+                            </div>
+                            <div class="main_line_box">
+                                <div id="chart3" style="width: 100%;height: calc(100% - 20px);">
+
+                                </div>
+                                <div class="line_title">今日进入人数 <span id="line_leave_title" th:text="${leavecount}"></span>人</div>
+                            </div>
+                        </div>
+                        <!--第三层右侧区域end-->
+                    </div>
+
                 </td>
                 <!--第二层右侧区域end-->
             </tr>
-            <tr  style="height: 31%;">
+            <tr  style="height: 23vh;">
                 <!--第三层左侧区域start-->
                 <td class="main_left_bottom">
                     <div class="main_left_bottom_box">
@@ -881,49 +1079,20 @@
                         <div class="main_image-border main_image-border3"></div>
                         <div class="main_image-border main_image-border4"></div>
                         <div class="main_title_box">
-                            <i class="iconfont icon-tongjifenxi"></i>
+                            <i class="iconfont icon-shuxiantubiao"></i>
                             基础数据
                         </div>
                         <div class="main_data_list_box" id="baseDataList">
-                            <!--<div class="main_data_list">
-                                <div class="main_data_list_item">学生总人数 <span>2</span> 个</div>
-                                <div class="main_data_list_item">家长总人数 <span>2</span> 个</div>
+                            <div id="leftData" class="charts_container" style="width: 40%;height: 100%;">
+                                <div class="pie_total">当前总人数： <span id="todayTotal">126</span> 个</div>
+                                <div class="pie_example">
+                                    <div  class="pie_example_item"><span></span> 学生总人数</div>
+                                    <div  class="pie_example_item"><span></span> 家长总人数</div>
+                                    <div  class="pie_example_item"><span></span> 教职工总人数</div>
+                                </div>
                             </div>
-                            <div class="main_data_list">
-                                <div class="main_data_list_item">教职工总人数 <span>2</span> 个</div>
-                                <div class="main_data_list_item">黑名单总人数 <span>2</span> 个</div>
-                            </div>
-                            <div class="main_data_list">
-                                <div class="main_data_list_item">考勤平板数 <span>2</span> 个</div>
-                                <div class="main_data_list_item">闸机通道数 <span>2</span> 个</div>
-                            </div>-->
+                            <div id="chart4" class="charts_container" style="width: 60%;height: 100%;"></div>
                         </div>
-                        <!--<div class="main_weather_list_box">
-                            <div class="main_weather_list_left">
-                                <div class="main_weather_item_title">实时温度</div>
-                                <div class="main_weather_item_title">27.0℃</div>
-                            </div>
-                            <div class="main_weather_list_right">
-                                <div class="main_weather_list_right_item">
-                                    <div class="main_weather_item_title">预报温度</div>
-                                    <div class="main_weather_item_title">6℃-27.0℃</div>
-                                </div>
-                                <div class="main_weather_list_right_item">
-                                    <div class="main_weather_item_title">实时湿度</div>
-                                    <div class="main_weather_item_title">54%</div>
-                                </div>
-                            </div>
-                            <div class="main_weather_list_right">
-                                <div class="main_weather_list_right_item">
-                                    <div class="main_weather_item_title">体感温度</div>
-                                    <div class="main_weather_item_title">18.0℃</div>
-                                </div>
-                                <div class="main_weather_list_right_item">
-                                    <div class="main_weather_item_title">空气质量指数</div>
-                                    <div class="main_weather_item_title">27.0℃</div>
-                                </div>
-                            </div>
-                        </div>-->
                     </div>
                 </td>
                 <!--第三层左侧区域end-->
@@ -934,15 +1103,16 @@
                         <div class="main_image-border main_image-border2"></div>
                         <div class="main_image-border main_image-border3"></div>
                         <div class="main_image-border main_image-border4"></div>
+
                         <div id="main_menu_items" class="main_menu_items">
                             <div class="main_menu_item"  data-url="page/dict/dict" data-value="底库管理">
                                 <div class="main_menu_item_left"></div>
-                                <div class="main_menu_item_center"><span class="iconfont icon-fl-renshi" style="font-size: 45px !important;top: 22px;"></span><span>底库管理</span></div>
+                                <div class="main_menu_item_center"><span class="iconfont icon-fl-renshi" style="font-size: 35px !important;top: 20px;"></span><span>底库管理</span></div>
                                 <div class="main_menu_item_right"></div>
                             </div>
                             <div class="main_menu_item" data-url="page/role/index" data-value="权限管理">
                                 <div class="main_menu_item_left"></div>
-                                <div class="main_menu_item_center"><span class="iconfont icon-quanxianchaxun" style="font-size: 40px !important;top: 20px;"></span><span>权限管理</span></div>
+                                <div class="main_menu_item_center"><span class="iconfont icon-quanxianchaxun" style="font-size: 35px !important;top: 20px;"></span><span>权限管理</span></div>
                                 <div class="main_menu_item_right"></div>
                             </div>
                             <div class="main_menu_item">
@@ -952,7 +1122,7 @@
                             </div>
                             <div class="main_menu_item">
                                 <div class="main_menu_item_left"></div>
-                                <div class="main_menu_item_center"><span class="iconfont icon-yewujiekoucanshu" style="font-size: 33px !important;top: 19px;"></span><span>接口管理</span></div>
+                                <div class="main_menu_item_center"><span class="iconfont icon-yewujiekoucanshu" style="font-size: 30px !important;top: 16px;"></span><span>接口管理</span></div>
                                 <div class="main_menu_item_right"></div>
                             </div>
                             <div class="main_menu_item" data-url="page/flatbed/index" data-value="平板管理">
@@ -989,27 +1159,9 @@
                     </div>
                 </td>
                 <!--第三层中间区域end-->
-                <!--第三层右侧区域start-->
-                <td class="main_right_bottom">
-                    <div class="main_right_bottom_box">
-                        <div class="main_image-border main_image-border1"></div>
-                        <div class="main_image-border main_image-border2"></div>
-                        <div class="main_image-border main_image-border3"></div>
-                        <div class="main_image-border main_image-border4"></div>
-                        <div class="main_title_box">
-                            <i class="iconfont icon-tianqi"></i>
-                            时间段统计
-                        </div>
-                        <div class="main_line_box">
-                            <div id="chart2" style="width: 100%;height: 100%;">
 
-                            </div>
-                        </div>
-                    </div>
-                </td>
-                <!--第三层右侧区域end-->
             </tr>
-            <tr style="height: 5%;">
+            <tr style="height: 4vh;">
                 <td colspan="3" style="position: relative;"></td>
             </tr>
             </tbody>
@@ -1031,15 +1183,6 @@
     }
 
     $(function () {
-        $('.main_center_top_box').on('mouseover',function(e){
-            e.stopPropagation()
-            $('.main_select_box').show()
-        })
-        $('.main_center_top_box').on('mouseout',function(e){
-            e.stopPropagation()
-            $('.main_select_box').hide()
-
-        })
 
         var player = videojs('example_video_1',{
             muted: true,//静音
@@ -1058,26 +1201,9 @@
             location.href= ctxPath
         })
 
-
-        //获取baseDataList数据
-        getBaseDatas()
         //获取最新进出记录
         getLastPassProcess()
 
-
-        /*$.get(ctxPath + "menu", {}, function (data) {
-            var hidd='';
-            if(data.code == 0 && data.data.length>0){
-                data.data.forEach((res,index)=>{
-                    hidd+='<div class="main_menu_item" data-id="'+res.id+'" data-url="'+res.url+'" data-value="'+res.name+'">\n' +
-                        '       <div class="main_menu_item_left"></div>\n' +
-                        '       <div class="main_menu_item_center"><span class="iconfont '+res.iconclass+'"></span><span>'+res.name+'</span></div>\n' +
-                        '       <div class="main_menu_item_right"></div>\n' +
-                        '  </div>'
-                })
-            }
-            $('#main_menu_items').html(hidd)
-        });*/
         $('#main_menu_items').on('click','.main_menu_item',function(ret){
             var url=$(this).data('url')
             var name=$(this).data('value')
@@ -1096,16 +1222,10 @@
             diag.show();
             diag.max();
         })
-        //右侧头部js
-        $(".right_toggle").hover(function (event) {
-            event.stopPropagation()
-            $(this).find(".right_toggle_content").slideToggle(200);
-        })
-
-
         setInterval(getDateData, 1000);
         eachrts1()
         eachrts2()
+        eachrts4()
     })
 
 
@@ -1120,41 +1240,14 @@
         selDateMap.minute = date.getMinutes();
         selDateMap.second = date.getSeconds();
         $('#main_date_bottom_box').html('<div class="main_date_bottom_date">\n' +
-            '            <div>'+selDateMap.year+'年'+selDateMap.month+'月'+selDateMap.date+'日</div>\n' +
-            '        <div>'+selDateMap.week+'</div>\n' +
-            '        </div>\n' +
-            '        <div class="main_date_bottom_time">\n' +
-            '            <span>'+selDateMap.hour+'</span>\n' +
-            '            <span class="time_colon">:</span>\n' +
-            '           <span>'+selDateMap.minute+'</span>\n' +
-            '           <span class="time_colon">:</span>\n' +
-            '           <span>'+selDateMap.second+'</span>\n' +
-            '        </div>')
+            '   <div class="main_date_bottom_top">'+selDateMap.year+'年'+selDateMap.month+'月'+selDateMap.date+'日</div>\n' +
+            '       <div class="main_date_bottom_bottom">\n' +
+            '           <span class="main_date_bottom_week">'+selDateMap.week+'</span>\n' +
+            '           <span class="main_date_bottom_hour">'+selDateMap.hour+':'+selDateMap.minute+':'+selDateMap.second+'</span>\n' +
+            '       </div>\n' +
+            '   </div>')
     }
 
-
-    function getBaseDatas(){
-        $.ajax({
-            url: ctxPath + "dataData/getBaseDatas",
-            type: 'get',
-            data: {},
-        }).then(function (res) {
-            var datas=res.data
-            $('#baseDataList').html('<div class="main_data_list">\n' +
-                '             <div class="main_data_list_item">学生总人数 <span>'+datas.data1+'</span> 个</div>\n' +
-                '             <div class="main_data_list_item">家长总人数 <span>'+datas.data2+'</span> 个</div>\n' +
-                '             </div>\n' +
-                '             <div class="main_data_list">\n' +
-                '             <div class="main_data_list_item">教职工总人数 <span>'+datas.data3+'</span> 个</div>\n' +
-                '             <div class="main_data_list_item">底库总数 <span>'+datas.data4+'</span> 个</div>\n' +
-                '             </div>\n' +
-                '             <div class="main_data_list">\n' +
-                '             <div class="main_data_list_item">考勤平板数 <span>'+datas.data5+'</span> 个</div>\n' +
-                '             <div class="main_data_list_item">闸机通道数 <span>'+datas.data6+'</span> 个</div>\n' +
-                '             </div>\n' +
-                '             </div>')
-        })
-    }
 
     function getLastPassProcess(){
         $.ajax({
@@ -1273,9 +1366,61 @@
 
     }
 
+    function eachrts4(){
+        var myChart = echarts.init(document.getElementById('chart4'),'macarons');
+        $.ajax({
+            url: ctxPath + "dataData/getBaseDatas",
+            type: 'get',
+            data: {},
+        }).then(function (res) {
+            console.log(res)
+            var datas = res.data
+            $('#todayTotal').html(datas.data4)
+            var option = {
+                color:['#07afee' , '#e25860' , '#e6e017'],
+                tooltip: {
+                    trigger: 'item',
+                    formatter: '{a} <br/>{b}: {c} ({d}%)'
+                },
+                series: [
+                    {
+                        name: '进出人数',
+                        type: 'pie',
+                        radius: ['40%', '50%'],
+                        avoidLabelOverlap: false,
+                        label: {
+                            show: false,
+                            position: 'center'
+                        },
+                        emphasis: {
+                            label: {
+                                show: false,
+                                fontSize: '30',
+                                fontWeight: 'bold'
+                            }
+                        },
+                        labelLine: {
+                            show: false
+                        },
+                        data: [
+                            {value: datas.data1, name: '学生总数'},
+                            {value: datas.data2, name: '家长总数'},
+                            {value: datas.data3, name: '教职工总数'}
+                        ]
+                    }
+                ]
+            };
+            myChart.hideLoading();
+            myChart.setOption(option);
+        });
+
+
+    }
+
 
     function eachrts2(){
         var myChart = echarts.init(document.getElementById('chart2'),'macarons');
+        var myChart3 = echarts.init(document.getElementById('chart3'),'macarons');
         $.ajax({
             url: ctxPath + "dataData/getflow",
             type: 'get',
@@ -1283,6 +1428,79 @@
         }).then(function (res) {
             var datas = res.data
             var option = {
+                animation: false,
+                xAxis: {
+                    type: 'category',
+                    boundaryGap: false,
+                    data: datas.data1,
+                    axisLine:{
+                        lineStyle:{
+                            color:'#1e2e76',
+                            width:2
+                        }
+                    },
+                    splitLine: {
+                        show: false
+                    }
+                },
+                yAxis: {
+                    type: 'value',
+                    axisLine:{
+                        lineStyle:{
+                            color:'#1e2e76',
+                            width:2
+                        }
+                    },
+                    splitLine: {
+                        show: false
+                    },
+                    axisLabel: {
+                        inside: false,
+                        formatter: '{value}\n'
+                    },
+                    z: 10
+                },
+                grid: {
+                    top: 20,
+                    left: 40,
+                    right: 20,
+                    bottom:25
+                },
+                textStyle:{
+                    color:'#b0def2'
+                },
+                series: [
+                    {
+                        type: 'line',
+                        smooth: true,
+                        symbol: 'circle',
+                        symbolSize: 3,
+                        sampling: 'average',
+                        itemStyle: {
+                            normal: {   //颜色渐变函数 前四个参数分别表示四个位置依次为左、下、右、上
+                                color: new echarts.graphic.LinearGradient(0, 0, 0, 1,[{
+                                        offset: 0, color: '#09ff9959' // 100% 处的颜色
+                                    }, {
+                                        offset: 0.8, color: '#a3ffbb1c' // 100% 处的颜色
+                                    }]
+                                ),  //背景渐变色
+                                lineStyle: {        // 系列级个性化折线样式
+                                    width: 3,
+                                    type: 'solid',
+                                    color: "#00b55147"
+                                }
+                            }
+                        },//线条样式
+                        areaStyle: {normal: {}},
+                        stack: 'a',
+                        data: datas.data2
+                    }
+
+                ]
+            };
+            myChart.hideLoading();
+            myChart.setOption(option);
+            var option1 = {
                 animation: false,
                 xAxis: {
                     type: 'category',
@@ -1348,13 +1566,13 @@
                         },//线条样式
                         areaStyle: {normal: {}},
                         stack: 'a',
-                        data: datas.data2
+                        data: datas.data3
                     }
 
                 ]
             };
-            myChart.hideLoading();
-            myChart.setOption(option);
+            myChart3.hideLoading();
+            myChart3.setOption(option1);
         });
     }
 
