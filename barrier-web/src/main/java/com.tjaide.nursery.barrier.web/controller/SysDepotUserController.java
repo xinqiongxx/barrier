@@ -141,7 +141,7 @@ public class SysDepotUserController {
         List<CompletableFuture> resList = new ArrayList<>();
         sysFlatbeds.forEach( sysFlatbed -> {
             resList.add(CompletableFuture.supplyAsync(() -> sysFlatbed).thenAcceptAsync(e -> {
-                if("0".equals(sysFlatbed.getOnlineStatus().toString())) {
+                if("1".equals(sysFlatbed.getOnlineStatus().toString())) {
                     FlatBedUtil.DeletePerson(sysFlatbed.getIpAddress(), sysFlatbed.getNumber(), ids);
                 }
             }));
@@ -259,7 +259,7 @@ public class SysDepotUserController {
         List<CompletableFuture> resList = new ArrayList<>();
         sysFlatbeds.forEach( sysFlatbed -> {
             resList.add(CompletableFuture.supplyAsync(() -> sysFlatbed).thenAcceptAsync(e -> {
-                if("0".equals(sysFlatbed.getOnlineStatus().toString())) {
+                if("1".equals(sysFlatbed.getOnlineStatus().toString())) {
                     FlatBedUtil.DeletePerson(sysFlatbed.getIpAddress(), sysFlatbed.getNumber(), ids);
                 }
             }));

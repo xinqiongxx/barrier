@@ -11,7 +11,14 @@ import com.tjaide.nursery.barrier.web.entity.SysFlatbed;
 import com.tjaide.nursery.barrier.web.service.SysFlatbedService;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.poi.ss.extractor.ExcelExtractor;
+import org.bytedeco.ffmpeg.avformat.AVFormatContext;
+import org.bytedeco.ffmpeg.global.avcodec;
+import org.bytedeco.javacv.FFmpegFrameGrabber;
+import org.bytedeco.javacv.FFmpegFrameRecorder;
+import org.bytedeco.javacv.Frame;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -130,8 +137,8 @@ public class FlatBedUtil {
     }
 
     @SneakyThrows
-    public static List<SysDepotUser> AddPersons(SysFlatbed sysFlatbed, List<SysDepotUser> lists, String filePath, SysFlatbedService sysFlatbedService){
-        String userid = ShiroUtils.getUser().getUserId();
+    public static List<SysDepotUser> AddPersons(String userid,SysFlatbed sysFlatbed, List<SysDepotUser> lists, String filePath, SysFlatbedService sysFlatbedService){
+
         sysFlatbed.setProcess("开始同步");
         WebSocketServer.sendInfo(JSONUtil.toJsonStr(sysFlatbed), userid);
         sysFlatbedService.updateById(sysFlatbed);
@@ -257,5 +264,108 @@ public class FlatBedUtil {
         HttpResponse httpResponse = httpRequest.executeAsync();
         String body = httpResponse.body();
         return (Map<String, Object>) JSONUtil.parseObj(body).get("info");
+    }
+
+    public  static  RtspThread rtspThread = null;
+    public  static long start ;
+
+    public static void setUrl(String url){
+        boolean isRun = true;
+        rtspThread.interrupt();
+        while(isRun){
+            if(rtspThread  == null) {
+                isRun = false;
+                rtspThread = new RtspThread();
+                rtspThread.setUrl(url);
+                rtspThread.start();
+            }else if(System.currentTimeMillis() - start > 3000){
+                rtspThread.stop();
+                rtspThread = null;
+            }
+        }
+    }
+
+    public static void startVideo(String url){
+        rtspThread = new RtspThread();
+        rtspThread.setUrl(url);
+        rtspThread.start();
+    }
+
+    static class RtspThread extends Thread{
+
+        public  String url = "";
+
+        public void setUrl(String url){
+            this.url = url;
+        }
+
+        @SneakyThrows
+        @Override
+        public void run() {
+            start = System.currentTimeMillis();
+            final int captureWidth = 1280;
+            final int captureHeight = 720;
+            FFmpegFrameGrabber grabber = new FFmpegFrameGrabber(this.url);// 最后一个参数是AudioChannels，建议通过grabber获取
+            FFmpegFrameRecorder recorder = new FFmpegFrameRecorder("rtmp://barrier-nginx:1935/live", captureWidth, captureHeight, 1);
+
+            try {
+                grabber.setImageWidth(captureWidth);
+                grabber.setImageHeight(captureHeight);
+                // rtsp格式一定要添加这个参数，否则丢帧会比较严重
+                grabber.setOption("rtsp_transport", "tcp");
+                grabber.start();
+                recorder.setInterleaved(true);
+                // 降低编码延时
+                recorder.setVideoOption("tune", "zerolatency");
+                // 提升编码速度
+                recorder.setVideoOption("preset", "ultrafast");
+                // 视频质量参数(详见 https://trac.ffmpeg.org/wiki/Encode/H.264)
+                recorder.setVideoOption("crf", "28");
+                // 分辨率
+                recorder.setVideoBitrate(2000000);
+                // 视频编码格式
+                recorder.setVideoCodec(avcodec.AV_CODEC_ID_H264);
+                // 视频格式
+                recorder.setFormat("flv");
+                // 视频帧率
+                recorder.setFrameRate(15);
+                recorder.setGopSize(60);
+                recorder.setAudioOption("crf", "0");
+                recorder.setAudioQuality(0);
+                recorder.setAudioBitrate(192000);
+                recorder.setSampleRate(44100);
+                // 建议从grabber获取AudioChannels
+                recorder.setAudioChannels(1);
+                recorder.setAudioCodec(avcodec.AV_CODEC_ID_AAC);
+                recorder.start();
+
+                // 解决音视频同步导致的延时问题
+                Field field = recorder.getClass().getDeclaredField("oc");
+                field.setAccessible(true);
+                AVFormatContext oc = (AVFormatContext) field.get(recorder);
+                oc.max_interleave_delta(100);
+
+                // 用来测试的frame窗口
+                Frame capturedFrame = null;
+
+                // 有些时候，程序执行回报下列错误，添加一行代码解决此问题
+                // av_interleaved_write_frame() error -22 while writing interleaved video packet.
+                grabber.flush();
+                while ((capturedFrame = grabber.grab()) != null && !rtspThread.isInterrupted()) {
+                    start = System.currentTimeMillis();
+                    recorder.setTimestamp(capturedFrame.timestamp);
+                    recorder.record(capturedFrame);
+                }
+                if (rtspThread.isInterrupted()) {
+                    grabber.close();
+                    recorder.close();
+                    rtspThread = null;
+                }
+            }catch (Exception e){
+                grabber.close();
+                recorder.close();
+                rtspThread = null;
+            }
+        }
     }
 }

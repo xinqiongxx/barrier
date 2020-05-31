@@ -107,7 +107,7 @@ public class SysBarrierController {
         }else {
             sysFlatbed = sysFlatbedService.getById(sysBarrier.getLeaveFlatbed());
         }
-        if("1".equals(sysFlatbed.getOnlineStatus().toString())){
+        if("0".equals(sysFlatbed.getOnlineStatus().toString())){
             return R.failed("平板不在线");
         }
         return R.ok(FlatBedUtil.OpenDoor(sysFlatbed.getIpAddress(),sysFlatbed.getNumber()));
@@ -119,11 +119,11 @@ public class SysBarrierController {
         List<SysBarrier> sysBarriers = sysBarrierService.list();
         sysBarriers.forEach(sysBarrier -> {
             SysFlatbed  sysFlatbedEnter = sysFlatbedService.getById(sysBarrier.getEnterFlatbed());
-            if("0".equals(sysFlatbedEnter.getOnlineStatus().toString())) {
+            if("1".equals(sysFlatbedEnter.getOnlineStatus().toString())) {
                 FlatBedUtil.OpenDoor(sysFlatbedEnter.getIpAddress(), sysFlatbedEnter.getNumber());
             }
             SysFlatbed  sysFlatbedLeave = sysFlatbedService.getById(sysBarrier.getLeaveFlatbed());
-            if("0".equals(sysFlatbedLeave.getOnlineStatus().toString())) {
+            if("1".equals(sysFlatbedLeave.getOnlineStatus().toString())) {
                 FlatBedUtil.OpenDoor(sysFlatbedLeave.getIpAddress(), sysFlatbedLeave.getNumber());
             }
         });

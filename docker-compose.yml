@@ -1,0 +1,38 @@
+# 使用说明 V3.0.0
+# 1. 使用docker-compose  宿主机不需要配置host来发现
+# 2. 无需修改源码，根目录  docker-compose up 即可
+# 3. 静静等待服务启动
+
+version: '3.5'
+services:
+
+  barrier-mysql:
+    container_name: barrier-mysql
+    image: 60.28.60.170:81/prv/barrier-mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: a8i3d2e9,.
+    restart: always
+    ports:
+      - 3306:3306
+    volumes:
+      - /Users/gougou/Files/docker/dcmx-mysql:/var/lib/mysql
+
+  barrier-nginx:
+    container_name: barrier-nginx
+    image: 60.28.60.170:81/prv/barrier-nginx:latest
+    restart: always
+    ports:
+      - 1935:1935
+
+
+  barrier-web:
+    container_name: barrier-web
+    image: 60.28.60.170:81/prv/barrier-web:latest
+    restart: always
+    ports:
+      - 8888:80
+    volumes:
+      - /Users/gougou/Desktop:/home/datadisk/file
+    depends_on:
+      - barrier-mysql
+      - barrier-nginx

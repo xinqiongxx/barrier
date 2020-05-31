@@ -44,7 +44,7 @@ spring:
       driver-class-name: com.mysql.cj.jdbc.Driver
       username: root
       password: a8i3d2e9,.
-      url: jdbc:mysql://39.99.225.172:3306/barrier?Unicode=true&characterEncoding=UTF-8
+      url: jdbc:mysql://barrier-mysql:3306/barrier?Unicode=true&characterEncoding=UTF-8
       stat-view-servlet:
         enabled: true
         url-pattern: /druid/*
@@ -65,6 +65,10 @@ shiro:
   success-url: /index
   unauthorized-url: /loginemptyKq
   anon:
+    - /imserver/**
+    - /flatbed/list
+    - /dataData/**
+    - /api/image/view/***/**
     - /api/statistics/**
     - /login/login
     - /static/**
@@ -91,7 +95,7 @@ logging:
   level:
     com.tjaide.nursery.barrier.web.mapper: info
 file:
-  path: /Users/gougou/Desktop
+  path: /home/datadisk/file
 # 租户表维护
 cacx:
   tenant:

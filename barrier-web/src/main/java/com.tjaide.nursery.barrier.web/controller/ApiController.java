@@ -159,16 +159,24 @@ public class ApiController {
         JSONObject jsonObject = JSONUtil.parseObj(res.toString());
         Map<String,Object> infoMap = (Map<String, Object>) jsonObject.get("info");
         String deviceId = infoMap.get("DeviceID").toString();
-        sysFlatbedService.update(Wrappers.<SysFlatbed>lambdaUpdate().set(SysFlatbed::getOnlineStatus,"0").eq(SysFlatbed::getNumber,deviceId));
         Timer timer;
         if(ObjectUtil.isNotEmpty(timerMap.get(deviceId))){
             timer = timerMap.get(deviceId);
             timer.cancel();
+        }else{
+            sysFlatbedService.update(Wrappers.<SysFlatbed>lambdaUpdate().set(SysFlatbed::getOnlineStatus,"1").eq(SysFlatbed::getNumber,deviceId));
+            SysFlatbed sysFlatbed= sysFlatbedService.getOne(Wrappers.<SysFlatbed>lambdaQuery().eq(SysFlatbed::getNumber,deviceId));
+            FlatBedUtil.startVideo(sysFlatbed.getRtspAddress());
         }
         timer = new Timer();
         timer.schedule(new TimerTask() {
             public void run() {
-                sysFlatbedService.update(Wrappers.<SysFlatbed>lambdaUpdate().set(SysFlatbed::getOnlineStatus,"1").eq(SysFlatbed::getNumber,deviceId));
+                sysFlatbedService.update(Wrappers.<SysFlatbed>lambdaUpdate().set(SysFlatbed::getOnlineStatus,"0").eq(SysFlatbed::getNumber,deviceId));
+                timerMap.remove(deviceId);
+                if(timerMap.keySet().size()> 0) {
+                    SysFlatbed sysFlatbed = sysFlatbedService.getOne(Wrappers.<SysFlatbed>lambdaQuery().eq(SysFlatbed::getNumber, timerMap.keySet().iterator().next()));
+                    FlatBedUtil.setUrl(sysFlatbed.getRtspAddress());
+                }
             }
         },30000);
         timerMap.put(deviceId,timer);
@@ -189,7 +197,7 @@ public class ApiController {
             sysDepotUser.setPhoto("/api/image/view/reg/"+sysPassProcess.getDiscernId()+"A");
             return sysDepotUser;
         }).collect(Collectors.toList());
-        List<SysFlatbed> sysFlatbeds = sysFlatbedService.list(Wrappers.<SysFlatbed>lambdaQuery().eq(SysFlatbed::getOnlineStatus,"0"));
+        List<SysFlatbed> sysFlatbeds = sysFlatbedService.list(Wrappers.<SysFlatbed>lambdaQuery().eq(SysFlatbed::getOnlineStatus,"1"));
         sysFlatbeds.forEach(sysFlatbed -> {
             FlatBedUtil.EditPerson(sysFlatbed.getIpAddress(),sysFlatbed.getNumber(),lists,filePath);
         });

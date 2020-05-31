@@ -10,7 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>barrier-web</artifactId>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
     <description>后台管理</description>
     <dependencies>
         <!-- websocket -->
@@ -23,7 +23,7 @@
             <groupId>com.tjaide.nursery</groupId>
             <artifactId>barrier-common-data</artifactId>
         </dependency>
-        <!-- 支持swagger -->
+        <!-- 支持swagger-->
         <dependency>
             <groupId>com.tjaide.nursery</groupId>
             <artifactId>barrier-common-swagger</artifactId>
@@ -70,17 +70,24 @@
                 </exclusion>
             </exclusions>
         </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.boot</groupId>-->
+<!--            <artifactId>spring-boot-starter-tomcat</artifactId>-->
+<!--            <scope>provided</scope>-->
+<!--        </dependency>-->
+
+
+        <!--undertow容器-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-tomcat</artifactId>
-            <scope>provided</scope>
+            <artifactId>spring-boot-starter-undertow</artifactId>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.springframework.security/spring-security-core -->
+        <!--
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-core</artifactId>
         </dependency>
-
+        -->
 
         <!--测试依赖-->
         <dependency>
@@ -101,7 +108,12 @@
             <version>4.1.0</version>
         </dependency>
 
-
+        <!-- javacv -->
+        <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>javacv-platform</artifactId>
+            <version>1.5.1</version>
+        </dependency>
         <!--HttpClient-->
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
@@ -116,6 +128,7 @@
             <version>2.0.4.RELEASE</version>
             <!-- 启用 -->
             <optional>true</optional>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
     <build>
@@ -127,14 +140,14 @@
             <plugin>
                 <artifactId>maven-resources-plugin</artifactId>
             </plugin>
-            <plugin>
+            <!--<plugin>
                 <artifactId>maven-war-plugin</artifactId>
                 <version>2.6</version>
                 <configuration>
-                    <!--如果想在没有web.xml文件的情况下构建WAR，请设置为false。-->
+                    &lt;!&ndash;如果想在没有web.xml文件的情况下构建WAR，请设置为false。&ndash;&gt;
                     <failOnMissingWebXml>false</failOnMissingWebXml>
                 </configuration>
-            </plugin>
+            </plugin>-->
         </plugins>
     </build>
 </project>

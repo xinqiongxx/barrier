@@ -10,6 +10,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.tjaide.nursery.barrier.common.core.util.R;
+import com.tjaide.nursery.barrier.common.core.util.ShiroUtils;
 import com.tjaide.nursery.barrier.common.log.annotation.SysLog;
 import com.tjaide.nursery.barrier.web.entity.SysDepotUser;
 import com.tjaide.nursery.barrier.web.entity.SysFlatbed;
@@ -133,6 +134,16 @@ public class SysFlatbedController {
         return R.ok(FlatBedUtil.SearchPersonNum(sysFlatbed.getIpAddress(),sysFlatbed.getNumber()));
     }
 
+    @PostMapping("/changeVideo/{id}")
+    public R changeVideo(@PathVariable Integer id) {
+        SysFlatbed sysFlatbed = sysFlatbedService.getById(id);
+        if("0".equals(sysFlatbed.getOnlineStatus())){
+            return R.failed("平板不在线");
+        }
+        FlatBedUtil.setUrl(sysFlatbed.getRtspAddress());
+        return R.ok();
+    }
+
 
     /**
      * 清空pad名单
@@ -163,9 +174,10 @@ public class SysFlatbedController {
      */
     @PostMapping("/sync/{id}")
     public R syncPad(@PathVariable Integer id) {
+        String userid = ShiroUtils.getUser().getUserId();
         SysFlatbed sysFlatbed = sysFlatbedService.getById(id);
         List<SysDepotUser> lists = sysDepotUserService.list(Wrappers.emptyWrapper());
-        List<SysDepotUser> errors = FlatBedUtil.AddPersons(sysFlatbed,lists,filePath,sysFlatbedService);
+        List<SysDepotUser> errors = FlatBedUtil.AddPersons(userid,sysFlatbed,lists,filePath,sysFlatbedService);
         if(errors.size() > 0){
             return R.failed("同步失败（"+errors.size()+"）个人");
         }
@@ -187,7 +199,7 @@ public class SysFlatbedController {
         List<CompletableFuture> resList = new ArrayList<>();
         sysFlatbeds.forEach( sysFlatbed -> {
             resList.add(CompletableFuture.supplyAsync(() -> sysFlatbed).thenAcceptAsync(e -> {
-                if("0".equals(sysFlatbed.getOnlineStatus().toString())) {
+                if("1".equals(sysFlatbed.getOnlineStatus().toString())) {
                     // FlatBedUtil.DeletePerson(sysFlatbed.getIpAddress(), sysFlatbed.getNumber(), ids);
                     FlatBedUtil.DeleteAllPerson(sysFlatbed.getIpAddress());
                 }
@@ -204,14 +216,15 @@ public class SysFlatbedController {
      */
     @PostMapping("/syncAll")
     public R syncAll(){
+        String userid = ShiroUtils.getUser().getUserId();
         List<SysFlatbed> sysFlatbeds = sysFlatbedService.list();
         List<SysDepotUser> lists = sysDepotUserService.list(Wrappers.emptyWrapper());
         List<SysDepotUser> errors = new ArrayList<>();
         List<CompletableFuture> resList = new ArrayList<>();
         sysFlatbeds.forEach( sysFlatbed -> {
             resList.add(CompletableFuture.supplyAsync(() -> sysFlatbed).thenAcceptAsync(e -> {
-                if("0".equals(sysFlatbed.getOnlineStatus().toString())) {
-                    errors.addAll(FlatBedUtil.AddPersons(sysFlatbed, lists,filePath,sysFlatbedService));
+                if("1".equals(sysFlatbed.getOnlineStatus().toString())) {
+                    errors.addAll(FlatBedUtil.AddPersons(userid,sysFlatbed, lists,filePath,sysFlatbedService));
                 }
             }));
         });
@@ -225,7 +238,7 @@ public class SysFlatbedController {
 
     @PostMapping("/contrast")
     public R contrast(@RequestParam  String picinfo1,@RequestParam  String picinfo2){
-        List<SysFlatbed> sysFlatbeds = sysFlatbedService.list(Wrappers.<SysFlatbed>lambdaQuery().eq(SysFlatbed::getOnlineStatus,"0"));
+        List<SysFlatbed> sysFlatbeds = sysFlatbedService.list(Wrappers.<SysFlatbed>lambdaQuery().eq(SysFlatbed::getOnlineStatus,"1"));
         if(sysFlatbeds.size() == 0){
             return R.failed("请最少保证一个在线平板");
         }else{
@@ -235,7 +248,7 @@ public class SysFlatbedController {
 
     @PostMapping("/search")
     public R search(@RequestParam  String picinfo,@RequestParam  float MaxSimilarity,@RequestParam int MaxNum){
-        List<SysFlatbed> sysFlatbeds = sysFlatbedService.list(Wrappers.<SysFlatbed>lambdaQuery().eq(SysFlatbed::getOnlineStatus,"0"));
+        List<SysFlatbed> sysFlatbeds = sysFlatbedService.list(Wrappers.<SysFlatbed>lambdaQuery().eq(SysFlatbed::getOnlineStatus,"1"));
         if(sysFlatbeds.size() == 0){
             return R.failed("请最少保证一个在线平板");
         }else{
@@ -245,14 +258,15 @@ public class SysFlatbedController {
 
     @PostMapping("/people/{id}")
     public R people(@PathVariable String id){
+        String userid = ShiroUtils.getUser().getUserId();
         List<SysDepotUser> lists = sysDepotUserService.list(Wrappers.<SysDepotUser>lambdaQuery().eq(SysDepotUser::getId,id));
         List<SysFlatbed> sysFlatbeds = sysFlatbedService.list();
         List<SysDepotUser> errors = new ArrayList<>();
         List<CompletableFuture> resList = new ArrayList<>();
         sysFlatbeds.forEach( sysFlatbed -> {
             resList.add(CompletableFuture.supplyAsync(() -> sysFlatbed).thenAcceptAsync(e -> {
-                if("0".equals(sysFlatbed.getOnlineStatus().toString())) {
-                    errors.addAll(FlatBedUtil.AddPersons(sysFlatbed, lists,filePath,sysFlatbedService));
+                if("1".equals(sysFlatbed.getOnlineStatus().toString())) {
+                    errors.addAll(FlatBedUtil.AddPersons(userid,sysFlatbed, lists,filePath,sysFlatbedService));
                 }
             }));
         });

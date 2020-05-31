@@ -125,7 +125,7 @@
                 {display: 'IP地址', name: 'ipAddress', align: 'center', width: "20%"},
                 {display: '在线', name: 'onlineStatus', align: 'center', width: "7%",
                     render: function (rowdata, rowindex, value, column) {
-                        return "<span id='status_"+rowdata.id+"'>"+(value == '0'?'在线':'离线')+"</span>"
+                        return "<span id='status_"+rowdata.id+"'>"+(value == '1'?'在线':'离线')+"</span>"
                     }},
                 {display: '名单数', name: 'num', align: 'center', width: "8%",
                     render: function (rowdata, rowindex, value, column) {
