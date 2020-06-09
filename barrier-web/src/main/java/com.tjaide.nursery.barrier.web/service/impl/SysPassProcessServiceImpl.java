@@ -20,6 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
@@ -43,7 +44,9 @@ public class SysPassProcessServiceImpl extends ServiceImpl<SysPassProcessMapper,
     @Override
     public List<SysPassProcessVo> findRecentPassVoList(){
         List<SysPassProcessVo> list=baseMapper.findRecentPassVoList();
+        DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss");
         for(SysPassProcessVo process:list){
+        String currentTime = df.format(process.getCreateTime());
             if(!process.getUserId().toString().equals( process.getDiscernId().toString())){
                 process.setParentType(sysUserRelationService.getRelation(process.getUserId(),process.getDiscernId()).getRelationName());
                 process.setDeptName(sysDepotUserService.getDept(process.getUserId()));
