@@ -11,7 +11,10 @@ import com.tjaide.nursery.barrier.web.entity.SysDepotUser;
 import com.tjaide.nursery.barrier.web.vo.SysDepotUserVo;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * <p>
@@ -33,4 +36,6 @@ public interface SysDepotUserMapper extends BaseMapper<SysDepotUser> {
     IPage<List<SysDepotUser>> relationPage(Page page, @Param("query") SysDepotUser sysDepotUser,@Param("id") Integer id);
 
     IPage<List<SysDepotUserVo>> userPage(Page page, @Param("query") SysDepotUser sysDepotUser);
+
+    List<LinkedHashMap<String,Object>> userList();
 }

@@ -7,6 +7,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.tjaide.nursery.barrier.common.core.util.R;
 import com.tjaide.nursery.barrier.web.entity.SysDictItem;
 
+import java.util.List;
+
 /**
  * 字典项
  *
@@ -30,4 +32,7 @@ public interface SysDictItemService extends IService<SysDictItem> {
      * @return
      */
     R updateDictItem(SysDictItem item);
+
+
+    List<SysDictItem> getAllItem(String type);
 }

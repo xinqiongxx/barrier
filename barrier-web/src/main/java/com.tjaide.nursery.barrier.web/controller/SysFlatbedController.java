@@ -32,6 +32,7 @@ import javax.validation.Valid;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -131,7 +132,14 @@ public class SysFlatbedController {
     @GetMapping("/number/{id}")
     public R getPeopleNumber(@PathVariable Integer id) {
         SysFlatbed sysFlatbed = sysFlatbedService.getById(id);
-        return R.ok(FlatBedUtil.SearchPersonNum(sysFlatbed.getIpAddress(),sysFlatbed.getNumber()));
+        Map<String,Object> res;
+        try {
+            res = FlatBedUtil.SearchPersonNum(sysFlatbed.getIpAddress(),sysFlatbed.getNumber());
+        }catch (Exception e){
+            res = new HashMap<>();
+            res.put("PersonNum",0);
+        }
+        return R.ok(res);
     }
 
     @PostMapping("/changeVideo/{id}")
@@ -177,9 +185,9 @@ public class SysFlatbedController {
         String userid = ShiroUtils.getUser().getUserId();
         SysFlatbed sysFlatbed = sysFlatbedService.getById(id);
         List<SysDepotUser> lists = sysDepotUserService.list(Wrappers.emptyWrapper());
-        List<SysDepotUser> errors = FlatBedUtil.AddPersons(userid,sysFlatbed,lists,filePath,sysFlatbedService);
+        List<String> errors = FlatBedUtil.AddPersons(userid,sysFlatbed,lists,filePath,sysFlatbedService);
         if(errors.size() > 0){
-            return R.failed("同步失败（"+errors.size()+"）个人");
+            return R.failed(errors);
         }
         return R.ok();
     }
@@ -219,7 +227,7 @@ public class SysFlatbedController {
         String userid = ShiroUtils.getUser().getUserId();
         List<SysFlatbed> sysFlatbeds = sysFlatbedService.list();
         List<SysDepotUser> lists = sysDepotUserService.list(Wrappers.emptyWrapper());
-        List<SysDepotUser> errors = new ArrayList<>();
+        List<String> errors = new ArrayList<>();
         List<CompletableFuture> resList = new ArrayList<>();
         sysFlatbeds.forEach( sysFlatbed -> {
             resList.add(CompletableFuture.supplyAsync(() -> sysFlatbed).thenAcceptAsync(e -> {
@@ -231,7 +239,7 @@ public class SysFlatbedController {
         CompletableFuture all = CompletableFuture.allOf(resList.toArray(new CompletableFuture[resList.size()]));
         all.join();
         if(errors.size() > 0){
-            return R.failed("同步失败（"+errors.size()+"）个人");
+            return R.failed(errors);
         }
         return R.ok();
     }
@@ -261,7 +269,7 @@ public class SysFlatbedController {
         String userid = ShiroUtils.getUser().getUserId();
         List<SysDepotUser> lists = sysDepotUserService.list(Wrappers.<SysDepotUser>lambdaQuery().eq(SysDepotUser::getId,id));
         List<SysFlatbed> sysFlatbeds = sysFlatbedService.list();
-        List<SysDepotUser> errors = new ArrayList<>();
+        List<String> errors = new ArrayList<>();
         List<CompletableFuture> resList = new ArrayList<>();
         sysFlatbeds.forEach( sysFlatbed -> {
             resList.add(CompletableFuture.supplyAsync(() -> sysFlatbed).thenAcceptAsync(e -> {
@@ -273,7 +281,7 @@ public class SysFlatbedController {
         CompletableFuture all = CompletableFuture.allOf(resList.toArray(new CompletableFuture[resList.size()]));
         all.join();
         if(errors.size() > 0){
-            return R.failed("同步失败（"+errors.size()+"）个人");
+            return R.failed(errors);
         }
         return R.ok();
     }

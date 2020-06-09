@@ -66,7 +66,7 @@
                 <div class="el-input" id="name">
                 </div>
             </td>
-            <td width="50%" rowspan="5" colspan="2"><img id="photo" src="" style="width: 80%; margin: 0px 10%;"/></td>
+            <td width="50%" rowspan="5" colspan="2"><img id="photo" src="" style="width: 50%; margin: 0px 25%;"/></td>
         </tr>
         <tr>
             <td width="20%">性别：</td>
@@ -182,7 +182,7 @@
             $("#name").html(data.name);
             $("#photo").attr("src",data.photo);
             $("#photolast").attr("src",data.photo+"A");
-            $("#gender").html(data.gender);
+            $("#gender").html(data.gender == "0"?"男":data.gender == "1"?"女":"未知");
             $("#userType").html(data.userType == 1?"学生":data.userType ==2?"教职工":data.userType == 3 ? "家长":"未知");
             if(data.depotType == 0){
                 $.ajax({

@@ -10,9 +10,12 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.tjaide.nursery.barrier.common.core.util.R;
 import com.tjaide.nursery.barrier.web.entity.SysDepotUser;
 import com.tjaide.nursery.barrier.web.entity.SysDictItem;
+import com.tjaide.nursery.barrier.web.vo.SysDepotUserVo;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * <p>
@@ -36,4 +39,6 @@ public interface SysDepotUserService extends IService<SysDepotUser> {
     IPage getpage(Page page, SysDepotUser sysDepotUser);
 
     String getDept(Integer user_id);
+
+    List<LinkedHashMap<String,Object>> userList();
 }

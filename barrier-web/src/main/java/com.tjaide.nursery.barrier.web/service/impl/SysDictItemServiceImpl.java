@@ -14,6 +14,8 @@ import com.tjaide.nursery.barrier.web.service.SysDictService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * 字典项
  *
@@ -58,5 +60,10 @@ public class SysDictItemServiceImpl extends ServiceImpl<SysDictItemMapper, SysDi
             return R.failed("系统内置字典项目不能修改");
         }
         return R.ok(this.updateById(item));
+    }
+
+    @Override
+    public List<SysDictItem> getAllItem(String type) {
+        return baseMapper.getAllItem(type);
     }
 }

@@ -11,9 +11,11 @@ import com.tjaide.nursery.barrier.web.entity.*;
 import com.tjaide.nursery.barrier.web.service.*;
 import com.tjaide.nursery.barrier.web.service.impl.AsyncServiceImpl;
 import com.tjaide.nursery.barrier.web.util.FlatBedUtil;
+import com.tjaide.nursery.barrier.web.util.WebSocketServer;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.ResourceUtils;
@@ -120,27 +122,38 @@ public class ApiController {
         sysPassProcess.setRemark("");
         sysPassProcess.setStatus(0);
         sysPassProcess.setSanpPic("/api/image/view/match/"+fileName);
-        sysPassProcess.setRegisteredPic("/api/image/view/reg/"+PersonUUID);
         // 0 进 1 出 2 未知
         SysFlatbed sysFlatbed = sysFlatbedService.getOne(Wrappers.<SysFlatbed>lambdaQuery().eq(SysFlatbed::getNumber,infoMap.get("DeviceID")));
-        SysBarrier leave = sysBarrierService.getOne(Wrappers.<SysBarrier>lambdaQuery().eq(SysBarrier::getLeaveFlatbed,sysFlatbed.getNumber()));
-        SysBarrier enter = sysBarrierService.getOne(Wrappers.<SysBarrier>lambdaQuery().eq(SysBarrier::getEnterFlatbed,sysFlatbed.getNumber()));
-        if(ObjectUtil.isNotEmpty(leave)){
+        List<SysBarrier> leaves = sysBarrierService.list(Wrappers.<SysBarrier>lambdaQuery().eq(SysBarrier::getLeaveFlatbed,sysFlatbed.getId()));
+        List<SysBarrier> enters = sysBarrierService.list(Wrappers.<SysBarrier>lambdaQuery().eq(SysBarrier::getEnterFlatbed,sysFlatbed.getId()));
+        if(ObjectUtil.isNotEmpty(leaves)){
             sysPassProcess.setEnterType(0);
-        }else if(ObjectUtil.isNotEmpty(enter)){
+        }else if(ObjectUtil.isNotEmpty(enters)){
             sysPassProcess.setEnterType(1);
         }else{
-            sysPassProcess.setEnterType(2);
+            sysPassProcess.setEnterType(1);
         }
         // ----
-        //WebSocketServer.sendInfo(JSONUtil.toJsonStr(sysFlatbed), "page");
-        sysPassProcessService.save(sysPassProcess);
+        // sysPassProcessService.save(sysPassProcess);
         List<SysUserRelation> lists = sysUserRelationService.list(Wrappers.<SysUserRelation>lambdaQuery().eq(SysUserRelation::getMemberId,sysPassProcess.getDiscernId()));
-        lists.forEach(sysUserRelation -> {
-            sysPassProcess.setUserId(sysUserRelation.getUserId());
+        if(ObjectUtil.isEmpty(lists)){
+            sysPassProcess.setUserId(sysPassProcess.getDiscernId());
+            sysPassProcess.setRegisteredPic("/api/image/view/reg/"+PersonUUID);
             sysPassProcessService.save(sysPassProcess);
-        });
+            asyncService.insertAttendance(sysPassProcess,infoMap.get("DeviceID").toString(),jsonObject.get("SanpPic").toString(),-99);
+        }else{
+            lists.forEach(sysUserRelation -> {
+                sysPassProcess.setUserId(sysUserRelation.getUserId());
+                sysPassProcess.setRegisteredPic("/api/image/view/reg/"+sysUserRelation.getUserId());
+                sysPassProcessService.save(sysPassProcess);
+                asyncService.insertAttendance(sysPassProcess,infoMap.get("DeviceID").toString(),jsonObject.get("SanpPic").toString(),sysUserRelation.getRelationType());
+            });
+        }
+        WebSocketServer.sendInfo(JSONUtil.toJsonStr(sysFlatbed), "page");
     }
+
+
+    private static boolean isStart = false;
 
     @SneakyThrows
     @ResponseBody
@@ -166,7 +179,10 @@ public class ApiController {
         }else{
             sysFlatbedService.update(Wrappers.<SysFlatbed>lambdaUpdate().set(SysFlatbed::getOnlineStatus,"1").eq(SysFlatbed::getNumber,deviceId));
             SysFlatbed sysFlatbed= sysFlatbedService.getOne(Wrappers.<SysFlatbed>lambdaQuery().eq(SysFlatbed::getNumber,deviceId));
-            FlatBedUtil.startVideo(sysFlatbed.getRtspAddress());
+            if(!isStart) {
+                isStart = true;
+                FlatBedUtil.startVideo(sysFlatbed.getRtspAddress());
+            }
         }
         timer = new Timer();
         timer.schedule(new TimerTask() {
@@ -183,7 +199,7 @@ public class ApiController {
         return res.toString();
     }
 
-    @Scheduled(cron = "0/30 * * * * ?")
+    @Scheduled(cron = "0 0 0/12 * * ?")
     //@Scheduled(cron = "0 0 2 * * ?")
     public void fixTime() {
         List<SysDepotUser> lists = sysDepotUserService.enterDepotUser().stream().map(sysDepotUser -> {

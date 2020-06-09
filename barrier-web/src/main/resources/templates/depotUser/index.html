@@ -88,29 +88,30 @@
                 </div>
             </div>
         </li>
+        <li>
+            <div class="minute" id="uploader">
+                <div id="process" style="width:100px;height:100px;position:relative;z-index:900;display: none;"><span style="position: absolute;left: 22px;top: 36px;">上传中...</span></div>
+                <div class="minute-content">
+                    <div class="minute_left" style="width: 55%;text-align: left;">
+                        <div style="font-weight:bold;font-size: 22px;">1.导入照片</div>
+                        <div style="line-height: 18px;font-size: 9px;">按照规范格式进行ZIP上传</div>
+                    </div>
+                    <div class="minute_right"><img src="../../system/skin/s4.png"></div>
+                </div>
+            </div>
+        </li>
         <li onclick="importUser()" id="test">
             <div class="minute">
                 <div class="minute-content">
                     <div class="minute_left">
-                        <div style="font-weight:bold;font-size: 22px;">导入人员</div>
+                        <div style="font-weight:bold;font-size: 22px;">2.导入人员</div>
                         <div style="line-height: 18px;font-size: 9px;">Import User</div>
                     </div>
                     <div class="minute_right"><img src="../../system/skin/s3.png"></div>
                 </div>
             </div>
         </li>
-        <li>
-            <div class="minute" id="uploader">
-                <div id="process" style="width:100px;height:100px;position:relative;z-index:900;display: none;"><span style="position: absolute;left: 22px;top: 36px;">导入中...</span></div>
-                <div class="minute-content">
-                    <div class="minute_left" style="width: 55%;text-align: left;">
-                        <div style="font-weight:bold;font-size: 22px;">导入照片</div>
-                        <div style="line-height: 18px;font-size: 9px;">照片以上传照片编号或者证件号命名</div>
-                    </div>
-                    <div class="minute_right"><img src="../../system/skin/s4.png"></div>
-                </div>
-            </div>
-        </li>
+
         <li>
             <div class="minute">
                 <div class="minute-content">
@@ -176,11 +177,12 @@
 
     var paramBg = {stroke: "#ebf1f7", "stroke-width": 10};
     var paramBlue = {stroke: "#00aaef", "stroke-width": 10,"stroke-linecap":"round"};
+    var percent = 0;
     $(function(){
 
         var paper =initPaper("process", 100, 100);
         //paper,current,min,max,cx,cy,radius,param,paramBg
-        ring = drawRingProgress(paper,50,0,100,50,50,radius,paramBlue,paramBg);
+        ring = drawRingProgress(paper,percent,0,100,50,50,radius,paramBlue,paramBg);
 
 
 
@@ -220,19 +222,23 @@
 
 
     uploader.on("uploadComplete",function(file){
+        $("#process span").html("上传中...");
+        $("#process").hide();
+        $("#uploader .minute_left").show()
         uploader.removeFile(file)
     })
 
-    uploader.on("uploadProgress",function(file,percentage){
-        if(percentage*100 == 100){
-            $("#process").hide();
-            $("#uploader .minute_left").show()
-        }else{
-            $("#process").show();
-            $("#uploader .minute_left").hide()
-        }
-        ring.animate({arc: [percentage*100, 100,50,50,radius]}, 500, "<");
+    uploader.on("uploadStart",function(file,percentage){
+        $("#process span").html("上传中...");
+        $("#process").show();
+        $("#uploader .minute_left").hide()
     })
+
+    uploader.on("uploadProgress",function(file,percentage){
+        percent = percentage*33;
+        ring.animate({arc: [percent, 100,50,50,radius]}, 500, "<");
+    })
+
     var grid;
     $.ajax({
         url: ctxPath + "dict/type/black_list",
@@ -340,7 +346,7 @@
             columns: [
                 {display: '照片', name: 'photo', align: 'center', width: "12%",
                     render: function (rowdata, rowindex, value, column) {
-                        if(value.startsWith("/")){
+                        if(value&&value.startsWith("/")){
                             var img = '<div class="user-img">';
                             img += '<img src="'+value+'"/>';
                             img += '</div>';
@@ -418,7 +424,7 @@
             url: ctxPath + 'depotuser/page',
             method: 'get',
             sortName: 'create_time',
-            sortOrder: "ASC",
+            sortOrder: "DESC",
             height: '100%',
             width: "100%",
             rownumbers: true,
@@ -466,7 +472,15 @@
             if (0 == res.code) {
                 top.Toast("showSuccessToast", '同步成功');
             } else {
-                top.Toast("showErrorToast", res.msg);
+                var error = "";
+                res.data.forEach(function(item){
+                    error += item+"</br>";
+                })
+                top.Notice('showNotice', {
+                    title	: "错误数据("+res.data.length+")",
+                    text    : error,
+                    sticky  : true
+                })
             }
         }, function () {
             top.Toast("showErrorToast", '操作异常');
@@ -558,6 +572,50 @@
         }
         grid.loadData();
     }
+
+    var socket;
+    function openSocket() {
+        if(typeof(WebSocket) == "undefined") {
+            console.log("您的浏览器不支持WebSocket");
+        }else{
+            console.log("您的浏览器支持WebSocket");
+            if(socket!=null){
+                socket.close();
+                socket=null;
+            }
+            socket = new WebSocket("ws://"+window.location.host+"/imserver/upload");
+            //打开事件
+            socket.onopen = function() {
+            };
+            //获得消息事件
+            socket.onmessage = function(msg) {
+                if(msg.data){
+                    var res = JSON.parse(msg.data);
+                    if(res.msg){
+                        $("#process span").html(res.msg);
+                    }else if(res.data){
+                        var show = percent + res.data*67;
+                        ring.animate({arc: [parseInt(show), 100,50,50,radius]}, 500, "<");
+                    }
+                }
+                //发现消息进入    开始处理前端触发逻辑
+            };
+            //关闭事件
+            socket.onclose = function() {
+            };
+            //发生了错误事件
+            socket.onerror = function() {
+            }
+        }
+    }
+    function sendMessage() {
+        if(typeof(WebSocket) == "undefined") {
+            console.log("您的浏览器不支持WebSocket");
+        }else {
+            console.log("您的浏览器支持WebSocket");
+        }
+    }
+    openSocket()
 </script>
 <style>
     .page_content {

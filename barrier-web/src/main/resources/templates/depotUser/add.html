@@ -173,7 +173,7 @@
     }
     function onchangeHandler(){
         var treeNodes = []
-        if($("#userType").val() == 2){
+        if($("#userType").val() == 2 || $("#userType").val() == 9){
             $.ajax({
                 url: ctxPath + "dept/list",
                 type: 'get'

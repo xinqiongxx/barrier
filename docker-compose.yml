@@ -30,7 +30,7 @@ services:
     image: 60.28.60.170:81/prv/barrier-web:latest
     restart: always
     ports:
-      - 8888:80
+      - 8888:8888
     volumes:
       - /Users/gougou/Desktop:/home/datadisk/file
     depends_on:

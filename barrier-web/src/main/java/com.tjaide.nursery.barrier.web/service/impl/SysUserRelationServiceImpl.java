@@ -10,11 +10,13 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tjaide.nursery.barrier.web.entity.*;
+import com.tjaide.nursery.barrier.web.mapper.SysDepotUserMapper;
 import com.tjaide.nursery.barrier.web.vo.SysUserRelationVO;
 import com.tjaide.nursery.barrier.web.mapper.SysUserRelationMapper;
 import com.tjaide.nursery.barrier.web.service.*;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 
@@ -26,8 +28,9 @@ import org.springframework.stereotype.Service;
 @Service
 @AllArgsConstructor
 public class SysUserRelationServiceImpl extends ServiceImpl<SysUserRelationMapper, SysUserRelation> implements SysUserRelationService {
-    private final SysDepotUserService sysDepotUserService;
 
+
+    private final SysDepotUserMapper sysDepotUserMapper;
     /**
      * 保存用户关系信息
      *
@@ -37,7 +40,7 @@ public class SysUserRelationServiceImpl extends ServiceImpl<SysUserRelationMappe
     @Override
     public  Boolean saveOrUpdateRelation(SysUserRelation sysUserRelation){
         //查是否是学生
-        SysDepotUser user=sysDepotUserService.getById(sysUserRelation.getUserId());
+        SysDepotUser user=sysDepotUserMapper.getUserById(sysUserRelation.getUserId());
         if (user.getUserType()==1) {
             sysUserRelation.setIfStudent(1);
         }else{

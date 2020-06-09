@@ -5,6 +5,7 @@
 package com.tjaide.nursery.barrier.web.entity;
 
 import cn.hutool.core.codec.Base64;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableLogic;
@@ -83,7 +84,7 @@ public class SysDepotUser extends Model<SysDepotUser> {
 
     // /api/image/view/{type}/{name}
     public String getPhotoBase64(String filePath){
-        if(this.photo.startsWith("/")) {
+        if(StrUtil.isNotEmpty(this.photo)&&this.photo.startsWith("/")) {
             String[] names = this.photo.split("/");
             String type = names[names.length - 2];
             String name = names[names.length - 1];

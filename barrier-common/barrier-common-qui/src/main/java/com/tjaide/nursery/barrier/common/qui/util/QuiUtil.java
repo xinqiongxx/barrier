@@ -51,7 +51,7 @@ public class QuiUtil {
             if (StrUtil.isNotEmpty(request.getParameter("gridsort"))){
                 page.setDesc(request.getParameter("gridsort").split(","));
             }else if(StrUtil.isNotEmpty(request.getParameter("sort"))){
-                page.setAsc(request.getParameter("sort").split(","));
+                page.setDesc(request.getParameter("sort").split(","));
             }
         }
         requestWrapper.removeParamte("direction");

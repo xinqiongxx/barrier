@@ -20,6 +20,7 @@ import com.tjaide.nursery.barrier.common.log.annotation.SysLog;
 import com.tjaide.nursery.barrier.web.entity.*;
 import com.tjaide.nursery.barrier.web.service.*;
 import com.tjaide.nursery.barrier.web.util.FlatBedUtil;
+import com.tjaide.nursery.barrier.web.util.WebSocketServer;
 import io.swagger.annotations.Api;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
@@ -42,6 +43,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.websocket.server.PathParam;
 import java.io.*;
+import java.nio.charset.Charset;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
@@ -219,11 +221,15 @@ public class SysDepotUserController {
         if(!outFileDe.exists()){
             outFileDe.mkdirs();
         }
-        String pathFile =path+File.separator+File.separator+DateUtil.date().getTime();
+        WebSocketServer.sendInfo("{\"msg\":\"正在上传\"}", "upload");
+        String pathFile =path+File.separator+DateUtil.date().getTime();
         File zipFile = new File(pathFile+".zip");
         IoUtil.copy(file.getInputStream(),new FileOutputStream(zipFile));
+        WebSocketServer.sendInfo("{\"msg\":\"正在解压\"}", "upload");
         ZipUtil.unzip(zipFile);
         zipFile.delete();
+        WebSocketServer.sendInfo("{\"msg\":\"开始导入\"}", "upload");
+        WebSocketServer.sendInfo("{\"data\":\"0.2\"}", "upload");
         return sysDepotUserService.updatePhoto(pathFile,filePath);
     }
 
@@ -280,7 +286,7 @@ public class SysDepotUserController {
         ExcelWriter writer = ExcelUtil.getWriter(true);
         Sheet sheet = writer.getSheet();
         //姓名 性别 人员类型  班级部门 证件类型  证件号 图片编号（导入图片名称关联）
-        String[] gender = {"男", "女"};
+        String[] gender = {"男", "女","未知"};
         CellRangeAddressList genderRegions = new CellRangeAddressList(1, 1000000, 1, 1);
         String[] userType = {"学生", "教职工","家长","未知"};
         CellRangeAddressList userTypeRegions = new CellRangeAddressList(1, 1000000, 2, 2);
@@ -323,22 +329,13 @@ public class SysDepotUserController {
         sheet.addValidationData(deptNamevalidation);
         sheet.addValidationData(certificateTypevalidation);
 
-        Map<String, Object> row1 = new LinkedHashMap<>();
-        row1.put("姓名", "");
-        row1.put("性别", "");
-        row1.put("人员类型", "");
-        row1.put("班级/部门", "");
-        row1.put("证件类型", "");
-        row1.put("证件号", "");
-        row1.put("图片编号（导入图片名称关联）", "");
-
-        sheet.setColumnWidth(3,7000);
+        sheet.setColumnWidth(4,7000);
         sheet.setColumnWidth(5,10000);
-        sheet.setColumnWidth(6,20000);
-        ArrayList<Map<String, Object>> rows = CollUtil.newArrayList(row1);
-        writer.write(rows, true);
+        sheet.setColumnWidth(6,7000);
+        List<LinkedHashMap<String,Object>> maps = sysDepotUserService.userList();
+        writer.write(maps, true);
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8");
-        response.setHeader("Content-Disposition","attachment;filename=test.xlsx");
+        response.setHeader("Content-Disposition","attachment;filename=peoples.xlsx");
         OutputStream out = response.getOutputStream();
         writer.flush(out, true);
         writer.close();

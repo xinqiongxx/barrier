@@ -107,8 +107,8 @@
         d.type = 'class_type'
         AND d.del_flag = 1
         AND u.del_flag = 0
-        AND u.user_type = 1
-        OR u.user_type = 3
+        AND (u.user_type = 1
+        OR u.user_type = 3)
 
     UNION
 
@@ -118,10 +118,10 @@
         sys_depot_user AS u
         LEFT JOIN sys_dept AS d ON u.dept_id = d.dept_id
     WHERE
-        d.del_flag = 1
+        (d.del_flag = 1 or d.dept_id = 1)
         AND u.del_flag = 0
-        AND u.user_type = 2
-        OR u.user_type = 9
+        AND (u.user_type = 2
+        OR u.user_type = 9)
     </select>
 
 
@@ -165,10 +165,11 @@
         FROM
         sys_depot_user as a
         <where>
+            AND a.del_flag = 0
             <if test="query.name != null and query.name != ''">
                 and name LIKE CONCAT('%',#{query.name},'%')
             </if>
-            <if test="query.depotId != null and query.depotId != ''">
+            <if test="query.depotId != null">
                 and depot_id = #{query.depotId}
             </if>
             <if test="query.userType != null and query.userType != ''">
@@ -179,5 +180,24 @@
             </if>
         </where>
     </select>
+    <select id="userList" resultType="java.util.LinkedHashMap">
+        SELECT DISTINCT
+        a.id as '人员编号',case a.gender when 0 then '男' WHEN 1 THEN '女' ELSE '未知'  END as '性别',case a.user_type when 1 then '学生' else '家长' END as'人员类型',b.label as '班级/部门',c.label  as '证件类型',a.name as '姓名', a.card_id as '证件号'
+        FROM
+        sys_depot_user as a,
+        sys_dict_item  as b,sys_dict_item  as c where b.type = 'class_type' and b.del_flag = 0  and a.dept_id =b.`value`
+        and c.type = 'certificate_type' and c.del_flag = 0  and a.certificate_type =c.`value`
+        and (user_type  = 1 or user_type = 3) and a.del_flag = 0
+        UNION
+        SELECT DISTINCT
+        a.id as '人员编号',case a.gender when 0 then '男' WHEN 1 THEN '女' ELSE '未知'  END as '性别',case a.user_type when 2 then '教职工' else '未知' END as'人员类型',b.dept_name as '班级/部门',c.label  as '证件类型',a.name as '姓名', a.card_id as '证件号'
+        FROM
+        sys_depot_user as a,
+        sys_dept  as b,sys_dict_item  as c where b.dept_id = a.dept_id and b.del_flag = 0
+        and c.type = 'certificate_type' and c.del_flag = 0  and a.certificate_type =c.`value`
+        and (user_type  = 2 or user_type = 9)  and a.del_flag = 0
+    </select>
+
+
 
 </mapper>

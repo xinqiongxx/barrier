@@ -44,7 +44,7 @@ public class SysPassProcessServiceImpl extends ServiceImpl<SysPassProcessMapper,
     public List<SysPassProcessVo> findRecentPassVoList(){
         List<SysPassProcessVo> list=baseMapper.findRecentPassVoList();
         for(SysPassProcessVo process:list){
-            if(ObjectUtil.isNotNull(process.getUserId())){
+            if(!process.getUserId().toString().equals( process.getDiscernId().toString())){
                 process.setParentType(sysUserRelationService.getRelation(process.getUserId(),process.getDiscernId()).getRelationName());
                 process.setDeptName(sysDepotUserService.getDept(process.getUserId()));
             }else{
@@ -140,7 +140,7 @@ public class SysPassProcessServiceImpl extends ServiceImpl<SysPassProcessMapper,
         IPage<SysPassProcessVo> ipage=baseMapper.getPage(page, sysPassProcessdto);
         List<SysPassProcessVo> list =  ipage.getRecords();
         for(SysPassProcessVo process:list){
-            if(ObjectUtil.isNotNull(process.getUserId())){
+            if(!process.getUserId().toString().equals( process.getDiscernId().toString())){
                 process.setParentType(sysUserRelationService.getRelation(process.getUserId(),process.getDiscernId()).getRelationName());
                 process.setDeptName(sysDepotUserService.getDept(process.getUserId()));
             }else{

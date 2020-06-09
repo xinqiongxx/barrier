@@ -11,9 +11,8 @@
  Target Server Version : 80019
  File Encoding         : 65001
 
- Date: 01/06/2020 00:03:11
+ Date: 08/06/2020 14:08:33
 */
-
 USE barrier
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
@@ -35,15 +34,7 @@ CREATE TABLE `sys_barrier` (
   `leave_flatbed` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '离开平板',
   `tenant_id` int DEFAULT NULL COMMENT '租户ID',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='道闸表';
-
--- ----------------------------
--- Records of sys_barrier
--- ----------------------------
-BEGIN;
-INSERT INTO `sys_barrier` VALUES (1, '1029823', '校门口闸机', '校门口闸机', '2020-05-05 10:51:06', NULL, NULL, '0', '2', '2', 1);
-INSERT INTO `sys_barrier` VALUES (3, '1029872', '宿舍门口闸机', '宿舍门口闸机', '2020-05-10 05:31:41', NULL, NULL, '0', '3', '3', 1);
-COMMIT;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='道闸表';
 
 -- ----------------------------
 -- Table structure for sys_depot_user
@@ -71,18 +62,7 @@ CREATE TABLE `sys_depot_user` (
   `del_flag` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT '0' COMMENT '删除标志',
   `tenant_id` int DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='用底库表';
-
--- ----------------------------
--- Records of sys_depot_user
--- ----------------------------
-BEGIN;
-INSERT INTO `sys_depot_user` VALUES (3, '王鋆', 1, 0, 0, '1', '/api/image/view/reg/1589280962157', 0, '天津市西青区', '1', 0, '142701199107040319', '2020-05-06', '13032255052', '天津市西青区', '2020-05-06 10:05:37', 1, '管理员', '0', 1);
-INSERT INTO `sys_depot_user` VALUES (4, '丁翔', 1, 0, 0, '3', '/api/image/view/reg/4', 1, NULL, NULL, 0, '1427011998222123', NULL, NULL, NULL, '2020-05-08 08:44:20', NULL, NULL, '0', 1);
-INSERT INTO `sys_depot_user` VALUES (5, '测试', 0, 0, 0, '1', '/api/image/view/reg/1589281324503', 0, NULL, NULL, 0, '142701199107040332', NULL, NULL, NULL, '2020-05-10 12:30:13', 1, '管理员', '0', 1);
-INSERT INTO `sys_depot_user` VALUES (6, '测试1', 1, 0, 0, '1', '/api/image/view/reg/607ba290efa84689b76c6bf4d75f6d03', 1, NULL, NULL, NULL, '142701199107040311', NULL, NULL, NULL, '2020-05-12 06:12:56', 1, '管理员', '0', 1);
-INSERT INTO `sys_depot_user` VALUES (8, '测试1', 1, 0, 0, '1', '/api/image/view/reg/8', 1, NULL, NULL, NULL, '142701199107040311', NULL, NULL, NULL, '2020-05-12 07:22:42', 1, '管理员', '0', 1);
-COMMIT;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='用底库表';
 
 -- ----------------------------
 -- Table structure for sys_dept
@@ -106,7 +86,7 @@ CREATE TABLE `sys_dept` (
 -- Records of sys_dept
 -- ----------------------------
 BEGIN;
-INSERT INTO `sys_dept` VALUES (1, '西青区二幼', 1, '2018-01-22 19:00:23', '2020-05-08 03:23:51', '0', -1, 1, '0', 'YEY-001');
+INSERT INTO `sys_dept` VALUES (1, '西青区某幼儿园', 1, '2018-01-22 19:00:23', '2020-06-08 14:04:16', '0', -1, 1, '0', 'YEY-001');
 INSERT INTO `sys_dept` VALUES (2, '管理部门', 0, '2020-05-05 06:09:25', '2020-05-05 06:09:25', '0', 1, NULL, '1', 'YEY-001');
 INSERT INTO `sys_dept` VALUES (3, '教学部门', 1, '2020-05-05 06:09:36', '2020-05-05 06:09:36', '0', 1, NULL, '2', 'YEY-001');
 INSERT INTO `sys_dept` VALUES (4, '后勤部门', 0, '2020-05-05 06:09:44', '2020-05-05 06:09:44', '0', 2, NULL, '1', 'YEY-001');
@@ -187,37 +167,40 @@ CREATE TABLE `sys_dict_item` (
   KEY `sys_dict_value` (`value`) USING BTREE,
   KEY `sys_dict_label` (`label`) USING BTREE,
   KEY `sys_dict_del_flag` (`del_flag`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=518 DEFAULT CHARSET=utf8 COMMENT='字典项';
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8 COMMENT='字典项';
 
 -- ----------------------------
 -- Records of sys_dict_item
 -- ----------------------------
 BEGIN;
-INSERT INTO `sys_dict_item` VALUES (492, 94, '1', '系统类', 'dict_type', '系统类', 1, '2020-05-05 16:22:46', '2020-05-05 16:25:30', NULL, '0', 1);
-INSERT INTO `sys_dict_item` VALUES (493, 94, '0', '业务类', 'dict_type', '业务类', 0, '2020-05-05 16:23:01', '2020-05-05 16:25:33', NULL, '0', 1);
-INSERT INTO `sys_dict_item` VALUES (494, 98, 'dorm_in', '进宿舍', 'gate_type', '进宿舍', 0, '2020-05-05 16:30:43', '2020-05-05 16:30:43', NULL, '0', 1);
-INSERT INTO `sys_dict_item` VALUES (495, 98, 'dorm_out', '出宿舍', 'gate_type', '出宿舍', 1, '2020-05-05 16:30:59', '2020-05-05 16:30:59', NULL, '0', 1);
-INSERT INTO `sys_dict_item` VALUES (496, 98, 'school_in', '进学校', 'gate_type', '进学校', 2, '2020-05-05 16:31:19', '2020-05-05 16:31:19', NULL, '0', 1);
-INSERT INTO `sys_dict_item` VALUES (497, 98, 'school_out', '出学校', 'gate_type', '出学校', 3, '2020-05-05 16:31:37', '2020-05-05 16:31:37', NULL, '0', 1);
-INSERT INTO `sys_dict_item` VALUES (498, 97, '0', '教师库', 'white_list', '教师库', 0, '2020-05-05 16:32:05', '2020-05-05 16:32:05', NULL, '0', 1);
-INSERT INTO `sys_dict_item` VALUES (499, 97, '1', '学生库', 'white_list', '学生库', 1, '2020-05-05 16:32:23', '2020-05-05 16:32:23', NULL, '0', 1);
-INSERT INTO `sys_dict_item` VALUES (500, 97, '2', '家长库', 'white_list', '家长库', 2, '2020-05-05 16:32:40', '2020-05-05 16:32:40', NULL, '0', 1);
-INSERT INTO `sys_dict_item` VALUES (501, 96, '0', '违纪库', 'black_list', '违纪库', 0, '2020-05-05 17:03:36', '2020-05-05 17:03:36', NULL, '0', 1);
-INSERT INTO `sys_dict_item` VALUES (502, 95, '0', '小班', 'class_type', '小班', 0, '2020-05-05 17:03:57', '2020-05-13 11:31:51', NULL, '0', 1);
-INSERT INTO `sys_dict_item` VALUES (503, 95, '1', '中班', 'class_type', '中班', 0, '2020-05-05 17:04:06', '2020-05-06 00:44:24', NULL, '0', 1);
-INSERT INTO `sys_dict_item` VALUES (504, 95, '2', '大班', 'class_type', '大班', 0, '2020-05-05 17:04:26', '2020-05-06 00:44:27', NULL, '0', 1);
-INSERT INTO `sys_dict_item` VALUES (505, 99, '0', '身份证', 'certificate_type', '身份证', 0, '2020-05-06 01:09:10', '2020-05-06 01:09:10', NULL, '0', 1);
-INSERT INTO `sys_dict_item` VALUES (506, 99, '1', '护照', 'certificate_type', '护照', 0, '2020-05-06 01:09:16', '2020-05-06 01:09:16', NULL, '0', 1);
-INSERT INTO `sys_dict_item` VALUES (507, 100, '1', '汉族', 'nation_type', '汉族', 0, '2020-05-06 22:59:45', '2020-05-07 20:07:21', NULL, '0', 1);
-INSERT INTO `sys_dict_item` VALUES (508, 100, '2', '蒙古族', 'nation_type', '蒙古族', 0, '2020-05-06 22:59:54', '2020-05-07 20:07:38', NULL, '0', 1);
-INSERT INTO `sys_dict_item` VALUES (509, 101, '0', '爸爸', 'parent_type', '爸爸', 0, '2020-05-08 00:23:59', '2020-05-08 00:23:59', NULL, '0', 1);
-INSERT INTO `sys_dict_item` VALUES (510, 101, '1', '妈妈', 'parent_type', '妈妈', 0, '2020-05-08 00:24:06', '2020-05-08 00:24:06', NULL, '0', 1);
-INSERT INTO `sys_dict_item` VALUES (511, 101, '2', '爷爷', 'parent_type', '爷爷', 0, '2020-05-08 00:24:14', '2020-05-08 00:24:14', NULL, '0', 1);
-INSERT INTO `sys_dict_item` VALUES (512, 101, '3', '奶奶', 'parent_type', '奶奶', 0, '2020-05-08 00:24:21', '2020-05-08 00:24:21', NULL, '0', 1);
-INSERT INTO `sys_dict_item` VALUES (513, 101, '4', '姥爷', 'parent_type', '姥爷', 0, '2020-05-08 00:24:33', '2020-05-08 00:24:33', NULL, '0', 1);
-INSERT INTO `sys_dict_item` VALUES (514, 101, '5', '姥姥', 'parent_type', '姥姥', 0, '2020-05-08 00:24:41', '2020-05-08 00:24:41', NULL, '0', 1);
-INSERT INTO `sys_dict_item` VALUES (516, 99, '2', '职工号', 'certificate_type', '职工号', 0, '2020-05-13 11:44:39', '2020-05-13 11:44:39', NULL, '0', 1);
-INSERT INTO `sys_dict_item` VALUES (517, 99, '3', '其他', 'certificate_type', '其他', 0, '2020-05-13 12:47:44', '2020-05-13 12:47:44', NULL, '0', 1);
+INSERT INTO `sys_dict_item` VALUES (1, 94, '1', '系统类', 'dict_type', '系统类', 1, '2020-05-05 16:22:46', '2020-06-08 14:06:07', NULL, '0', 1);
+INSERT INTO `sys_dict_item` VALUES (2, 94, '0', '业务类', 'dict_type', '业务类', 0, '2020-05-05 16:23:01', '2020-06-08 14:06:09', NULL, '0', 1);
+INSERT INTO `sys_dict_item` VALUES (3, 98, 'dorm_in', '进宿舍', 'gate_type', '进宿舍', 0, '2020-05-05 16:30:43', '2020-06-08 14:06:20', NULL, '0', 1);
+INSERT INTO `sys_dict_item` VALUES (4, 98, 'dorm_out', '出宿舍', 'gate_type', '出宿舍', 1, '2020-05-05 16:30:59', '2020-06-08 14:06:23', NULL, '0', 1);
+INSERT INTO `sys_dict_item` VALUES (5, 98, 'school_in', '进学校', 'gate_type', '进学校', 2, '2020-05-05 16:31:19', '2020-06-08 14:06:25', NULL, '0', 1);
+INSERT INTO `sys_dict_item` VALUES (6, 98, 'school_out', '出学校', 'gate_type', '出学校', 3, '2020-05-05 16:31:37', '2020-06-08 14:06:28', NULL, '0', 1);
+INSERT INTO `sys_dict_item` VALUES (7, 97, '0', '教师库', 'white_list', '教师库', 0, '2020-05-05 16:32:05', '2020-06-08 14:06:30', NULL, '0', 1);
+INSERT INTO `sys_dict_item` VALUES (8, 97, '1', '学生库', 'white_list', '学生库', 1, '2020-05-05 16:32:23', '2020-06-08 14:06:31', NULL, '0', 1);
+INSERT INTO `sys_dict_item` VALUES (9, 97, '2', '家长库', 'white_list', '家长库', 2, '2020-05-05 16:32:40', '2020-06-08 14:06:31', NULL, '0', 1);
+INSERT INTO `sys_dict_item` VALUES (10, 96, '0', '违纪库', 'black_list', '违纪库', 0, '2020-05-05 17:03:36', '2020-06-08 14:06:33', NULL, '0', 1);
+INSERT INTO `sys_dict_item` VALUES (11, 95, '0', '小班', 'class_type', '小班', 0, '2020-05-05 17:03:57', '2020-06-08 14:06:34', NULL, '1', 1);
+INSERT INTO `sys_dict_item` VALUES (12, 95, '1', '中班', 'class_type', '中班', 0, '2020-05-05 17:04:06', '2020-06-08 14:06:35', NULL, '1', 1);
+INSERT INTO `sys_dict_item` VALUES (13, 95, '2', '大班', 'class_type', '大班', 0, '2020-05-05 17:04:26', '2020-06-08 14:06:35', NULL, '1', 1);
+INSERT INTO `sys_dict_item` VALUES (14, 99, '0', '身份证', 'certificate_type', '身份证', 0, '2020-05-06 01:09:10', '2020-06-08 14:06:36', NULL, '0', 1);
+INSERT INTO `sys_dict_item` VALUES (15, 99, '1', '护照', 'certificate_type', '护照', 0, '2020-05-06 01:09:16', '2020-06-08 14:06:37', NULL, '0', 1);
+INSERT INTO `sys_dict_item` VALUES (16, 100, '1', '汉族', 'nation_type', '汉族', 0, '2020-05-06 22:59:45', '2020-06-08 14:06:38', NULL, '0', 1);
+INSERT INTO `sys_dict_item` VALUES (17, 100, '2', '蒙古族', 'nation_type', '蒙古族', 0, '2020-05-06 22:59:54', '2020-06-08 14:06:40', NULL, '0', 1);
+INSERT INTO `sys_dict_item` VALUES (18, 101, '0', '爸爸', 'parent_type', '爸爸', 0, '2020-05-08 00:23:59', '2020-06-08 14:06:41', NULL, '0', 1);
+INSERT INTO `sys_dict_item` VALUES (19, 101, '1', '妈妈', 'parent_type', '妈妈', 0, '2020-05-08 00:24:06', '2020-06-08 14:06:42', NULL, '0', 1);
+INSERT INTO `sys_dict_item` VALUES (20, 101, '2', '爷爷', 'parent_type', '爷爷', 0, '2020-05-08 00:24:14', '2020-06-08 14:06:46', NULL, '0', 1);
+INSERT INTO `sys_dict_item` VALUES (21, 101, '3', '奶奶', 'parent_type', '奶奶', 0, '2020-05-08 00:24:21', '2020-06-08 14:06:48', NULL, '0', 1);
+INSERT INTO `sys_dict_item` VALUES (22, 101, '4', '姥爷', 'parent_type', '姥爷', 0, '2020-05-08 00:24:33', '2020-06-08 14:06:49', NULL, '0', 1);
+INSERT INTO `sys_dict_item` VALUES (23, 101, '5', '姥姥', 'parent_type', '姥姥', 0, '2020-05-08 00:24:41', '2020-06-08 14:06:50', NULL, '0', 1);
+INSERT INTO `sys_dict_item` VALUES (24, 99, '2', '职工号', 'certificate_type', '职工号', 0, '2020-05-13 11:44:39', '2020-06-08 14:06:50', NULL, '0', 1);
+INSERT INTO `sys_dict_item` VALUES (25, 99, '3', '其他', 'certificate_type', '其他', 0, '2020-05-13 12:47:44', '2020-06-08 14:06:51', NULL, '0', 1);
+INSERT INTO `sys_dict_item` VALUES (26, 95, '0', '小班', 'class_type', '小班', 0, '2020-06-02 12:01:58', '2020-06-08 14:06:52', NULL, '1', 1);
+INSERT INTO `sys_dict_item` VALUES (27, 97, '-1', '默认白名单', 'white_list', '默认库', -1, '2020-06-03 12:05:00', '2020-06-08 14:06:53', NULL, '0', 1);
+INSERT INTO `sys_dict_item` VALUES (28, 101, '-1', '其他', 'parent_type', '其他', 0, '2020-05-13 12:47:44', '2020-06-08 14:06:56', NULL, '0', 1);
 COMMIT;
 
 -- ----------------------------
@@ -239,15 +222,7 @@ CREATE TABLE `sys_flatbed` (
   `tenant_id` int DEFAULT NULL COMMENT '租户ID',
   `process` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '进度',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='平板';
-
--- ----------------------------
--- Records of sys_flatbed
--- ----------------------------
-BEGIN;
-INSERT INTO `sys_flatbed` VALUES (2, '测试平板', '13307881', '192.168.254.239', 'school_out', '0', 'rtsp://192.168.254.238/av0_0', '2020-05-05 08:58:08', NULL, NULL, '0', 1, '完成：0%');
-INSERT INTO `sys_flatbed` VALUES (3, '测试平板2', '1330788', '192.168.254.238', 'school_out', '0', 'rtsp://192.168.254.238/av0_0', '2020-05-07 04:35:40', NULL, NULL, '0', 1, '同步完成');
-COMMIT;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='平板';
 
 -- ----------------------------
 -- Table structure for sys_log
@@ -275,18 +250,7 @@ CREATE TABLE `sys_log` (
   KEY `sys_log_request_uri` (`request_uri`) USING BTREE,
   KEY `sys_log_type` (`type`) USING BTREE,
   KEY `sys_log_create_date` (`create_time`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='日志表';
-
--- ----------------------------
--- Records of sys_log
--- ----------------------------
-BEGIN;
-INSERT INTO `sys_log` VALUES (1, '0', '修改', NULL, 'admin', '2020-05-30 12:49:31', NULL, '0:0:0:0:0:0:0:1', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.61 Safari/537.36', '/flatbed', 'PUT', NULL, '33', '0', NULL, 0);
-INSERT INTO `sys_log` VALUES (2, '0', '修改', NULL, 'admin', '2020-05-30 12:49:41', NULL, '0:0:0:0:0:0:0:1', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.61 Safari/537.36', '/flatbed', 'PUT', NULL, '15', '0', NULL, 0);
-INSERT INTO `sys_log` VALUES (3, '0', '修改', NULL, 'admin', '2020-05-30 12:53:26', NULL, '0:0:0:0:0:0:0:1', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.61 Safari/537.36', '/flatbed', 'PUT', NULL, '28', '0', NULL, 0);
-INSERT INTO `sys_log` VALUES (4, '0', '修改', NULL, 'admin', '2020-05-30 12:53:30', NULL, '0:0:0:0:0:0:0:1', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.61 Safari/537.36', '/flatbed', 'PUT', NULL, '36', '0', NULL, 0);
-INSERT INTO `sys_log` VALUES (5, '0', '修改', NULL, 'admin', '2020-05-31 09:00:06', NULL, '0:0:0:0:0:0:0:1', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.61 Safari/537.36', '/flatbed', 'PUT', NULL, '27', '0', NULL, 0);
-COMMIT;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='日志表';
 
 -- ----------------------------
 -- Table structure for sys_menu
@@ -339,42 +303,7 @@ CREATE TABLE `sys_pass_process` (
   `discern_id` int DEFAULT NULL COMMENT '识别id（家长/教师/幼儿）',
   `registered_pic` varchar(80) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='进出记录表';
-
--- ----------------------------
--- Records of sys_pass_process
--- ----------------------------
-BEGIN;
-INSERT INTO `sys_pass_process` VALUES (9, 2, '/api/image/view/match/1330788-1589287200030', '2020-05-21 07:40:00', 0, NULL, NULL, 4, '/api/image/view/reg/4');
-INSERT INTO `sys_pass_process` VALUES (10, 2, '/api/image/view/match/1330788-1589287200030', '2020-05-21 07:40:00', 0, NULL, 3, 4, '/api/image/view/reg/4');
-INSERT INTO `sys_pass_process` VALUES (11, 2, '/api/image/view/match/1330788-1589354486780', '2020-05-21 02:21:27', 0, NULL, NULL, 4, '/api/image/view/reg/4A');
-INSERT INTO `sys_pass_process` VALUES (12, 1, '/api/image/view/match/1330788-1589287200030', '2020-05-21 07:40:00', 0, NULL, NULL, 4, '/api/image/view/reg/4');
-INSERT INTO `sys_pass_process` VALUES (13, 1, '/api/image/view/match/1330788-1589287200030', '2020-05-21 07:40:00', 0, NULL, 3, 4, '/api/image/view/reg/4');
-INSERT INTO `sys_pass_process` VALUES (14, 2, '/api/image/view/match/1330788-1589354486780', '2020-05-21 02:21:27', 0, NULL, NULL, 4, '/api/image/view/reg/4A');
-INSERT INTO `sys_pass_process` VALUES (15, 2, '/api/image/view/match/1330788-1589704372249', '2020-05-21 03:32:52', 0, NULL, NULL, 4, '/api/image/view/reg/4');
-INSERT INTO `sys_pass_process` VALUES (16, 2, '/api/image/view/match/1330788-1589704471264', '2020-05-21 03:34:31', 0, NULL, NULL, 5, '/api/image/view/reg/5');
-INSERT INTO `sys_pass_process` VALUES (17, 2, '/api/image/view/match/1330788-1589706051381', '2020-05-21 04:00:52', 0, NULL, NULL, 4, '/api/image/view/reg/4');
-INSERT INTO `sys_pass_process` VALUES (18, 2, '/api/image/view/match/1330788-1590031877748', '2020-05-21 03:31:18', 0, NULL, NULL, 5, '/api/image/view/reg/5A');
-INSERT INTO `sys_pass_process` VALUES (19, 2, '/api/image/view/match/1330788-1590031878182', '2020-05-21 03:31:18', 0, NULL, NULL, 4, '/api/image/view/reg/4A');
-INSERT INTO `sys_pass_process` VALUES (20, 2, '/api/image/view/match/1330788-1590031878182', '2020-05-21 03:31:18', 0, NULL, 3, 4, '/api/image/view/reg/4A');
-INSERT INTO `sys_pass_process` VALUES (21, 2, '/api/image/view/match/1330788-1590031952367', '2020-05-21 03:32:32', 0, NULL, NULL, 5, '/api/image/view/reg/5A');
-INSERT INTO `sys_pass_process` VALUES (22, 2, '/api/image/view/match/1330788-1590031957067', '2020-05-21 03:32:37', 0, NULL, NULL, 5, '/api/image/view/reg/5');
-INSERT INTO `sys_pass_process` VALUES (23, 2, '/api/image/view/match/1330788-1590031960459', '2020-05-21 03:32:40', 0, NULL, NULL, 6, '/api/image/view/reg/6');
-INSERT INTO `sys_pass_process` VALUES (24, 2, '/api/image/view/match/1330788-1590031961220', '2020-05-21 03:32:41', 0, NULL, NULL, 5, '/api/image/view/reg/5');
-INSERT INTO `sys_pass_process` VALUES (25, 2, '/api/image/view/match/1330788-1590031983511', '2020-05-21 03:33:04', 0, NULL, NULL, 5, '/api/image/view/reg/5');
-INSERT INTO `sys_pass_process` VALUES (26, 2, '/api/image/view/match/1330788-1590032217361', '2020-05-21 03:36:57', 0, NULL, NULL, 4, '/api/image/view/reg/4');
-INSERT INTO `sys_pass_process` VALUES (27, 2, '/api/image/view/match/1330788-1590032217361', '2020-05-21 03:36:57', 0, NULL, 3, 4, '/api/image/view/reg/4');
-INSERT INTO `sys_pass_process` VALUES (28, 2, '/api/image/view/match/1330788-1590032222857', '2020-05-21 03:37:03', 0, NULL, NULL, 4, '/api/image/view/reg/4');
-INSERT INTO `sys_pass_process` VALUES (29, 2, '/api/image/view/match/1330788-1590032222857', '2020-05-21 03:37:03', 0, NULL, 3, 4, '/api/image/view/reg/4');
-INSERT INTO `sys_pass_process` VALUES (30, 2, '/api/image/view/match/1330788-1590032223417', '2020-05-21 03:37:03', 0, NULL, NULL, 3, '/api/image/view/reg/3');
-INSERT INTO `sys_pass_process` VALUES (31, 2, '/api/image/view/match/1330788-1590033748933', '2020-05-21 04:02:29', 0, NULL, NULL, 3, '/api/image/view/reg/3');
-INSERT INTO `sys_pass_process` VALUES (32, 2, '/api/image/view/match/1330788-1590033774819', '2020-05-21 04:02:55', 0, NULL, NULL, 6, '/api/image/view/reg/6');
-INSERT INTO `sys_pass_process` VALUES (33, 2, '/api/image/view/match/1330788-1590034737579', '2020-05-21 04:18:58', 0, NULL, NULL, 6, '/api/image/view/reg/6');
-INSERT INTO `sys_pass_process` VALUES (34, 2, '/api/image/view/match/1330788-1590034828226', '2020-05-21 04:20:28', 0, NULL, NULL, 6, '/api/image/view/reg/6');
-INSERT INTO `sys_pass_process` VALUES (35, 2, '/api/image/view/match/1330788-1590034857222', '2020-05-21 04:20:57', 0, NULL, NULL, 4, '/api/image/view/reg/4');
-INSERT INTO `sys_pass_process` VALUES (36, 2, '/api/image/view/match/1330788-1590034857222', '2020-05-21 04:20:57', 0, NULL, 3, 4, '/api/image/view/reg/4');
-INSERT INTO `sys_pass_process` VALUES (37, 2, '/api/image/view/match/1330788-1590034857637', '2020-05-21 04:20:58', 0, NULL, NULL, 6, '/api/image/view/reg/6');
-COMMIT;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='进出记录表';
 
 -- ----------------------------
 -- Table structure for sys_role
@@ -491,13 +420,6 @@ CREATE TABLE `sys_user_relation` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- ----------------------------
--- Records of sys_user_relation
--- ----------------------------
-BEGIN;
-INSERT INTO `sys_user_relation` VALUES (3, 4, 1, NULL, 1);
-COMMIT;
-
--- ----------------------------
 -- Table structure for sys_user_role
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_user_role`;
@@ -512,8 +434,6 @@ CREATE TABLE `sys_user_role` (
 -- ----------------------------
 BEGIN;
 INSERT INTO `sys_user_role` VALUES (1, 1);
-INSERT INTO `sys_user_role` VALUES (11563, 2);
-INSERT INTO `sys_user_role` VALUES (11566, 33);
 COMMIT;
 
 SET FOREIGN_KEY_CHECKS = 1;

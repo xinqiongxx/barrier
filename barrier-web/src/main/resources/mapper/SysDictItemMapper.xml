@@ -22,4 +22,17 @@
         <result property="delFlag" column="del_flag"/>
         <result property="tenantId" column="tenant_id"/>
     </resultMap>
+
+
+
+
+    <select id="getAllItem" resultMap="sysDictItemMap">
+        SELECT
+        *
+        FROM
+        sys_dict_item
+        <where>
+            and type=#{type}
+        </where>
+    </select>
 </mapper>

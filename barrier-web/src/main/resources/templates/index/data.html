@@ -1180,6 +1180,7 @@
         }
     }
     function initVideo(file){
+        videojs.options.flash.swf = "/static/js/video/video-js.swf"
         player = videojs('video',{
             width: $("#mainVedioBox").width(),
             height: $("#mainVedioBox").height(),
@@ -1304,14 +1305,15 @@
                 '           </div>\n' +
                 '         </div>\n' +
                 '         <div class="main_message_list_item_right">\n' ;
-                if(ret.user!=null){
+                if(ret.user!=ret.discernId){
                     hidd+=' <div class="user_name_box">'+ret.user.name;
                 }else{
                     hidd+=' <div class="user_name_box">'+ret.discernUser.name;
 
                 }
-                if(ret.userId!=null){
-                    hidd+=' <span>('+ret.discernUser.name+'-'+ret.parentType+'-'+ret.deptName+')</span>';
+                if(ret.userId!=ret.discernId){
+                    //hidd+=' <span>('+ret.discernUser.name+'-'+ret.parentType+'-'+ret.deptName+')</span>';
+                    hidd+=' <span>('+ret.deptName+')</span>';
                 }else{
                     hidd+=' <span>('+ret.deptName+')</span>';
                 }
@@ -1620,7 +1622,6 @@
                 eachrts1()
                 eachrts2()
                 eachrts4()
-                //发现消息进入    开始处理前端触发逻辑
             };
             //关闭事件
             socket.onclose = function() {

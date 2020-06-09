@@ -160,7 +160,7 @@
                     }
                 },
                 {
-                    display: '操作', align: 'center', width: "25%",
+                    display: '操作', align: 'center', width: "22%",
                     render: function (rowdata, rowindex, value, column) {
                         var bar = '<div class="grid_user_container">';
                         bar += '<div class="bg4 qTip" title="清空" onclick="onClear(\'' + rowdata.id + '\',\''+rowdata.onlineStatus+'\')">清空</div>';
@@ -233,7 +233,7 @@
 
     //查看
     function onClear(id,onlineStatus) {
-        if(onlineStatus != 0){
+        if(onlineStatus != 1){
             top.Toast("showErrorToast", '平板不在线');
             return;
         }
@@ -299,7 +299,7 @@
 
     //同步
     function onSync(id,onlineStatus) {
-        if(onlineStatus != 0){
+        if(onlineStatus != 1){
             top.Toast("showErrorToast", '平板不在线');
             return;
         }
@@ -316,7 +316,15 @@
                 top.Toast("showSuccessToast", '同步成功');
             } else {
                 //top.bodyUnMask()
-                top.Toast("showErrorToast", res.msg);
+                var error = "";
+                res.data.forEach(function(item){
+                    error += item+"</br>";
+                })
+                top.Notice('showNotice', {
+                    title	: "错误数据("+res.data.length+")",
+                    text    : error,
+                    sticky  : true
+                })
             }
         }, function () {
             //top.bodyUnMask()
@@ -360,7 +368,17 @@
                     $("#sync").unmask();
                     isSync = false;
                     //top.bodyUnMask()
-                    top.Toast("showErrorToast",  res.msg);
+                    // top.Toast("showErrorToast",  res.data);
+
+                    var error = "";
+                    res.data.forEach(function(item){
+                        error += item+"</br>";
+                    })
+                    top.Notice('showNotice', {
+                        title	: "错误数据("+res.data.length+")",
+                        text    : error,
+                        sticky  : true
+                    })
                 }
             }, function () {
                 $("#sync").unmask();

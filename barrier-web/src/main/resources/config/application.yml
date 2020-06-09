@@ -5,7 +5,7 @@ session:
 path:
   imgPath: D:\\barrier
 server:
-  port: 8088
+  port: 8888
   servlet:
     context-path: /
     jsp:
@@ -93,9 +93,10 @@ mybatis-plus:
 # Logger Config
 logging:
   level:
-    com.tjaide.nursery.barrier.web.mapper: info
+    com.tjaide.nursery.barrier.web.mapper: debug
 file:
-  path: /home/datadisk/file
+  path: /Users/gougou/Desktop
+
 # 租户表维护
 cacx:
   tenant:
