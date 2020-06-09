@@ -114,8 +114,9 @@ public class SysPassProcessServiceImpl extends ServiceImpl<SysPassProcessMapper,
         List<Integer> data3=new ArrayList<>();
         for(int i=0;i<12;i++){
             int h=i*2;
-            String hour1=i>9?(i+""):("0"+i);
-            String hour2=h>9?(h+""):("0"+h);
+            int h1=(i*2)+2;
+            String hour1=h>9?(h+""):("0"+h);
+            String hour2=(h1<=9)?("0"+h1):(h1>9&&h1<24)?(h1+""):"23";
             String start_time=date1+" "+hour1+":00:00";
             String end_time=date1+" "+hour2+":59:59";
             Integer flow = baseMapper.getCountByCreateDate(1,start_time,end_time);
