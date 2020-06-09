@@ -64,14 +64,12 @@ public class SysPassProcessServiceImpl extends ServiceImpl<SysPassProcessMapper,
         //学生
         Integer data1=baseMapper.getCountByUserTypeCreateDate(1,start_time,end_time);
         //家长
-        Integer data2=baseMapper.getCountByUserTypeCreateDate(3,start_time,end_time);
+        //Integer data2=baseMapper.getCountByUserTypeCreateDate(3,start_time,end_time1);
         //教职工
-        Integer data3=baseMapper.getCountByUserTypeCreateDate(2,start_time,end_time);
-        Integer data4=baseMapper.getCountByUserTypeCreateDate(null,start_time,end_time);
+        Integer data2=baseMapper.getCountByUserTypeCreateDate(2,start_time,end_time);
+       // Integer data4=baseMapper.getCountByUserTypeCreateDate(null,start_time,end_time);
         res.put("data1",data1);
         res.put("data2",data2);
-        res.put("data3",data3);
-        res.put("data4",data4);
         return res;
     }
 
