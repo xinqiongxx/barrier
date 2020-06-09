@@ -62,12 +62,12 @@ public class HomeController {
         Map<String,Object> datas=sysPassProcessService.getBaseDatas();
         //获取进出人数
         Integer entercount=sysPassProcessService.count(Wrappers.<SysPassProcess>lambdaQuery()
-            .eq(SysPassProcess::getEnterType,1)
+            .eq(SysPassProcess::getEnterType,0)
             .ge(SysPassProcess::getCreateTime,starTime)
             .le(SysPassProcess::getCreateTime,endTime));
         //获取进出人数
         Integer leavecount=sysPassProcessService.count(Wrappers.<SysPassProcess>lambdaQuery()
-            .eq(SysPassProcess::getEnterType,2)
+            .eq(SysPassProcess::getEnterType,1)
             .ge(SysPassProcess::getCreateTime,starTime)
             .le(SysPassProcess::getCreateTime,endTime));
         model.addAttribute("stucount",datas.get("data1"));
