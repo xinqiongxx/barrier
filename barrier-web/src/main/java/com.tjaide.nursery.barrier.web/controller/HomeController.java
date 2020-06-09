@@ -71,7 +71,7 @@ public class HomeController {
             .ge(SysPassProcess::getCreateTime,starTime)
             .le(SysPassProcess::getCreateTime,endTime));
         model.addAttribute("stucount",datas.get("data1"));
-        model.addAttribute("teachercount",datas.get("data3"));
+        model.addAttribute("teachercount",datas.get("data2"));
         model.addAttribute("entercount",entercount);
         model.addAttribute("leavecount",leavecount);
         return "index/data";
