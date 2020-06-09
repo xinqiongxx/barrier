@@ -26,6 +26,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.sql.ResultSet;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -114,6 +116,7 @@ public class ApiController {
         JSONObject jsonObject = JSONUtil.parseObj(res.toString());
         Map<String,Object> infoMap = (Map<String, Object>) jsonObject.get("info");
         // infoMap 存储进出记录表
+        DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-ddTHH:mm:ss");
         SysPassProcess sysPassProcess = new SysPassProcess();
         String PersonUUID = infoMap.get("PersonUUID").toString();
         sysPassProcess.setDiscernId(Integer.parseInt(PersonUUID.replace("A","")));
@@ -122,15 +125,17 @@ public class ApiController {
         asyncService.savePhoto(jsonObject.get("SanpPic").toString(),fileName);
         sysPassProcess.setRemark("");
         sysPassProcess.setStatus(0);
+        LocalDateTime localDateTime = LocalDateTime.parse(infoMap.get("CreateTime").toString(),df);
+        sysPassProcess.setCreateTime(localDateTime);
         sysPassProcess.setSanpPic("/api/image/view/match/"+fileName);
         // 0 进 1 出 2 未知
         SysFlatbed sysFlatbed = sysFlatbedService.getOne(Wrappers.<SysFlatbed>lambdaQuery().eq(SysFlatbed::getNumber,infoMap.get("DeviceID")));
         List<SysBarrier> leaves = sysBarrierService.list(Wrappers.<SysBarrier>lambdaQuery().eq(SysBarrier::getLeaveFlatbed,sysFlatbed.getId()));
         List<SysBarrier> enters = sysBarrierService.list(Wrappers.<SysBarrier>lambdaQuery().eq(SysBarrier::getEnterFlatbed,sysFlatbed.getId()));
         if(ObjectUtil.isNotEmpty(leaves)){
-            sysPassProcess.setEnterType(0);
-        }else if(ObjectUtil.isNotEmpty(enters)){
             sysPassProcess.setEnterType(1);
+        }else if(ObjectUtil.isNotEmpty(enters)){
+            sysPassProcess.setEnterType(0);
         }else{
             sysPassProcess.setEnterType(1);
         }

@@ -906,7 +906,7 @@
                                 </div>
                             </div>
                              <div class="main_date_top_box">
-                                <div  class="main_date_top_data">今日出勤学生<span th:text="${stucount}"></span>人 <span class="span_center"></span>教职工<span th:text="${teachercount}"></span>人</div>
+                                <div  class="main_date_top_data">今日出勤学生<span id="stucount">0</span>人 <span class="span_center"></span>教职工<span id="teachercount">0</span>人</div>
                             </div>
                         </div>
                         <div class="main_statistics_box">
@@ -997,13 +997,13 @@
                                 <div id="chart2" style="width: 100%;height: calc(100% - 20px);">
 
                                 </div>
-                                <div class="line_title">今日进园人数 <span id="line_enter_title" th:text="${entercount}"></span>人</div>
+                                <div class="line_title">今日进园人数 <span id="line_enter_title" class="entercount">0</span>人</div>
                             </div>
                             <div class="main_line_box">
                                 <div id="chart3" style="width: 100%;height: calc(100% - 20px);">
 
                                 </div>
-                                <div class="line_title">今日出园人数 <span id="line_leave_title" th:text="${leavecount}"></span>人</div>
+                                <div class="line_title">今日出园人数 <span id="line_leave_title" class="leavecount">0</span>人</div>
                             </div>
                         </div>
                         <!--第三层右侧区域end-->
@@ -1259,6 +1259,7 @@
         eachrts1()
         eachrts2()
         eachrts4()
+        getCount()
     })
 
 
@@ -1401,7 +1402,19 @@
 
 
     }
-
+    function getCount(){
+        $.ajax({
+            url: ctxPath + "dataData/getCount",
+            type: 'get',
+            data: {},
+        }).then(function (res) {
+            var data = res.data;
+            $("#stucount").html(data.stucount);
+            $("#teachercount").html(data.teachercount);
+            $(".entercount").html(data.entercount);
+            $(".leavecount").html(data.leavecount);
+        });
+    }
     function eachrts4(){
         var myChart = echarts.init(document.getElementById('chart4'),'macarons');
         $.ajax({
@@ -1623,6 +1636,7 @@
                 eachrts1()
                 eachrts2()
                 eachrts4()
+                getCount()
             };
             //关闭事件
             socket.onclose = function() {

@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,6 +44,34 @@ public class DataController {
     private final SysPassProcessService passProcessService;
     private final SysDepotUserService sysDepotUserService;
 
+
+
+    @GetMapping("/getCount")
+    public R getCount(){
+        Map<String,Object> map = new HashMap<>();
+        LocalDateTime now=LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String nowStr=now.format(formatter);
+        LocalDateTime starTime= LocalDateTime.parse(nowStr+" 00:00:00",formatter2);
+        LocalDateTime endTime= LocalDateTime.parse(nowStr+" 23:59:59",formatter2);
+        Map<String,Object> datas=passProcessService.getBaseDatas();
+        //获取进出人数
+        Integer entercount=passProcessService.count(Wrappers.<SysPassProcess>lambdaQuery()
+                .eq(SysPassProcess::getEnterType,0)
+                .ge(SysPassProcess::getCreateTime,starTime)
+                .le(SysPassProcess::getCreateTime,endTime));
+        //获取进出人数
+        Integer leavecount=passProcessService.count(Wrappers.<SysPassProcess>lambdaQuery()
+                .eq(SysPassProcess::getEnterType,1)
+                .ge(SysPassProcess::getCreateTime,starTime)
+                .le(SysPassProcess::getCreateTime,endTime));
+        map.put("stucount",datas.get("data1"));
+        map.put("teachercount",datas.get("data2"));
+        map.put("entercount",entercount);
+        map.put("leavecount",leavecount);
+        return R.ok(map);
+    }
     /**
      * 查询基础数据
      */

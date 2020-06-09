@@ -67,7 +67,7 @@
                                 prompt="请选择人员类型"></select>
                     </td>
                     <td>
-                        <select id="enterType" data='{"list":[{"value":"1","key":"进校"},{"value":"2","key":"离校"}]}'
+                        <select id="enterType" data='{"list":[{"value":"0","key":"进校"},{"value":"1","key":"离校"}]}'
                                 prompt="请选择进出类型"></select>
                     </td>
                     <td>
@@ -111,7 +111,7 @@
 
 
         var enterType = $("#enterType").val();
-        if (enterType) {
+        if (enterType == 0 ||enterType == 1) {
             paramsx.enterType = enterType
         }
 
@@ -160,9 +160,9 @@
                     render: function (rowdata, rowindex, value, column) {
                     //1学生2教职工3家长9未知
                         switch (value) {
-                            case 1:
+                            case 0:
                                 return "进校"
-                            case 2:
+                            case 1:
                                 return "出校"
                         }
                     }},

@@ -17,7 +17,10 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.SneakyThrows;
 
+import javax.imageio.ImageIO;
 import javax.sql.rowset.serial.SerialBlob;
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.sql.Blob;
 import java.time.LocalDateTime;
@@ -100,6 +103,10 @@ public class SysDepotUser extends Model<SysDepotUser> {
                     }
                     // 压缩图片
                     ImgUtil.scale(file, fileTemp, 0.5f);
+                    BufferedImage image = ImageIO.read(fileTemp);
+                    if(image.getWidth() > image.getHeight()) {
+                        ImgUtil.write(ImgUtil.rotate(ImageIO.read(fileTemp), 90), fileTemp);
+                    }
                     //file.delete();
                     //fileTemp.renameTo(file);
                     setPhoto("data:image/jpeg;base64,"+Base64.encode(fileTemp));
@@ -113,13 +120,18 @@ public class SysDepotUser extends Model<SysDepotUser> {
         return this.photo;
     }
 
+    @SneakyThrows
     public static void main(String[] args) {
-        File file = new File("/Users/gougou/Desktop/import/2020-06-09/1.jpg");
-        File fileTemp = new File("/Users/gougou/Desktop/import/2020-06-09/1_temp.jpeg");
-
+        File file = new File("/Users/gougou/Desktop/import/2020-06-09/2.jpg");
+        File fileTemp = new File("/Users/gougou/Desktop/import/2020-06-09/2_temp.jpeg");;
             if (file.length() > 1024 * 800) {
                 // 压缩图片
                 ImgUtil.scale(file, fileTemp, 0.5f);
+                BufferedImage image1 = ImageIO.read(file);
+                BufferedImage image = ImageIO.read(fileTemp);
+                if(image.getWidth() > image.getHeight()) {
+                    ImgUtil.write(ImgUtil.rotate(ImageIO.read(fileTemp), 90), fileTemp);
+                }
             }
     }
 
