@@ -85,8 +85,8 @@ public class SysPassProcessServiceImpl extends ServiceImpl<SysPassProcessMapper,
             datelist.add(date1.substring(5,10));
             String start_time = date1+" 00:00:00";
             String end_time = date1+" 23:59:59";
-            Integer enter = baseMapper.getCountByCreateDate(1,start_time,end_time);
-            Integer leave = baseMapper.getCountByCreateDate(2,start_time,end_time);
+            Integer enter = baseMapper.getCountByCreateDate(9,start_time,end_time);
+            Integer leave = baseMapper.getCountByCreateDate(1,start_time,end_time);
             data1.add(enter);
             data2.add(leave);
         }
@@ -112,15 +112,16 @@ public class SysPassProcessServiceImpl extends ServiceImpl<SysPassProcessMapper,
         List<String> data1=new ArrayList<>();
         List<Integer> data2=new ArrayList<>();
         List<Integer> data3=new ArrayList<>();
-        for(int i=0;i<12;i++){
+        for(int i=0;i<24;i++){
             int h=i*2;
             int h1=(i*2)+2;
-            String hour1=h>9?(h+""):("0"+h);
-            String hour2=(h1<=9)?("0"+h1):(h1>9&&h1<24)?(h1+""):"23";
+            String hour1=i>9?(i+""):("0"+i);
+            //String hour1=h>9?(h+""):("0"+h);
+           // String hour2=(h1<=9)?("0"+h1):(h1>9&&h1<24)?(h1+""):"23";
             String start_time=date1+" "+hour1+":00:00";
-            String end_time=date1+" "+hour2+":59:59";
-            Integer flow = baseMapper.getCountByCreateDate(1,start_time,end_time);
-            Integer flow1 = baseMapper.getCountByCreateDate(2,start_time,end_time);
+            String end_time=date1+" "+hour1+":59:59";
+            Integer flow = baseMapper.getCountByCreateDate(9,start_time,end_time);
+            Integer flow1 = baseMapper.getCountByCreateDate(1,start_time,end_time);
             String datestr=hour1+":00";
             data1.add(datestr);
             data2.add(flow);
