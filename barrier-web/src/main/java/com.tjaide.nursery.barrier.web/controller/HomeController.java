@@ -67,7 +67,7 @@ public class HomeController {
             .le(SysPassProcess::getCreateTime,endTime));
         //获取进出人数
         Integer leavecount=sysPassProcessService.count(Wrappers.<SysPassProcess>lambdaQuery()
-            .eq(SysPassProcess::getEnterType,1)
+            .eq(SysPassProcess::getEnterType,2)
             .ge(SysPassProcess::getCreateTime,starTime)
             .le(SysPassProcess::getCreateTime,endTime));
         model.addAttribute("stucount",datas.get("data1"));
