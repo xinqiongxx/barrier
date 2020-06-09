@@ -69,7 +69,7 @@ public class ApiController {
         Map<String,Object> result = new HashMap<>();
         Map<String,Object> message = new HashMap<>();
         DruidPooledConnection druidPooledConnection = dataSource.getConnection();
-        String sql = "select * from "+table + " where "+ name +" = "+ validateValue +" and "+ name + " <> '"+value+"'";
+        String sql = "select * from "+table + " where "+ name +" = '"+ validateValue +"' and "+ name + " <> '"+value+"'";
         ResultSet resultSet = druidPooledConnection.prepareStatement(sql).executeQuery();
         if(resultSet.next()){
             message.put("message","");
@@ -179,9 +179,11 @@ public class ApiController {
         }else{
             sysFlatbedService.update(Wrappers.<SysFlatbed>lambdaUpdate().set(SysFlatbed::getOnlineStatus,"1").eq(SysFlatbed::getNumber,deviceId));
             SysFlatbed sysFlatbed= sysFlatbedService.getOne(Wrappers.<SysFlatbed>lambdaQuery().eq(SysFlatbed::getNumber,deviceId));
-            if(!isStart) {
-                isStart = true;
-                FlatBedUtil.startVideo(sysFlatbed.getRtspAddress());
+            synchronized (this) {
+                if (!isStart) {
+                    isStart = true;
+                   // FlatBedUtil.startVideo(sysFlatbed.getRtspAddress());
+                }
             }
         }
         timer = new Timer();

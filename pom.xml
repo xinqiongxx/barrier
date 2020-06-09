@@ -134,6 +134,7 @@
                         <nonFilteredFileExtension>doc</nonFilteredFileExtension>
                         <nonFilteredFileExtension>docx</nonFilteredFileExtension>
                         <nonFilteredFileExtension>ico</nonFilteredFileExtension>
+                        <nonFilteredFileExtension>swf</nonFilteredFileExtension>
                     </nonFilteredFileExtensions>
                 </configuration>
             </plugin>

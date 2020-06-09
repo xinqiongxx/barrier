@@ -17,6 +17,7 @@ import com.tjaide.nursery.barrier.web.entity.SysFlatbed;
 import com.tjaide.nursery.barrier.web.service.SysDepotUserService;
 import com.tjaide.nursery.barrier.web.service.SysFlatbedService;
 import com.tjaide.nursery.barrier.web.util.FlatBedUtil;
+import com.tjaide.nursery.barrier.web.util.WebSocketServer;
 import io.swagger.annotations.Api;
 import io.swagger.models.auth.In;
 import lombok.AllArgsConstructor;
@@ -31,10 +32,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
@@ -185,9 +183,13 @@ public class SysFlatbedController {
         String userid = ShiroUtils.getUser().getUserId();
         SysFlatbed sysFlatbed = sysFlatbedService.getById(id);
         List<SysDepotUser> lists = sysDepotUserService.list(Wrappers.emptyWrapper());
-        List<String> errors = FlatBedUtil.AddPersons(userid,sysFlatbed,lists,filePath,sysFlatbedService);
+        List<String> errors = FlatBedUtil.AddPersons(false,userid,sysFlatbed,lists,filePath,sysFlatbedService);
         if(errors.size() > 0){
+            Map<String,Object> res = new HashMap<>();
+            res.put("error",errors);
+            WebSocketServer.sendInfo(JSONUtil.toJsonStr(res), userid);
             return R.failed(errors);
+
         }
         return R.ok();
     }
@@ -227,18 +229,21 @@ public class SysFlatbedController {
         String userid = ShiroUtils.getUser().getUserId();
         List<SysFlatbed> sysFlatbeds = sysFlatbedService.list();
         List<SysDepotUser> lists = sysDepotUserService.list(Wrappers.emptyWrapper());
-        List<String> errors = new ArrayList<>();
+        Set<String> errors = new HashSet<>();
         List<CompletableFuture> resList = new ArrayList<>();
         sysFlatbeds.forEach( sysFlatbed -> {
             resList.add(CompletableFuture.supplyAsync(() -> sysFlatbed).thenAcceptAsync(e -> {
                 if("1".equals(sysFlatbed.getOnlineStatus().toString())) {
-                    errors.addAll(FlatBedUtil.AddPersons(userid,sysFlatbed, lists,filePath,sysFlatbedService));
+                    errors.addAll(FlatBedUtil.AddPersons(false,userid,sysFlatbed, lists,filePath,sysFlatbedService));
                 }
             }));
         });
         CompletableFuture all = CompletableFuture.allOf(resList.toArray(new CompletableFuture[resList.size()]));
         all.join();
         if(errors.size() > 0){
+            Map<String,Object> res = new HashMap<>();
+            res.put("error",errors);
+            WebSocketServer.sendInfo(JSONUtil.toJsonStr(res), userid);
             return R.failed(errors);
         }
         return R.ok();
@@ -269,12 +274,12 @@ public class SysFlatbedController {
         String userid = ShiroUtils.getUser().getUserId();
         List<SysDepotUser> lists = sysDepotUserService.list(Wrappers.<SysDepotUser>lambdaQuery().eq(SysDepotUser::getId,id));
         List<SysFlatbed> sysFlatbeds = sysFlatbedService.list();
-        List<String> errors = new ArrayList<>();
+        Set<String> errors = new HashSet<>();
         List<CompletableFuture> resList = new ArrayList<>();
         sysFlatbeds.forEach( sysFlatbed -> {
             resList.add(CompletableFuture.supplyAsync(() -> sysFlatbed).thenAcceptAsync(e -> {
                 if("1".equals(sysFlatbed.getOnlineStatus().toString())) {
-                    errors.addAll(FlatBedUtil.AddPersons(userid,sysFlatbed, lists,filePath,sysFlatbedService));
+                    errors.addAll(FlatBedUtil.AddPersons(true,userid,sysFlatbed, lists,filePath,sysFlatbedService));
                 }
             }));
         });

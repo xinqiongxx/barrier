@@ -118,7 +118,7 @@ public class WebSocketServer {
      * */
     @SneakyThrows
     public static void sendInfo(String message, @PathParam("userId") String userId) {
-        log.info("发送消息到:"+userId+"，报文:"+message);
+        //log.info("发送消息到:"+userId+"，报文:"+message);
         if(StrUtil.isNotBlank(userId)&&webSocketMap.containsKey(userId)){
             webSocketMap.get(userId).sendMessage(message);
         }else{

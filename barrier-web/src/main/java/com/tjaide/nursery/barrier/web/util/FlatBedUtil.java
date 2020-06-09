@@ -134,25 +134,29 @@ public class FlatBedUtil {
     }
 
     @SneakyThrows
-    public static List<String> AddPersons(String userid,SysFlatbed sysFlatbed, List<SysDepotUser> lists, String filePath, SysFlatbedService sysFlatbedService){
+    public static List<String> AddPersons(Boolean isDel,String userid,SysFlatbed sysFlatbed, List<SysDepotUser> lists, String filePath, SysFlatbedService sysFlatbedService){
         sysFlatbed.setProcess("开始同步");
         WebSocketServer.sendInfo(JSONUtil.toJsonStr(sysFlatbed), userid);
         sysFlatbedService.updateById(sysFlatbed);
         String url = sysFlatbed.getIpAddress();
         String deviceId = sysFlatbed.getNumber();
-        List<String> ids = new ArrayList<>();
-        lists.forEach(sysDepotUser -> {
-            ids.add(sysDepotUser.getId()+"");
-            ids.add(sysDepotUser.getId()+"A");
-        });
         sysFlatbed.setProcess("完成：0%");
         WebSocketServer.sendInfo(JSONUtil.toJsonStr(sysFlatbed), userid);
         sysFlatbedService.updateById(sysFlatbed);
-        DeletePerson(url, deviceId, ids);
-        Set<String> idsNow = FlatBedUtil.SearchPersonList(sysFlatbed.getIpAddress(),sysFlatbed.getNumber(),0,100);
-        // 多线程处理
+        Set<String> idsNow = new HashSet<>();
+        if(isDel) {
+            List<String> ids = new ArrayList<>();
+            lists.forEach(sysDepotUser -> {
+                ids.add(sysDepotUser.getId()+"");
+                ids.add(sysDepotUser.getId()+"A");
+            });
+            DeletePerson(url, deviceId, ids);
+        }else {
+            idsNow = FlatBedUtil.SearchPersonList(sysFlatbed.getIpAddress(), sysFlatbed.getNumber(), 0, 100);
+        }
+//        // 多线程处理
         int tempInt = lists.size() / 30 + 1;
-        //int tempInt = lists.size();
+//        //int tempInt = lists.size();
         AtomicInteger unPicNum = new AtomicInteger();
         AtomicInteger unFeatureNum = new AtomicInteger();
         AtomicInteger useNum = new AtomicInteger();
@@ -223,14 +227,14 @@ public class FlatBedUtil {
                             JSONObject info = JSONUtil.parseObj(bodyObj.get("info").toString());
                             if(info.get("Detail").toString().indexOf("Unkonw Picinfo and get picURI error") > -1){
                                 unPicNum.getAndIncrement();
-                                error.add(sysDepotUser.getName()+"照片不存在；");
+                                error.add(sysDepotUser.getName()+"照片过大，请勿超过1M；");
                             }
                             if(info.get("Detail").toString().indexOf("Unkonw operator") > -1){
-                                error.add(sysDepotUser.getName()+"照片不存在；");
+                                error.add(sysDepotUser.getName()+"照片不存在，请重新上传；");
                             }
                             if(info.get("Detail").toString().indexOf("GetPersonFeature err") > -1){
                                 unFeatureNum.getAndIncrement();
-                                error.add(sysDepotUser.getName()+"照片无法找到人脸；");
+                                error.add(sysDepotUser.getName()+"照片无法找到人脸，请重新上传；");
                             }
 
                             if(info.get("Detail").toString().indexOf("PersonUUID had existed") > -1){
@@ -281,6 +285,8 @@ public class FlatBedUtil {
         info.put("DeviceID",deviceId);
         info.put("PersonType",2);
         info.put("Gender",2);
+        info.put("BeginTime","2020-06-01T00:00:00");
+        info.put("EndTime","2050-06-19T23:59:59");
         info.put("BeginNO",start);
         info.put("RequestCount",size);
         jsonObject.put("operator","SearchPersonList");

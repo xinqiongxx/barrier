@@ -68,6 +68,7 @@ shiro:
     - /imserver/**
     - /flatbed/list
     - /dataData/**
+    - /flatbed/changeVideo/**
     - /api/image/view/***/**
     - /api/statistics/**
     - /login/login
@@ -93,8 +94,9 @@ mybatis-plus:
 # Logger Config
 logging:
   level:
-    com.tjaide.nursery.barrier.web.mapper: debug
+    com.tjaide.nursery.barrier.web.mapper: info
 file:
+  #path: /home/datadisk/file
   path: /Users/gougou/Desktop
 
 # 租户表维护

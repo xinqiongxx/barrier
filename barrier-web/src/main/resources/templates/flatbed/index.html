@@ -317,14 +317,14 @@
             } else {
                 //top.bodyUnMask()
                 var error = "";
-                res.data.forEach(function(item){
-                    error += item+"</br>";
-                })
-                top.Notice('showNotice', {
-                    title	: "错误数据("+res.data.length+")",
-                    text    : error,
-                    sticky  : true
-                })
+                // res.data.forEach(function(item){
+                //     error += item+"</br>";
+                // })
+                // top.Notice('showNotice', {
+                //     title	: "错误数据("+res.data.length+")",
+                //     text    : error,
+                //     sticky  : true
+                // })
             }
         }, function () {
             //top.bodyUnMask()
@@ -370,15 +370,15 @@
                     //top.bodyUnMask()
                     // top.Toast("showErrorToast",  res.data);
 
-                    var error = "";
-                    res.data.forEach(function(item){
-                        error += item+"</br>";
-                    })
-                    top.Notice('showNotice', {
-                        title	: "错误数据("+res.data.length+")",
-                        text    : error,
-                        sticky  : true
-                    })
+                    // var error = "";
+                    // res.data.forEach(function(item){
+                    //     error += item+"</br>";
+                    // })
+                    // top.Notice('showNotice', {
+                    //     title	: "错误数据("+res.data.length+")",
+                    //     text    : error,
+                    //     sticky  : true
+                    // })
                 }
             }, function () {
                 $("#sync").unmask();
@@ -430,8 +430,20 @@
             socket.onmessage = function(msg) {
                 if(msg.data){
                     var res = JSON.parse(msg.data)
-                    $("#process_"+res.id).html(res.process)
-                    $("#status_"+res.id).html(res.onlineStatus?'在线':'离线')
+                    if(res.id){
+                        $("#process_"+res.id).html(res.process)
+                        $("#status_"+res.id).html(res.onlineStatus?'在线':'离线')
+                    }else if(res.error){
+                        var error = "";
+                        res.error.forEach(function(item){
+                            error += item+"</br>";
+                        })
+                        top.Notice('showNotice', {
+                            title	: "错误数据("+res.error.length+")",
+                            text    : error,
+                            sticky  : true
+                        })
+                    }
                 }
                 //发现消息进入    开始处理前端触发逻辑
             };
