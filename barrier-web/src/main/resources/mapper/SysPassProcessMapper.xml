@@ -29,6 +29,7 @@
         <result column="user_id" property="userId"/>
         <result column="discern_id" property="discernId"/>
         <result column="create_time" property="createTime"/>
+        <result column="create_time" property="createTimeStr"/>
         <result column="user_name" property="userName"/>
         <result column="discern_name" property="discernName"/>
         <association property="user" column="user_id"
@@ -43,7 +44,7 @@
 			sys_pass_process
 		ORDER BY
 			create_time DESC
-			 limit 0,10
+			limit 0,10
     </select>
     <select id="getCountByCreateDate" resultType="Integer">
 		SELECT

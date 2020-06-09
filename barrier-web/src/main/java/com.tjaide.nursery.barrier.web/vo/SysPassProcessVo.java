@@ -38,5 +38,7 @@ public class SysPassProcessVo extends SysPassProcess {
 
     private String deptName;
 
+    private String createTimeStr;
+
 
 }
