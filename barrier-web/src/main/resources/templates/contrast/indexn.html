@@ -179,7 +179,7 @@
                         }
                         paramsx.filters = JSON.stringify(paramsx);
                         $(".maingrid_content").show();
-                        $(".maingrid_content").find("iframe").attr("src", "/page/depotuser/view?id=" + id);
+                        $(".maingrid_content").find("iframe").attr("src", "/page/depotUser/view?id=" + id);
                         $(".maingrid_content").stop().animate({marginRight: "0"}, 500);
 
                     }
@@ -301,7 +301,7 @@
             onAfterShowData: onAfterShowData,
             onClickCell: function (rowdata, rowid, rowobj) {
                 $(".maingrid_content").show();
-                $(".maingrid_content").find("iframe").attr("src", "/page/depotuser/view?id=" + rowdata.id);
+                $(".maingrid_content").find("iframe").attr("src", "/page/depotUser/view?id=" + rowdata.id);
                 $(".maingrid_content").stop().animate({marginRight: "0"}, 500);
             }
         });

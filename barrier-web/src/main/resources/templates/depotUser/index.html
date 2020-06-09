@@ -222,9 +222,7 @@
 
 
     uploader.on("uploadComplete",function(file){
-        $("#process span").html("上传中...");
-        $("#process").hide();
-        $("#uploader .minute_left").show()
+        $("#process span").html("添加数据...");
         uploader.removeFile(file)
     })
 
@@ -435,7 +433,7 @@
             onAfterShowData: onAfterShowData,
             onClickCell: function (rowdata, rowid, rowobj) {
                 $(".maingrid_content").show();
-                $(".maingrid_content").find("iframe").attr("src", "/page/depotuser/view?id=" + rowdata.id);
+                $(".maingrid_content").find("iframe").attr("src", "/page/depotUser/view?id=" + rowdata.id);
                 $(".maingrid_content").stop().animate({marginRight: "0"}, 500);
             }
         });
@@ -489,7 +487,7 @@
     //新增
     function addUser() {
         var diag = new top.Dialog();
-        diag.URL = ctxPath + "page/depotuser/add";
+        diag.URL = ctxPath + "page/depotUser/add";
         diag.Title = "添加出入人员";
         //自定义宽度和长度的设置
         diag.Width = 800;
@@ -526,7 +524,7 @@
     function onEdit(id) {
         var diag = new top.Dialog();
         diag.Title = "编辑";
-        diag.URL = ctxPath + "page/depotuser/add?id=" + id;
+        diag.URL = ctxPath + "page/depotUser/add?id=" + id;
         //自定义长度和宽度的设置
         diag.Width = 800;
         diag.Height = 700;
@@ -593,10 +591,15 @@
                     var res = JSON.parse(msg.data);
                     if(res.msg){
                         $("#process span").html(res.msg);
+                        if(res.msg == "完成"){
+                            $("#process").hide();
+                            $("#uploader .minute_left").show()
+                        }
                     }else if(res.data){
                         var show = percent + res.data*67;
                         ring.animate({arc: [parseInt(show), 100,50,50,radius]}, 500, "<");
                     }
+
                 }
                 //发现消息进入    开始处理前端触发逻辑
             };

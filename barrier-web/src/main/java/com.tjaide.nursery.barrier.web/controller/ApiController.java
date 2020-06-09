@@ -88,12 +88,13 @@ public class ApiController {
     public void imageView(@PathVariable String type, @PathVariable String id, HttpServletResponse response){
         File imageFile = new File(filePath+File.separator+type+File.separator + id+".jpeg");
         if(!imageFile.exists()){
-            String filePath = ResourceUtils.getURL("classpath:").getPath() + "static"+ File.separator+"image"+File.separator;
-            String newname = "noData.png";
-            imageFile = new File(filePath + newname);
+            InputStream inputStream = this.getClass().getResourceAsStream("/static/image/noData.png");
+            response.setContentType("image/jpeg");
+            IoUtil.copy(inputStream, response.getOutputStream());
+        }else {
+            response.setContentType("image/jpeg");
+            IoUtil.copy(new FileInputStream(imageFile), response.getOutputStream());
         }
-        response.setContentType("image/jpeg");
-        IoUtil.copy(new FileInputStream(imageFile), response.getOutputStream());
     }
 
     @SneakyThrows
@@ -182,7 +183,7 @@ public class ApiController {
             synchronized (this) {
                 if (!isStart) {
                     isStart = true;
-                   // FlatBedUtil.startVideo(sysFlatbed.getRtspAddress());
+                    FlatBedUtil.startVideo(sysFlatbed.getRtspAddress());
                 }
             }
         }

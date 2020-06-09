@@ -386,6 +386,7 @@ public class SysDepotUserServiceImpl extends ServiceImpl<SysDepotUserMapper, Sys
 
             CompletableFuture all = CompletableFuture.allOf(resList.toArray(new CompletableFuture[resList.size()]));
             all.join();
+            WebSocketServer.sendInfo("{\"msg\":\"完成\"}", "upload");
             return R.ok("更新照片，成功更新学生:"+studentNum+"，教师："+teacherNum+"，家长："+parentNum);
         }else{
             return R.failed("压缩包目录不符合学校->班级->学生");
@@ -570,12 +571,14 @@ public class SysDepotUserServiceImpl extends ServiceImpl<SysDepotUserMapper, Sys
     public String getDept(Integer user_id){
         SysDepotUser user=baseMapper.getUserById(user_id);
         //人员类型（1学生2教职工3家长9未知）
+        System.out.println("======"+user);
         String deptName="";
         if(user.getUserType()==1){
             SysDictItem dictName= sysDictItemService.getOne(Wrappers
                     .<SysDictItem>query().lambda()
                     .eq(SysDictItem::getType, "class_type")
             .eq(SysDictItem::getValue,user.getDeptId()));
+            System.out.println("======"+dictName);
             deptName=dictName.getLabel();
         }else if(user.getUserType()==2){
             SysDept dept=sysDeptService.getOne(Wrappers

@@ -226,7 +226,7 @@ public class SysDepotUserController {
         File zipFile = new File(pathFile+".zip");
         IoUtil.copy(file.getInputStream(),new FileOutputStream(zipFile));
         WebSocketServer.sendInfo("{\"msg\":\"正在解压\"}", "upload");
-        ZipUtil.unzip(zipFile);
+        ZipUtil.unzip(zipFile,Charset.forName("GBK"));
         zipFile.delete();
         WebSocketServer.sendInfo("{\"msg\":\"开始导入\"}", "upload");
         WebSocketServer.sendInfo("{\"data\":\"0.2\"}", "upload");

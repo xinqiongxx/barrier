@@ -92,15 +92,35 @@ public class SysDepotUser extends Model<SysDepotUser> {
             String name = names[names.length - 1];
             File file = new File(filePath+File.separator+type+File.separator+name+".jpeg");
             File fileTemp = new File(filePath+File.separator+type+File.separator+name+"_temp.jpeg");
-            if(file.length() > 1024*1024){
-                // 压缩图片
-                ImgUtil.scale(file,fileTemp,0.5f);
-                file.delete();
-                fileTemp.renameTo(file);
+            try {
+                if (file.length() > 1024 * 800) {
+                    if(fileTemp.exists()){
+                        setPhoto("data:image/jpeg;base64,"+Base64.encode(fileTemp));
+                        return this.photo;
+                    }
+                    // 压缩图片
+                    ImgUtil.scale(file, fileTemp, 0.5f);
+                    //file.delete();
+                    //fileTemp.renameTo(file);
+                    setPhoto("data:image/jpeg;base64,"+Base64.encode(fileTemp));
+                    return this.photo;
+                }
+            }catch(Exception e){
+
             }
             setPhoto("data:image/jpeg;base64,"+Base64.encode(file));
         }
         return this.photo;
+    }
+
+    public static void main(String[] args) {
+        File file = new File("/Users/gougou/Desktop/import/2020-06-09/1.jpg");
+        File fileTemp = new File("/Users/gougou/Desktop/import/2020-06-09/1_temp.jpeg");
+
+            if (file.length() > 1024 * 800) {
+                // 压缩图片
+                ImgUtil.scale(file, fileTemp, 0.5f);
+            }
     }
 
 }
