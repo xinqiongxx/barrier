@@ -60,7 +60,7 @@
 
     <select id="getCountByUserTypeCreateDate" resultType="Integer">
 		SELECT
-          count(a.id)
+          count(DISTINCT a.user_id)
         FROM
         sys_pass_process a join sys_depot_user b on a.discern_id=b.id
         <where>
@@ -70,7 +70,6 @@
             </if>
         </where>
     </select>
-
 
     <select id="getPage" resultMap="passProcessMap">
         SELECT

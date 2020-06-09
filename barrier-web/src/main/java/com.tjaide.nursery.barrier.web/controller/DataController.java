@@ -40,16 +40,22 @@ public class DataController {
     private final SysFlatbedService flatbedService;
     private final SysBarrierService barrierService;
     private final SysPassProcessService passProcessService;
+    private final SysDepotUserService sysDepotUserService;
 
     /**
      * 查询基础数据
      */
     @GetMapping("/getBaseDatas")
     public R getBaseDatas() {
-        Map<String,Object> res=passProcessService.getBaseDatas();
-        /*res.put("data4",sysDictItemService.count(Wrappers.<SysDictItem>lambdaQuery().eq(SysDictItem::getType,"white_list")));
-        res.put("data5",flatbedService.count());
-        res.put("data6",barrierService.count());*/
+        Map<String,Object> res=new HashMap<>();
+        Integer data1 = sysDepotUserService.count(Wrappers.<SysDepotUser>lambdaQuery().eq(SysDepotUser::getUserType,1));
+        Integer data2 = sysDepotUserService.count(Wrappers.<SysDepotUser>lambdaQuery().eq(SysDepotUser::getUserType,3));
+        Integer data3 = sysDepotUserService.count(Wrappers.<SysDepotUser>lambdaQuery().eq(SysDepotUser::getUserType,2));
+        Integer data4 = sysDepotUserService.count();
+        res.put("data1",data1);
+        res.put("data2",data2);
+        res.put("data3",data3);
+        res.put("data4",data4);
         return R.ok(res);
     }
 

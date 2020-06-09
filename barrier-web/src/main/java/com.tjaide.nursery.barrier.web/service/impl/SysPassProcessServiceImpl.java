@@ -61,8 +61,11 @@ public class SysPassProcessServiceImpl extends ServiceImpl<SysPassProcessMapper,
         String date1=getDateAdd(0);
         String start_time = date1+" 00:00:00";
         String end_time = date1+" 23:59:59";
+        //学生
         Integer data1=baseMapper.getCountByUserTypeCreateDate(1,start_time,end_time);
+        //家长
         Integer data2=baseMapper.getCountByUserTypeCreateDate(3,start_time,end_time);
+        //教职工
         Integer data3=baseMapper.getCountByUserTypeCreateDate(2,start_time,end_time);
         Integer data4=baseMapper.getCountByUserTypeCreateDate(null,start_time,end_time);
         res.put("data1",data1);

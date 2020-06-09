@@ -581,7 +581,7 @@ public class SysDepotUserServiceImpl extends ServiceImpl<SysDepotUserMapper, Sys
             SysDept dept=sysDeptService.getOne(Wrappers
                     .<SysDept>query().lambda()
                     .eq(SysDept::getDeptId,user.getDeptId()));
-            deptName=dept.getDeptName();
+            deptName=ObjectUtil.isNotNull(dept)?dept.getDeptName():"";
         }
         return deptName;
     }
