@@ -1244,16 +1244,20 @@
                 top.Toast("showErrorToast", '系统尚未对接！！');
                 return;
             }
-            var diag = new top.Dialog();
-            diag.Title = name;
-            diag.URL = url;
-            //自定义长度和宽度的设置
-            diag.ShowMaxButton=true;
-            diag.Width = 960;
-            diag.Height = 650;
-            diag.ShowButtonRow = false;
-            diag.show();
-            diag.max();
+            if(url.startsWith("http")){
+                window.open(url);
+            }else{
+                var diag = new top.Dialog();
+                diag.Title = name;
+                diag.URL = url;
+                //自定义长度和宽度的设置
+                diag.ShowMaxButton=true;
+                diag.Width = 960;
+                diag.Height = 650;
+                diag.ShowButtonRow = false;
+                diag.show();
+                diag.max();
+            }
         })
         setInterval(getDateData, 1000);
         eachrts1()
