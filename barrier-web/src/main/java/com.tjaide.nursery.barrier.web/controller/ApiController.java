@@ -116,7 +116,7 @@ public class ApiController {
         JSONObject jsonObject = JSONUtil.parseObj(res.toString());
         Map<String,Object> infoMap = (Map<String, Object>) jsonObject.get("info");
         // infoMap 存储进出记录表
-        DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-ddTHH:mm:ss");
+        DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         SysPassProcess sysPassProcess = new SysPassProcess();
         String PersonUUID = infoMap.get("PersonUUID").toString();
         sysPassProcess.setDiscernId(Integer.parseInt(PersonUUID.replace("A","")));
@@ -125,7 +125,7 @@ public class ApiController {
         asyncService.savePhoto(jsonObject.get("SanpPic").toString(),fileName);
         sysPassProcess.setRemark("");
         sysPassProcess.setStatus(0);
-        LocalDateTime localDateTime = LocalDateTime.parse(infoMap.get("CreateTime").toString(),df);
+        LocalDateTime localDateTime =LocalDateTime.parse(infoMap.get("CreateTime").toString().replace("T"," "), df);
         sysPassProcess.setCreateTime(localDateTime);
         sysPassProcess.setSanpPic("/api/image/view/match/"+fileName);
         // 0 进 1 出 2 未知
@@ -225,5 +225,11 @@ public class ApiController {
         sysFlatbeds.forEach(sysFlatbed -> {
             FlatBedUtil.EditPerson(sysFlatbed.getIpAddress(),sysFlatbed.getNumber(),lists,filePath);
         });
+    }
+
+    public static void main(String[] args) {
+
+        DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        System.out.println(LocalDateTime.parse("2018-03-25T21:50:05".replace("T"," "), df));
     }
 }

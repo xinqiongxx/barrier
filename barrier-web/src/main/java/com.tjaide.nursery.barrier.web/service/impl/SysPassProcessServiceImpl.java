@@ -5,6 +5,7 @@
 package com.tjaide.nursery.barrier.web.service.impl;
 
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -14,6 +15,7 @@ import com.tjaide.nursery.barrier.web.mapper.SysPassProcessMapper;
 import com.tjaide.nursery.barrier.web.service.SysDepotUserService;
 import com.tjaide.nursery.barrier.web.service.SysPassProcessService;
 import com.tjaide.nursery.barrier.web.service.SysUserRelationService;
+import com.tjaide.nursery.barrier.web.vo.SysPassProcessExcel;
 import com.tjaide.nursery.barrier.web.vo.SysPassProcessVo;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -156,6 +158,26 @@ public class SysPassProcessServiceImpl extends ServiceImpl<SysPassProcessMapper,
         }
         ipage.setRecords(list);
         return ipage;
+    }
+
+    @Override
+    public List<SysPassProcessExcel> getProcess(SysPassProcessDTO sysPassProcessDTO) {
+        if(StrUtil.isNotEmpty(sysPassProcessDTO.getStartTime())){
+            String localTime = sysPassProcessDTO.getStartTime();
+            sysPassProcessDTO.setStartTime(localTime+" 00:00:00");
+            sysPassProcessDTO.setEndTime(localTime+" 23:59:59");
+        }
+        List<SysPassProcessExcel> list = baseMapper.getProcess(sysPassProcessDTO);
+        for(SysPassProcessExcel process:list){
+            if(!process.getUserId().toString().equals( process.getDiscernId().toString())){
+                process.setParentType(sysUserRelationService.getRelation(process.getUserId(),process.getDiscernId()).getRelationName());
+                process.setDeptName(sysDepotUserService.getDept(process.getUserId()));
+            }else{
+                process.setParentType("本人");
+                process.setDeptName(sysDepotUserService.getDept(process.getDiscernId()));
+            }
+        }
+        return list;
     }
 
 

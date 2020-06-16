@@ -6,9 +6,11 @@ import com.tjaide.nursery.barrier.common.core.entity.ShiroUser;
 import com.tjaide.nursery.barrier.common.core.util.R;
 import com.tjaide.nursery.barrier.web.entity.*;
 import com.tjaide.nursery.barrier.web.service.*;
+import com.tjaide.nursery.barrier.web.service.impl.AsyncServiceImpl;
 import com.tjaide.nursery.barrier.web.vo.UserVO;
 import lombok.AllArgsConstructor;
 import org.apache.shiro.SecurityUtils;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -43,6 +45,7 @@ public class DataController {
     private final SysBarrierService barrierService;
     private final SysPassProcessService passProcessService;
     private final SysDepotUserService sysDepotUserService;
+    private final AsyncServiceImpl asyncService;
 
 
 
@@ -117,5 +120,23 @@ public class DataController {
     @GetMapping("/getflow")
     public R getflow() {
         return R.ok(passProcessService.getflow());
+    }
+
+
+    @GetMapping("/test")
+    public R test(){
+        SysPassProcess sysPassProcess = new SysPassProcess();
+        DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        sysPassProcess.setDiscernId(3);
+        sysPassProcess.setRemark("");
+        sysPassProcess.setStatus(0);
+        LocalDateTime localDateTime =LocalDateTime.parse("2020-07-01 00:00:00", df);
+        sysPassProcess.setCreateTime(localDateTime);
+        sysPassProcess.setSanpPic("/api/image/view/match/1");
+        sysPassProcess.setEnterType(0);
+        sysPassProcess.setUserId(sysPassProcess.getDiscernId());
+        sysPassProcess.setRegisteredPic("/api/image/view/reg/1");
+        asyncService.insertAttendance(sysPassProcess,"deviceId","photo",-99);
+        return R.ok();
     }
 }

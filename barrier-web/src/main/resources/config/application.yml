@@ -44,7 +44,7 @@ spring:
       driver-class-name: com.mysql.cj.jdbc.Driver
       username: root
       password: a8i3d2e9,.
-      url: jdbc:mysql://barrier-mysql:3306/barrier?Unicode=true&characterEncoding=UTF-8
+      url: jdbc:mysql://barrier-mysql:3306/barrier?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=GMT%2B8&allowMultiQueries=true&allowPublicKeyRetrieval=true
       stat-view-servlet:
         enabled: true
         url-pattern: /druid/*
@@ -94,7 +94,7 @@ mybatis-plus:
 # Logger Config
 logging:
   level:
-    com.tjaide.nursery.barrier.web.mapper: debug
+    com.tjaide.nursery.barrier.web.mapper: info
 file:
   path: /home/datadisk/file
   #path: /Users/gougou/Desktop

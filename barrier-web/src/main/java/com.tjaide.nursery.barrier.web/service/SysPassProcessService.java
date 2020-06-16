@@ -9,6 +9,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.tjaide.nursery.barrier.web.dto.SysPassProcessDTO;
 import com.tjaide.nursery.barrier.web.entity.SysPassProcess;
+import com.tjaide.nursery.barrier.web.vo.SysPassProcessExcel;
 import com.tjaide.nursery.barrier.web.vo.SysPassProcessVo;
 
 import java.util.List;
@@ -22,4 +23,6 @@ public interface SysPassProcessService extends IService<SysPassProcess> {
  Map<String,Object> getDateNum();
  Map<String,Object> getflow();
  IPage getPage(Page page, SysPassProcessDTO sysPassProcessdto);
+
+ List<SysPassProcessExcel> getProcess(SysPassProcessDTO sysPassProcessDTO);
 }

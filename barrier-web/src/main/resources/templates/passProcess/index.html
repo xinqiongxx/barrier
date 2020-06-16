@@ -83,12 +83,24 @@
                             <span class="icon_clear">重置</span>
                         </button>
                     </td>
+                    <td>
+                        <button type="button" class="warning" onclick="exportExcel()">
+                            <span class="icon_export">导出</span>
+                        </button>
+                    </td>
                 </tr>
             </table>
         </form>
     </div>
     <div id="dataBasic"></div>
 </div>
+
+<form action="" id="downloadForm" method="post">
+    <input type="hidden" name="name" value="" id="nameExcel"/>
+    <input type="hidden" name="startTime" value="" id="startTimeExcel"/>
+    <input type="hidden" name="userType" value="" id="userTypeExcel"/>
+    <input type="hidden" name="enterType" value="" id="enterTypeExcel"/>
+</form>
 <script type="text/javascript">
 
     function searchHandler() {
@@ -122,6 +134,42 @@
         });
         grid.setNewPage(1);
         grid.loadData();
+    }
+
+    function exportExcel(){
+        var name = $("#name").val();
+        if (name) {
+            $("#nameExcel").val(name);
+        }else{
+            $("#nameExcel").val("");
+        }
+
+        var createTime = $("#createTime").val();
+        if (createTime) {
+            $("#startTimeExcel").val(createTime);
+        }else{
+            $("#startTimeExcel").val("");
+        }
+
+
+        var userType = $("#userType").val();
+        if (userType) {
+            $("#userTypeExcel").val(userType);
+        }else{
+            $("#userTypeExcel").val("");
+        }
+
+
+        var enterType = $("#enterType").val();
+        if (enterType == 0 ||enterType == 1) {
+            $("#enterTypeExcel").val(enterType);
+        }else{
+            $("#enterTypeExcel").val("");
+        }
+        var $reportForm = $("#downloadForm");
+        $reportForm.attr("action", ctxPath + "passProcess/download");
+        console.log($reportForm);
+        $reportForm.submit();
     }
 
     function resetSearch() {

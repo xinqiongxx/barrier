@@ -571,20 +571,18 @@ public class SysDepotUserServiceImpl extends ServiceImpl<SysDepotUserMapper, Sys
     public String getDept(Integer user_id){
         SysDepotUser user=baseMapper.getUserById(user_id);
         //人员类型（1学生2教职工3家长9未知）
-        System.out.println("======"+user);
         String deptName="";
         if(user.getUserType()==1){
             SysDictItem dictName= sysDictItemService.getOne(Wrappers
                     .<SysDictItem>query().lambda()
                     .eq(SysDictItem::getType, "class_type")
             .eq(SysDictItem::getValue,user.getDeptId()));
-            System.out.println("======"+dictName);
-            deptName=dictName.getLabel();
+            deptName=ObjectUtil.isEmpty(dictName)?"已毕业":dictName.getLabel();
         }else if(user.getUserType()==2){
             SysDept dept=sysDeptService.getOne(Wrappers
                     .<SysDept>query().lambda()
                     .eq(SysDept::getDeptId,user.getDeptId()));
-            deptName=ObjectUtil.isNotNull(dept)?dept.getDeptName():"";
+            deptName=ObjectUtil.isEmpty(dept)?"已注销":dept.getDeptName();
         }
         return deptName;
     }

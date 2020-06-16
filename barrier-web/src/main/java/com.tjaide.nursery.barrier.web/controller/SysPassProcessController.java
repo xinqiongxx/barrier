@@ -4,6 +4,11 @@
 
 package com.tjaide.nursery.barrier.web.controller;
 
+import cn.hutool.core.io.IoUtil;
+import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
+import cn.hutool.poi.excel.ExcelUtil;
+import cn.hutool.poi.excel.ExcelWriter;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.tjaide.nursery.barrier.common.core.util.R;
@@ -13,11 +18,23 @@ import com.tjaide.nursery.barrier.web.entity.SysFlatbed;
 import com.tjaide.nursery.barrier.web.entity.SysPassProcess;
 import com.tjaide.nursery.barrier.web.service.SysFlatbedService;
 import com.tjaide.nursery.barrier.web.service.SysPassProcessService;
+import com.tjaide.nursery.barrier.web.vo.SysPassProcessExcel;
+import com.tjaide.nursery.barrier.web.vo.SysPassProcessVo;
 import io.swagger.annotations.Api;
 import lombok.AllArgsConstructor;
+import lombok.SneakyThrows;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.shiro.crypto.hash.Hash;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.OutputStream;
+import java.net.URLEncoder;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author maxinqiong
@@ -86,5 +103,34 @@ public class SysPassProcessController {
     @GetMapping("/page")
     public R getRolePage(Page page, SysPassProcessDTO sysPassProcessDTO) {
         return R.ok(sysPassProcessService.getPage(page, sysPassProcessDTO));
+    }
+
+    @SneakyThrows
+    @PostMapping("/download")
+    public void download(HttpServletResponse response, SysPassProcessDTO sysPassProcessDTO) {
+        String filename = URLEncoder.encode("考勤记录","UTF8");
+        if(StrUtil.isNotEmpty(sysPassProcessDTO.getStartTime())){
+            String localTime = sysPassProcessDTO.getStartTime();
+            filename = URLEncoder.encode(localTime+"考勤记录","UTF8");
+        }
+        ExcelWriter writer = ExcelUtil.getWriter(true);
+        Map<String,String> headerMap = new HashMap<>();
+        headerMap.put("userId","用户编码");
+        headerMap.put("discernId","识别编码");
+        headerMap.put("parentType","关系");
+        headerMap.put("userName","考勤用户");
+        headerMap.put("discernName","识别用户");
+        headerMap.put("deptName","班级/部门");
+        headerMap.put("createTimeStr","考勤时间");
+        headerMap.put("enterStr","进/出园");
+        writer.setHeaderAlias(headerMap);
+        List<SysPassProcessExcel> lists = sysPassProcessService.getProcess(sysPassProcessDTO);
+        writer.write(lists, true);
+        response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8");
+        response.setHeader("Content-Disposition","attachment;filename="+ filename+".xlsx");
+        OutputStream out = response.getOutputStream();
+        writer.flush(out, true);
+        writer.close();
+        IoUtil.close(out);
     }
 }

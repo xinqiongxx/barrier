@@ -1,5 +1,6 @@
 package com.tjaide.nursery.barrier.web.util;
 
+import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
@@ -337,7 +338,9 @@ public class FlatBedUtil {
 
     public static void setUrl(String url){
         boolean isRun = true;
-        rtspThread.interrupt();
+        if(ObjectUtil.isNotEmpty(rtspThread)) {
+            rtspThread.interrupt();
+        }
         while(isRun){
             if(rtspThread  == null) {
                 isRun = false;
