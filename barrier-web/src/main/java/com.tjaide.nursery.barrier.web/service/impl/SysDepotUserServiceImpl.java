@@ -522,8 +522,8 @@ public class SysDepotUserServiceImpl extends ServiceImpl<SysDepotUserMapper, Sys
     }
 
     @Override
-    public List<Integer> getGraduation() {
-        return baseMapper.getGraduation();
+    public List<Integer> getGraduation(boolean isRemoveTeacher) {
+        return baseMapper.getGraduation(isRemoveTeacher);
     }
 
     private static List<File> readfile(File[] files) {

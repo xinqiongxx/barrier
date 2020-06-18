@@ -71,6 +71,7 @@ shiro:
     - /flatbed/changeVideo/**
     - /api/image/view/***/**
     - /api/statistics/**
+    - /api/sync
     - /login/login
     - /static/**
     - /libs/**

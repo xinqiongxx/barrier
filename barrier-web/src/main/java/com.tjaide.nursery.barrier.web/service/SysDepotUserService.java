@@ -33,7 +33,7 @@ public interface SysDepotUserService extends IService<SysDepotUser> {
 
     List<SysDepotUser> enterDepotUser();
 
-    List<Integer> getGraduation();
+    List<Integer> getGraduation(boolean isRemoveTeacher);
 
     IPage relationPage(Page page, SysDepotUser sysDepotUser, Integer id);
     IPage getpage(Page page, SysDepotUser sysDepotUser);

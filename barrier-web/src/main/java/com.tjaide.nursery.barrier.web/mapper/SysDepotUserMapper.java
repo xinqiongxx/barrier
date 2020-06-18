@@ -29,7 +29,7 @@ public interface SysDepotUserMapper extends BaseMapper<SysDepotUser> {
 
     List<SysDepotUser> getParentsById(@Param("id") Integer id);
 
-    List<Integer> getGraduation();
+    List<Integer> getGraduation(@Param("isremove") boolean isRemoveTeacher);
 
     SysDepotUser getUserById(@Param("user_id") Integer user_id);
 

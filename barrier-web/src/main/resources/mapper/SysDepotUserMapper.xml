@@ -117,11 +117,15 @@
     FROM
         sys_depot_user AS u
         LEFT JOIN sys_dept AS d ON u.dept_id = d.dept_id
-    WHERE
-        (d.del_flag = 1 )
+
+    <where>
+        <if test="isremove == false">
+        AND (d.del_flag = 1 )
+        </if>
         AND u.del_flag = 0
         AND (u.user_type = 2
         OR u.user_type = 9)
+    </where>
     </select>
 
 <!--or d.dept_id = 1 -->

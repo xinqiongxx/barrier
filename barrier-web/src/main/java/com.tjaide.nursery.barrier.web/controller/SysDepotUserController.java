@@ -252,26 +252,28 @@ public class SysDepotUserController {
 
     @SysLog("清除毕业人员")
     @DeleteMapping("/clearGraduation")
-    public R clearGraduation(){
+    public R clearGraduation(@RequestParam("isRemoveTeacher") boolean isRemoveTeacher){
         // 查询毕业人员
-        List<Integer> graduationIds = sysDepotUserService.getGraduation();
-        sysDepotUserService.removeByIds(graduationIds);
-        List<SysFlatbed> sysFlatbeds = sysFlatbedService.list();
-        List<String> ids = new ArrayList<>();
-        graduationIds.forEach(id -> {
-            ids.add(id+"");
-            ids.add(id+"A");
-        });
-        List<CompletableFuture> resList = new ArrayList<>();
-        sysFlatbeds.forEach( sysFlatbed -> {
-            resList.add(CompletableFuture.supplyAsync(() -> sysFlatbed).thenAcceptAsync(e -> {
-                if("1".equals(sysFlatbed.getOnlineStatus().toString())) {
-                    FlatBedUtil.DeletePerson(sysFlatbed.getIpAddress(), sysFlatbed.getNumber(), ids);
-                }
-            }));
-        });
-        CompletableFuture all = CompletableFuture.allOf(resList.toArray(new CompletableFuture[resList.size()]));
-        all.join();
+        List<Integer> graduationIds = sysDepotUserService.getGraduation(isRemoveTeacher);
+        if(graduationIds.size() > 0) {
+            sysDepotUserService.removeByIds(graduationIds);
+            List<SysFlatbed> sysFlatbeds = sysFlatbedService.list();
+            List<String> ids = new ArrayList<>();
+            graduationIds.forEach(id -> {
+                ids.add(id + "");
+                ids.add(id + "A");
+            });
+            List<CompletableFuture> resList = new ArrayList<>();
+            sysFlatbeds.forEach(sysFlatbed -> {
+                resList.add(CompletableFuture.supplyAsync(() -> sysFlatbed).thenAcceptAsync(e -> {
+                    if ("1".equals(sysFlatbed.getOnlineStatus().toString())) {
+                        FlatBedUtil.DeletePerson(sysFlatbed.getIpAddress(), sysFlatbed.getNumber(), ids);
+                    }
+                }));
+            });
+            CompletableFuture all = CompletableFuture.allOf(resList.toArray(new CompletableFuture[resList.size()]));
+            all.join();
+        }
         return R.ok();
     }
 

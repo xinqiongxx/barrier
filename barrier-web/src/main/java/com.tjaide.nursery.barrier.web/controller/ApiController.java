@@ -1,5 +1,6 @@
 package com.tjaide.nursery.barrier.web.controller;
 
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.json.JSONObject;
@@ -46,6 +47,8 @@ public class ApiController {
     private SysPassProcessService sysPassProcessService;
     @Autowired
     private SysDepotUserService sysDepotUserService;
+    @Autowired
+    private SysDictItemService sysDictItemService;
     @Autowired
     private AsyncServiceImpl asyncService;
 
@@ -189,6 +192,8 @@ public class ApiController {
                 if (!isStart) {
                     isStart = true;
                     FlatBedUtil.startVideo(sysFlatbed.getRtspAddress());
+                }else if(ObjectUtil.isEmpty(FlatBedUtil.rtspThread)){
+                    FlatBedUtil.setUrl(sysFlatbed.getRtspAddress());
                 }
             }
         }
@@ -207,29 +212,64 @@ public class ApiController {
         return res.toString();
     }
 
+    @ResponseBody
+    @RequestMapping(value = "/sync")
+    public void sync(){
+        fixTime();
+    }
+
     @Scheduled(cron = "0 0 0/12 * * ?")
     //@Scheduled(cron = "0 0 2 * * ?")
     public void fixTime() {
-        List<SysDepotUser> lists = sysDepotUserService.enterDepotUser().stream().map(sysDepotUser -> {
-            SysPassProcess sysPassProcess = sysPassProcessService.getOne(Wrappers.<SysPassProcess>lambdaQuery().eq(SysPassProcess::getDiscernId,sysDepotUser.getId()).orderByDesc(SysPassProcess::getCreateTime).last("limit 0 , 1"));
-            String inputFile = sysPassProcess.getSanpPic().replace("/api/image/view/match/","");
-            try {
-                IoUtil.copy(new FileInputStream(new File(filePath+File.separator+"match"+File.separator+inputFile+".jpeg")),new FileOutputStream(new File(filePath+File.separator+"reg"+File.separator+sysPassProcess.getDiscernId()+"A.jpeg")));
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
+        SysDictItem sysDictItem = sysDictItemService.getOne(Wrappers.<SysDictItem>lambdaQuery().eq(SysDictItem::getType,"is_sync").eq(SysDictItem::getLabel,"is_sync"));
+        if(ObjectUtil.isNotEmpty(sysDictItem) && "1".equals(sysDictItem.getValue().toString())) {
+            // 同步最新照片
+            List<SysDepotUser> lists = sysDepotUserService.enterDepotUser().stream().map(sysDepotUser -> {
+                SysPassProcess sysPassProcess = sysPassProcessService.getOne(Wrappers.<SysPassProcess>lambdaQuery().eq(SysPassProcess::getDiscernId, sysDepotUser.getId()).orderByDesc(SysPassProcess::getCreateTime).last("limit 0 , 1"));
+                String inputFile = sysPassProcess.getSanpPic().replace("/api/image/view/match/", "");
+                try {
+                    IoUtil.copy(new FileInputStream(new File(filePath + File.separator + "match" + File.separator + inputFile + ".jpeg")), new FileOutputStream(new File(filePath + File.separator + "reg" + File.separator + sysPassProcess.getDiscernId() + "A.jpeg")));
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+                sysDepotUser.setPhoto("/api/image/view/reg/" + sysPassProcess.getDiscernId() + "A");
+                return sysDepotUser;
+            }).collect(Collectors.toList());
+            List<SysFlatbed> sysFlatbeds = sysFlatbedService.list(Wrappers.<SysFlatbed>lambdaQuery().eq(SysFlatbed::getOnlineStatus, "1"));
+            sysFlatbeds.forEach(sysFlatbed -> {
+                FlatBedUtil.EditPerson(sysFlatbed.getIpAddress(), sysFlatbed.getNumber(), lists, filePath);
+            });
+        }else{
+            // 不同步最新照片恢复老照片
+            String path = filePath+File.separator+"reg"+File.separator;
+            File outFileDe = new File(path);
+            if(!outFileDe.exists()){
+                outFileDe.mkdirs();
             }
-            sysDepotUser.setPhoto("/api/image/view/reg/"+sysPassProcess.getDiscernId()+"A");
-            return sysDepotUser;
-        }).collect(Collectors.toList());
-        List<SysFlatbed> sysFlatbeds = sysFlatbedService.list(Wrappers.<SysFlatbed>lambdaQuery().eq(SysFlatbed::getOnlineStatus,"1"));
-        sysFlatbeds.forEach(sysFlatbed -> {
-            FlatBedUtil.EditPerson(sysFlatbed.getIpAddress(),sysFlatbed.getNumber(),lists,filePath);
-        });
+            File[] files = outFileDe.listFiles();
+            List<SysDepotUser> lists = new ArrayList<>();
+            for (File file : files) {
+                if(file.getName().indexOf("A") > -1){
+                    String persionId = file.getName().replace("A.jpeg","");
+                    SysDepotUser sysDepotUser = sysDepotUserService.getById(persionId);
+                    if(ObjectUtil.isNotEmpty(sysDepotUser)) {
+                        try {
+                            IoUtil.copy(new FileInputStream(new File(filePath + File.separator + "reg" + File.separator + persionId + ".jpeg")), new FileOutputStream(new File(filePath + File.separator + "reg" + File.separator + persionId + "A.jpeg")));
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        }
+                        lists.add(sysDepotUser);
+                    }
+                }
+            }
+            List<SysFlatbed> sysFlatbeds = sysFlatbedService.list(Wrappers.<SysFlatbed>lambdaQuery().eq(SysFlatbed::getOnlineStatus, "1"));
+            sysFlatbeds.forEach(sysFlatbed -> {
+                FlatBedUtil.EditPerson(sysFlatbed.getIpAddress(), sysFlatbed.getNumber(), lists, filePath);
+            });
+        }
     }
 
     public static void main(String[] args) {
-
-        DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        System.out.println(LocalDateTime.parse("2018-03-25T21:50:05".replace("T"," "), df));
+        System.out.println("123123A.jpeg".replace("A.jpeg", ""));
     }
 }

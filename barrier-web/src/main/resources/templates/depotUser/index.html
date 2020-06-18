@@ -298,19 +298,35 @@
     }
     function clearGraduation(){
         top.Dialog.confirm("确认清除已毕业人员信息吗？确保所有相关平板在线。",function(){
-            $.ajax({
-                url: ctxPath + "depotuser/clearGraduation",
-                type: 'delete'
-            }).then(function (res) {
-                if (0 == res.code) {
-                    grid.loadData();
-                    top.Toast("showSuccessToast", '清除成功');
-                } else {
+            top.Dialog.confirm("是否删除所有教职工？",function(){
+                $.ajax({
+                    url: ctxPath + "depotuser/clearGraduation?isRemoveTeacher=true",
+                    type: 'delete'
+                }).then(function (res) {
+                    if (0 == res.code) {
+                        grid.loadData();
+                        top.Toast("showSuccessToast", '清除成功');
+                    } else {
+                        top.Toast("showErrorToast", '清除异常');
+                    }
+                }, function () {
                     top.Toast("showErrorToast", '清除异常');
-                }
-            }, function () {
-                top.Toast("showErrorToast", '清除异常');
-            })
+                })
+            },function(){
+                $.ajax({
+                    url: ctxPath + "depotuser/clearGraduation?isRemoveTeacher=false",
+                    type: 'delete'
+                }).then(function (res) {
+                    if (0 == res.code) {
+                        grid.loadData();
+                        top.Toast("showSuccessToast", '清除成功');
+                    } else {
+                        top.Toast("showErrorToast", '清除异常');
+                    }
+                }, function () {
+                    top.Toast("showErrorToast", '清除异常');
+                })
+            });
         },function(){
 
         });
