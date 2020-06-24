@@ -14,6 +14,7 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.bytedeco.ffmpeg.avformat.AVFormatContext;
 import org.bytedeco.ffmpeg.global.avcodec;
+import org.bytedeco.ffmpeg.global.avutil;
 import org.bytedeco.javacv.FFmpegFrameGrabber;
 import org.bytedeco.javacv.FFmpegFrameRecorder;
 import org.bytedeco.javacv.Frame;
@@ -372,17 +373,20 @@ public class FlatBedUtil {
         @Override
         public void run() {
             start = System.currentTimeMillis();
-            final int captureWidth = 1280;
-            final int captureHeight = 720;
             FFmpegFrameGrabber grabber = new FFmpegFrameGrabber(this.url);// 最后一个参数是AudioChannels，建议通过grabber获取
-            FFmpegFrameRecorder recorder = new FFmpegFrameRecorder("rtmp://barrier-nginx:1935/live", captureWidth, captureHeight, 1);
-
+            FFmpegFrameRecorder recorder = new FFmpegFrameRecorder("rtmp://barrier-nginx:1935/live", 1920, 1080, 1);
             try {
-                grabber.setImageWidth(captureWidth);
-                grabber.setImageHeight(captureHeight);
+                avutil.av_log_set_level(avutil.AV_LOG_ERROR);
                 // rtsp格式一定要添加这个参数，否则丢帧会比较严重
                 grabber.setOption("rtsp_transport", "tcp");
+                grabber.setPixelFormat(avutil.AV_PIX_FMT_YUV420P);
                 grabber.start();
+                int captureWidth = grabber.getImageWidth();
+                int captureHeight = grabber.getImageHeight();
+                recorder.setImageHeight(captureHeight);
+                recorder.setImageWidth(captureWidth);
+                recorder.setAudioChannels(grabber.getAudioChannels());
+
                 recorder.setInterleaved(true);
                 // 降低编码延时
                 recorder.setVideoOption("tune", "zerolatency");
@@ -391,20 +395,19 @@ public class FlatBedUtil {
                 // 视频质量参数(详见 https://trac.ffmpeg.org/wiki/Encode/H.264)
                 recorder.setVideoOption("crf", "28");
                 // 分辨率
-                recorder.setVideoBitrate(2000000);
+                recorder.setVideoBitrate(grabber.getVideoBitrate());
                 // 视频编码格式
-                recorder.setVideoCodec(avcodec.AV_CODEC_ID_H264);
+                recorder.setVideoCodec(grabber.getVideoCodec());
                 // 视频格式
                 recorder.setFormat("flv");
                 // 视频帧率
-                recorder.setFrameRate(15);
-                recorder.setGopSize(60);
-                recorder.setAudioOption("crf", "0");
-                recorder.setAudioQuality(0);
-                recorder.setAudioBitrate(192000);
-                recorder.setSampleRate(44100);
+                recorder.setFrameRate(grabber.getFrameRate());
+                recorder.setGopSize(2);
+                recorder.setAudioCodecName("aac");
+                recorder.setAudioBitrate(grabber.getAudioBitrate());
+                recorder.setSampleRate(grabber.getSampleRate());
                 // 建议从grabber获取AudioChannels
-                recorder.setAudioChannels(1);
+                recorder.setAudioChannels(grabber.getAudioChannels());
                 recorder.setAudioCodec(avcodec.AV_CODEC_ID_AAC);
                 recorder.start();
 
@@ -439,6 +442,6 @@ public class FlatBedUtil {
     }
 
     public static void main(String[] args) {
-        System.out.println(SearchPersonList("demo-pad.tjaide.com", "1330788", 0, 100).size());
+        startVideo("rtsp://10.10.2.151:554/av0_0");
     }
 }

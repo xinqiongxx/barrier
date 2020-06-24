@@ -105,7 +105,7 @@ public class ApiController {
     @SneakyThrows
     @RequestMapping(value = "/statistics/verify")
     @ResponseBody
-    public void verify(HttpServletRequest request) {
+    public Map<String,Object> verify(HttpServletRequest request) {
         StringBuffer res = new StringBuffer();
         InputStream inputStream = request.getInputStream();
         InputStreamReader isr = new InputStreamReader(inputStream);
@@ -159,6 +159,11 @@ public class ApiController {
             });
         }
         WebSocketServer.sendInfo(JSONUtil.toJsonStr(sysFlatbed), "page");
+
+        Map<String,Object> resMap = new HashMap<String,Object>();
+        resMap.put("code",200);
+        resMap.put("desc","OK");
+        return resMap;
     }
 
 
@@ -188,12 +193,14 @@ public class ApiController {
         }else{
             sysFlatbedService.update(Wrappers.<SysFlatbed>lambdaUpdate().set(SysFlatbed::getOnlineStatus,"1").eq(SysFlatbed::getNumber,deviceId));
             SysFlatbed sysFlatbed= sysFlatbedService.getOne(Wrappers.<SysFlatbed>lambdaQuery().eq(SysFlatbed::getNumber,deviceId));
-            synchronized (this) {
-                if (!isStart) {
-                    isStart = true;
-                    FlatBedUtil.startVideo(sysFlatbed.getRtspAddress());
-                }else if(ObjectUtil.isEmpty(FlatBedUtil.rtspThread)){
-                    FlatBedUtil.setUrl(sysFlatbed.getRtspAddress());
+            if(ObjectUtil.isNotEmpty(sysFlatbed)){
+                synchronized (this) {
+                    if (!isStart) {
+                        isStart = true;
+                        FlatBedUtil.startVideo(sysFlatbed.getRtspAddress());
+                    } else if (ObjectUtil.isEmpty(FlatBedUtil.rtspThread)) {
+                        FlatBedUtil.setUrl(sysFlatbed.getRtspAddress());
+                    }
                 }
             }
         }
@@ -204,7 +211,9 @@ public class ApiController {
                 timerMap.remove(deviceId);
                 if(timerMap.keySet().size()> 0) {
                     SysFlatbed sysFlatbed = sysFlatbedService.getOne(Wrappers.<SysFlatbed>lambdaQuery().eq(SysFlatbed::getNumber, timerMap.keySet().iterator().next()));
-                    FlatBedUtil.setUrl(sysFlatbed.getRtspAddress());
+                    if(ObjectUtil.isNotEmpty(sysFlatbed)){
+                        FlatBedUtil.setUrl(sysFlatbed.getRtspAddress());
+                    }
                 }
             }
         },30000);

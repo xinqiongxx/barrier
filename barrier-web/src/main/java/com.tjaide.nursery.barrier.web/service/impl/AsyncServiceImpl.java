@@ -77,34 +77,37 @@ public class AsyncServiceImpl {
     @Async
     public void insertAttendance(SysPassProcess sysPassProcess,String deviceId,String base64,Integer type){
         Integer userId = sysPassProcess.getUserId();
-        String typeName = "本人";
-        if(type != -99){
-            typeName = sysDictItemService.getOne(Wrappers.<SysDictItem>lambdaQuery().eq(SysDictItem::getValue,type).eq(SysDictItem::getType,"parent_type")).getLabel();
-        }
         SysDepotUser sysDepotUser = sysDepotUserService.getById(userId);
-        Map<String,Object> res = new HashMap<String,Object>();
-        res.put("yeyjcqkxx_xm",sysDepotUser.getName());
-        res.put("yeyjcqkxx_num",sysDepotUser.getCardId());
-        res.put("yeyjcqkxx_photo",base64);
-        res.put("yeyjcqkxx_parent",typeName);
-        res.put("yeyjcqkxx_io",sysPassProcess.getEnterType());
-        DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        res.put("yeyjcqkxx_time", sysPassProcess.getCreateTime().format(formatter2));
-        res.put("yeyjcqkxx_device",deviceId);
-        SysDept sysDept = sysDeptService.getOne(Wrappers.<SysDept>lambdaQuery().eq(SysDept::getParentId,-1));
-        if(StrUtil.isNotEmpty(sysDept.getDeptCode())&&sysDept.getDeptCode().startsWith("http")) {
-            HttpRequest httpRequest = HttpUtil.createPost(sysDept.getDeptCode());
-            httpRequest.header("Content-Type", "application/json");
-            httpRequest.body(JSONUtil.parseObj(res));
-            HttpResponse httpResponse = httpRequest.execute();
-            JSONObject jsonObject = JSONUtil.parseObj(httpResponse.body());
-            if("0".equals(jsonObject.get("code").toString())){
-                log.error("推送考勤"+jsonObject.get("message"));
-            }else{
-                log.error("推送考勤"+jsonObject.get("message"));
+        if(ObjectUtil.isNotEmpty(sysDepotUser.getCardId())&&!"暂无".equals(sysDepotUser.getCardId().toString())) {
+            String typeName = "本人";
+            if(type != -99) {
+                typeName = sysDictItemService.getOne(Wrappers.<SysDictItem>lambdaQuery().eq(SysDictItem::getValue, type).eq(SysDictItem::getType, "parent_type")).getLabel();
+            }
+            Map<String, Object> res = new HashMap<String, Object>();
+            res.put("yeyjcqkxx_xm", sysDepotUser.getName());
+            res.put("yeyjcqkxx_num", sysDepotUser.getCardId());
+            res.put("yeyjcqkxx_photo", base64);
+            res.put("yeyjcqkxx_parent", typeName);
+            res.put("yeyjcqkxx_io", sysPassProcess.getEnterType());
+            DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            res.put("yeyjcqkxx_time", sysPassProcess.getCreateTime().format(formatter2));
+            res.put("yeyjcqkxx_device", deviceId);
+            SysDept sysDept = sysDeptService.getOne(Wrappers.<SysDept>lambdaQuery().eq(SysDept::getParentId, -1));
+            if (StrUtil.isNotEmpty(sysDept.getDeptCode()) && sysDept.getDeptCode().startsWith("http")) {
+                HttpRequest httpRequest = HttpUtil.createPost(sysDept.getDeptCode());
+                httpRequest.header("Content-Type", "application/json");
+                httpRequest.body(JSONUtil.parseObj(res));
+                HttpResponse httpResponse = httpRequest.execute();
+                JSONObject jsonObject = JSONUtil.parseObj(httpResponse.body());
+                res.put("yeyjcqkxx_photo", "");
+                System.out.println("info:" + res);
+                if ("0".equals(jsonObject.get("code").toString())) {
+                    log.info("推送考勤" + httpResponse.body());
+                } else {
+                    log.error("推送考勤" + httpResponse.body());
+                }
             }
         }
-
     }
 
 
