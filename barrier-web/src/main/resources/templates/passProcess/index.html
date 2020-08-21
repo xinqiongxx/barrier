@@ -52,7 +52,7 @@
 <body>
 
 <div class="page_content">
-    <div class="titleContent" style="float:left;margin:3px 5px;">
+    <div class="titleContent" style="margin:3px 5px;">
         校园进出人员记录
     </div>
     <div class="searchContent">
@@ -71,7 +71,9 @@
                                 prompt="请选择进出类型"></select>
                     </td>
                     <td>
-                        <input id="createTime" type="text" class="date" placeholder="请选择日期"/>
+                       <!-- <input id="createTime" type="text" class="date" placeholder="请选择日期"/>-->
+                        <input type="text" id="beginTime" class="dateIcon" />
+                        <input type="text" id="endTime" class="dateIcon" />
                     </td>
                     <td>
                         <button type="button" id="search" class="primary" onclick="searchHandler()">
@@ -85,7 +87,12 @@
                     </td>
                     <td>
                         <button type="button" class="warning" onclick="exportExcel()">
-                            <span class="icon_export">导出</span>
+                            <span class="icon_export">导出明细</span>
+                        </button>
+                    </td>
+                    <td>
+                        <button type="button" class="success" onclick="exportExcel()">
+                            <span class="icon_export">导出考勤</span>
                         </button>
                     </td>
                 </tr>
@@ -98,10 +105,12 @@
 <form action="" id="downloadForm" method="post">
     <input type="hidden" name="name" value="" id="nameExcel"/>
     <input type="hidden" name="startTime" value="" id="startTimeExcel"/>
+    <input type="hidden" name="endTime" value="" id="endTimeExcel"/>
     <input type="hidden" name="userType" value="" id="userTypeExcel"/>
     <input type="hidden" name="enterType" value="" id="enterTypeExcel"/>
 </form>
 <script type="text/javascript">
+    var dateSkin = "blue";
 
     function searchHandler() {
         var paramsx = {};
@@ -109,12 +118,21 @@
         if (name) {
             paramsx.name = name;
         }
-
+        /*
         var createTime = $("#createTime").val();
         if (createTime) {
             paramsx.startTime = createTime
+        }*/
+
+        var beginTime = $("#beginTime").val();
+        if (beginTime) {
+            paramsx.startTime = beginTime;
         }
 
+        var endTime = $("#endTime").val();
+        if (endTime) {
+            paramsx.endTime = endTime;
+        }
 
         var userType = $("#userType").val();
         if (userType) {
@@ -144,11 +162,24 @@
             $("#nameExcel").val("");
         }
 
-        var createTime = $("#createTime").val();
+        /*var createTime = $("#createTime").val();
         if (createTime) {
             $("#startTimeExcel").val(createTime);
         }else{
             $("#startTimeExcel").val("");
+        }*/
+        var beginTime = $("#beginTime").val();
+        if (beginTime) {
+            $("#startTimeExcel").val(beginTime);
+        }else{
+            $("#startTimeExcel").val("");
+        }
+
+        var endTime = $("#endTime").val();
+        if (endTime) {
+            $("#endTimeExcel").val(endTime);
+        }else{
+            $("#endTimeExcel").val("");
         }
 
 
@@ -177,6 +208,30 @@
         searchHandler();
     }
     $(function () {
+
+        //获取当前主题风格，用于设置日期控件的皮肤
+        try {
+            dateSkin = themeColor;
+        } catch(e) {}
+
+        //自定义点击触发日期控件
+        document.getElementById('beginTime').onfocus = function() {
+            var endtimeTf = $dp.$('endTime');
+            WdatePicker({
+                skin: dateSkin,
+                onpicked: function() {
+                    endtimeTf.focus();
+                },
+                maxDate: '#F{$dp.$D(\'endTime\')}'
+            });
+        }
+        document.getElementById('endTime').onfocus = function() {
+            //这里设置了最大日期为当前日期，如果不需要则把maxDate:'%y-%M-%d'去掉
+            WdatePicker({
+                skin: dateSkin,
+                minDate: '#F{$dp.$D(\'beginTime\')}'
+            });
+        }
 
         grid = $("#dataBasic").quiGrid({
             columns: [

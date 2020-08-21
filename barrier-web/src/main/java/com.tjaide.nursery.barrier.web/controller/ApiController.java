@@ -125,6 +125,7 @@ public class ApiController {
         sysPassProcess.setDiscernId(Integer.parseInt(PersonUUID.replace("A","")));
         // 异步更新用户
         String fileName = infoMap.get("DeviceID")+"-"+System.currentTimeMillis();
+        System.out.println("=================="+jsonObject.get("SanpPic"));
         asyncService.savePhoto(jsonObject.get("SanpPic").toString(),fileName);
         sysPassProcess.setRemark("");
         sysPassProcess.setStatus(0);

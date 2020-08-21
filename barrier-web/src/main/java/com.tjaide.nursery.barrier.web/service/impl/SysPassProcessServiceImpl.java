@@ -141,7 +141,17 @@ public class SysPassProcessServiceImpl extends ServiceImpl<SysPassProcessMapper,
     @Override
     public IPage getPage(Page page, SysPassProcessDTO sysPassProcessdto) {
         if(ObjectUtil.isNotNull(sysPassProcessdto.getStartTime())){
-            String localTime = sysPassProcessdto.getStartTime();
+            String startlocalTime = sysPassProcessdto.getStartTime();
+            sysPassProcessdto.setStartTime(startlocalTime+" 00:00:00");
+            if(ObjectUtil.isNotNull(sysPassProcessdto.getEndTime())){
+                String endlocalTime = sysPassProcessdto.getEndTime();
+                sysPassProcessdto.setEndTime(endlocalTime+" 23:59:59");
+            }else{
+                sysPassProcessdto.setEndTime(startlocalTime+" 23:59:59");
+            }
+        }else{
+            SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+            String localTime = sdf.format(new Date());
             sysPassProcessdto.setStartTime(localTime+" 00:00:00");
             sysPassProcessdto.setEndTime(localTime+" 23:59:59");
         }
@@ -162,11 +172,11 @@ public class SysPassProcessServiceImpl extends ServiceImpl<SysPassProcessMapper,
 
     @Override
     public List<SysPassProcessExcel> getProcess(SysPassProcessDTO sysPassProcessDTO) {
-        if(StrUtil.isNotEmpty(sysPassProcessDTO.getStartTime())){
+        /*if(StrUtil.isNotEmpty(sysPassProcessDTO.getStartTime())){
             String localTime = sysPassProcessDTO.getStartTime();
             sysPassProcessDTO.setStartTime(localTime+" 00:00:00");
             sysPassProcessDTO.setEndTime(localTime+" 23:59:59");
-        }
+        }*/
         List<SysPassProcessExcel> list = baseMapper.getProcess(sysPassProcessDTO);
         for(SysPassProcessExcel process:list){
             if(!process.getUserId().toString().equals( process.getDiscernId().toString())){

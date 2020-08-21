@@ -31,10 +31,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.OutputStream;
 import java.net.URLEncoder;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * @author maxinqiong
@@ -109,10 +107,22 @@ public class SysPassProcessController {
     @PostMapping("/download")
     public void download(HttpServletResponse response, SysPassProcessDTO sysPassProcessDTO) {
         String filename = URLEncoder.encode("考勤记录","UTF8");
-        if(StrUtil.isNotEmpty(sysPassProcessDTO.getStartTime())){
-            String localTime = sysPassProcessDTO.getStartTime();
-            filename = URLEncoder.encode(localTime+"考勤记录","UTF8");
+        if(ObjectUtil.isNotNull(sysPassProcessDTO.getStartTime())){
+            String startlocalTime = sysPassProcessDTO.getStartTime();
+            sysPassProcessDTO.setStartTime(startlocalTime+" 00:00:00");
+            if(ObjectUtil.isNotNull(sysPassProcessDTO.getEndTime())){
+                String endlocalTime = sysPassProcessDTO.getEndTime();
+                sysPassProcessDTO.setEndTime(endlocalTime+" 23:59:59");
+            }else{
+                sysPassProcessDTO.setEndTime(startlocalTime+" 23:59:59");
+            }
+        }else{
+            SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+            String localTime = sdf.format(new Date());
+            sysPassProcessDTO.setStartTime(localTime+" 00:00:00");
+            sysPassProcessDTO.setEndTime(localTime+" 23:59:59");
         }
+        filename = URLEncoder.encode(sysPassProcessDTO.getStartTime()+"至"+sysPassProcessDTO.getEndTime()+"考勤记录","UTF8");
         ExcelWriter writer = ExcelUtil.getWriter(true);
         Map<String,String> headerMap = new HashMap<>();
         headerMap.put("userId","用户编码");
