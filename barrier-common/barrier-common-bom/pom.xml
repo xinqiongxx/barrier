@@ -18,7 +18,7 @@
         <shiro.version>1.4.0</shiro.version>
         <mybatis-plus.version>3.1.0</mybatis-plus.version>
         <druid.version>1.1.16</druid.version>
-        <mysql.connector.version>8.0.19</mysql.connector.version>
+        <mysql.connector.version>8.0.28</mysql.connector.version>
         <ttl.version>2.10.2</ttl.version>
         <pac4j.version>3.6.1</pac4j.version>
         <buji-pac4j.version>4.0.0</buji-pac4j.version>
